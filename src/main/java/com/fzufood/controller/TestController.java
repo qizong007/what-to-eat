@@ -1,11 +1,9 @@
 package com.fzufood.controller;
 
 import com.fzufood.entity.Dish;
-import com.fzufood.entity.User;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
@@ -26,6 +24,8 @@ public class TestController {
 
     @GetMapping("/dish")
     public Dish dish(String name, BigDecimal price){
-        return new Dish(1l,name,price,false,null);
+        return new Dish(1,name,price,false,null);
     }
+
 }
+

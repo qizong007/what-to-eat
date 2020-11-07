@@ -16,7 +16,10 @@ import java.util.List;
 public class User {
 
     @ApiModelProperty("用户ID")
-    private Long userId;
+    private Integer userId;
+
+    @ApiModelProperty("用户openID")
+    private String openId;
 
     @ApiModelProperty("手机号")
     private String phoneNumber;

@@ -15,7 +15,7 @@ import java.util.Date;
 public class Feedback {
 
     @ApiModelProperty("反馈ID")
-    private Long feedbackId;
+    private Integer feedbackId;
 
     @ApiModelProperty("反馈时间")
     private Date submitTime;
@@ -24,9 +24,9 @@ public class Feedback {
     private String content;
 
     @ApiModelProperty("菜品ID")
-    private Long dishId;
+    private Integer dishId;
 
     @ApiModelProperty("窗口ID")
-    private Long windowId;
+    private Integer windowId;
 
 }

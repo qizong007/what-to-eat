@@ -15,12 +15,13 @@ import java.util.List;
 public class Canteen {
 
     @ApiModelProperty("食堂ID")
-    private Long canteenId;
+    private Integer canteenId;
 
     @ApiModelProperty("食堂名字")
     private String canteenName;
 
-    @ApiModelProperty("食堂所有窗口")
-    private List<Window> windows;
+    @ApiModelProperty("食堂窗口")
+    //private List<Window> windows;
+    private Integer windowId;
 
 }

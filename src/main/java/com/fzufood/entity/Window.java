@@ -16,7 +16,7 @@ import java.util.List;
 public class Window {
 
     @ApiModelProperty("窗口ID")
-    private Long windowId;
+    private Integer windowId;
 
     @ApiModelProperty("窗口名")
     private String windowName;

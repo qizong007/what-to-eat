@@ -16,7 +16,7 @@ import java.util.List;
 public class Dish {
 
     @ApiModelProperty("菜品ID")
-    private Long dishId;
+    private Integer dishId;
 
     @ApiModelProperty("菜品名")
     private String dishName;

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Tag {
 
     @ApiModelProperty("标签ID")
-    private Long tagId;
+    private Integer tagId;
 
     @ApiModelProperty("标签内容")
     private String content;

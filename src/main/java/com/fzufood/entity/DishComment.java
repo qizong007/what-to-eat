@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class DishComment {
 
     @ApiModelProperty("菜品评价ID")
-    private Long commentId;
+    private Integer commentId;
 
     @ApiModelProperty("评价星级")
     private Double stars;
@@ -22,9 +22,9 @@ public class DishComment {
     private Integer count;
 
     @ApiModelProperty("用户ID")
-    private Long userId;
+    private Integer userId;
 
     @ApiModelProperty("菜品ID")
-    private Long dishId;
+    private Integer dishId;
 
 }

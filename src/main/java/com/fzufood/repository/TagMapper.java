@@ -12,6 +12,6 @@ public interface TagMapper {
 
     List<Tag> findAll();
     Tag findById(Integer id);
-    void save(String content);
+    int save(String content);
 
 }

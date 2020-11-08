@@ -45,8 +45,7 @@ class WhatToEatApplicationTests {
     @Test
     public void canteenFindById(){
         Canteen canteen = canteenMapper.findById(1);
-        if(canteen != null)
-            System.out.println(canteen.getCanteenName());
+        System.out.println(canteen.getCanteenName());
     }
 
     @Test

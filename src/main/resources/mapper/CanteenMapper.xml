@@ -14,7 +14,7 @@
         select * from canteen
     </select>
     
-    <select id="findById" parameterType="java.lang.Integer" resultType="Canteen">
+    <select id="findById" parameterType="java.lang.Integer" resultMap="canteenMap">
         select * from canteen where canteen_id = #{id}
     </select>
     

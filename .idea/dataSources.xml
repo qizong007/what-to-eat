@@ -7,5 +7,13 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://121.196.99.36:3306/what_to_eat_dev</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="what-to-eat/Hibernate" uuid="e846d161-5f60-48d3-99ef-e2120a863349">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>Hibernate</remarks>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://121.196.99.36:3306/what_to_eat_dev?useUnicode=true&amp;characterEncoding=utf-8</jdbc-url>
+    </data-source>
   </component>
 </project>

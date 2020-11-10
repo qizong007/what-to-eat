@@ -19,7 +19,7 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="entityManagerFactory" />
-          <factory-entry name="what-to-eat" />
+          <factory-entry name="what-to-eat" value="e846d161-5f60-48d3-99ef-e2120a863349" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

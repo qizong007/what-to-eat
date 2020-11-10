@@ -3,8 +3,10 @@ package com.fzufood.controller;
 import com.fzufood.dto.DishEntry;
 import com.fzufood.dto.DishInfo;
 import com.fzufood.dto.UpdateDishTag;
+import com.fzufood.service.DishService;
 import com.fzufood.util.StatusCode;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -13,6 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/dish")
 public class DishController {
+
+    @Autowired
+    private DishService dishService;
 
     /**
      * 更新菜品标签接口

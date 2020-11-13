@@ -1,11 +1,13 @@
 package com.fzufood;
 
+import com.fzufood.dto.SystemInfo;
 import com.fzufood.entity.Canteen;
 import com.fzufood.entity.Tag;
 import com.fzufood.entity.Window;
 import com.fzufood.repository.CanteenMapper;
 import com.fzufood.repository.TagMapper;
 import com.fzufood.repository.WindowMapper;
+import com.fzufood.service.SystemService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,21 +36,21 @@ class WhatToEatApplicationTests {
         System.out.println(dataSource.getConnection());
     }
 
-//    @Test
-//    public void findAll(){
-////        List<Canteen> canteens = canteenMapper.findAll();
-////        for(Canteen canteen : canteens){
-////            System.out.println(canteen.getCanteenName());
-////        }
-////        List<Tag> tags = tagMapper.findAll();
-////        for(Tag tag : tags){
-////            System.out.println(tag.getContent());
-////        }
+    @Test
+    public void findAll(){
+        List<Canteen> canteens = canteenMapper.listCanteens();
+        for(Canteen canteen : canteens){
+            System.out.println(canteen.getCanteenName());
+        }
+//        List<Tag> tags = tagMapper.findAll();
+//        for(Tag tag : tags){
+//            System.out.println(tag.getContent());
+//        }
 //        List<Window> windows = windowMapper.findAll();
 //        for(Window window : windows){
 //            System.out.println(window.getWindowName());
 //        }
-//    }
+    }
 //
 //    @Test
 //    public void canteenFindById(){
@@ -78,6 +80,16 @@ class WhatToEatApplicationTests {
 //        Window window = windowMapper.findById(1);
 //        System.out.println(window.getWindowName());
 //    }
+    @Autowired
+    private SystemService systemService;
 
+    @Test
+    public void testForGetSystemInfo(){
+        SystemInfo systemInfo = systemService.getInfo();
+        List<Canteen> canteens = systemInfo.getCanteens();
+        for(Canteen c : canteens){
+            System.out.println(c.getCanteenName());
+        }
+    }
 
 }

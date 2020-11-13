@@ -23,10 +23,6 @@ public class Feedback {
     @ApiModelProperty("反馈内容")
     private String content;
 
-    @ApiModelProperty("菜品ID")
-    private Integer dishId;
-
-    @ApiModelProperty("窗口ID")
-    private Integer windowId;
-
+    @ApiModelProperty("所属的用户")
+    private User user;
 }

@@ -21,9 +21,6 @@ public class Window {
     @ApiModelProperty("窗口名")
     private String windowName;
 
-    @ApiModelProperty("菜品")
-    private List<Dish> dishes;
-
     @ApiModelProperty("窗口位置")
     private File location;
 
@@ -33,4 +30,9 @@ public class Window {
     @ApiModelProperty("窗口介绍")
     private String description;
 
+    @ApiModelProperty("所属的餐厅")
+    private Canteen canteen;
+
+    @ApiModelProperty("菜品")
+    private List<Dish> dishes;
 }

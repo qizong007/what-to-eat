@@ -1,0 +1,62 @@
+package com.fzufood.repository;
+
+import com.fzufood.entity.DishComment;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * @author buzhouI
+ */
+@Repository
+@Mapper
+public interface DishCommentMapper {
+
+    /**
+     * 查询所有dishComment(commentId, stars, userId, dishId)
+     * @return List<DishComment>
+     */
+    List<DishComment> listDishComments();
+
+    /**
+     * 根据userId查询该userId所有的dishComment(commentId, stars, userId, dishId)
+     * @param userId
+     * @return List<DishComment>
+     */
+    List<DishComment> listDishCommentsByUserId(Integer userId);
+
+    /**
+     * 根据dishId查询该dishId所有的dishComment(commentId, stars, userId, dishId)
+     * @param dishId
+     * @return List<DishComment>
+     */
+    List<DishComment> listDishCommentsByDishId(Integer dishId);
+
+    /**
+     * 根据(userId, dishId)查询对应的dishComment(commentId, stars, userId, dishId)
+     * @param userId
+     * @param dishId
+     * @return DishComment
+     */
+    DishComment getDishCommentByUserIdDishId(Integer userId, Integer dishId);
+
+    /**
+     * 插入新的dishComment(commentId, stars, userId, dishId)
+     * @param dishComment
+     */
+    void saveDishComment(DishComment dishComment);
+
+    /**
+     * 根据(userId, dishId)更新dishComment(commentId, stars, userId, dishId)
+     * @param dishComment
+     */
+    void updateDishComment(DishComment dishComment);
+
+    /**
+     * 根据(userId, dishId)删除dishComment(commentId, stars, userId, dishId)
+     * @param userId
+     * @param dishId
+     */
+    void removeDishComment(Integer userId, Integer dishId);
+}

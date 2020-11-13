@@ -27,7 +27,9 @@ public class Dish {
     @ApiModelProperty("是否按重量计算")
     private Boolean byWeight;
 
+    @ApiModelProperty("所属的窗口")
+    private Window window;
+
     @ApiModelProperty("菜品标签")
     private List<Tag> tags;
-
 }

@@ -21,7 +21,6 @@ public class Canteen {
     private String canteenName;
 
     @ApiModelProperty("食堂窗口")
-    //private List<Window> windows;
-    private Integer windowId;
+    private List<Window> windows;
 
 }

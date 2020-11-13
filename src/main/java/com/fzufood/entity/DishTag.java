@@ -9,14 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("菜品评价")
-public class DishComment {
-
-    @ApiModelProperty("菜品评价ID")
-    private Integer commentId;
-
-    @ApiModelProperty("评价星级")
-    private Double stars;
+@ApiModel("菜品标签")
+public class DishTag {
 
     @ApiModelProperty("用户ID")
     private Integer userId;
@@ -24,4 +18,6 @@ public class DishComment {
     @ApiModelProperty("菜品ID")
     private Integer dishId;
 
+    @ApiModelProperty("标签ID")
+    private Integer tagId;
 }

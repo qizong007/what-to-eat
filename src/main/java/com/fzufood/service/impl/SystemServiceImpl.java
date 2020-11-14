@@ -20,6 +20,11 @@ public class SystemServiceImpl implements SystemService{
     @Autowired
     private CanteenMapper canteenMapper;
 
+    /**
+     * 获取系统基础数据接口
+     * @author qizong007
+     * @return
+     */
     @Override
     public SystemInfo getInfo() {
         List<Tag> allTags = tagMapper.listTags();

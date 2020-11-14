@@ -29,24 +29,28 @@ public interface DishTagMapper {
     /**
      * 插入新的dishTag(userId, dishId, tagId)
      * @param dishTag
+     * @return int
      */
-    void saveDishTag(DishTag dishTag);
+    int saveDishTag(DishTag dishTag);
 
     /**
      * 根据userId删除该userId所有的dishTag
      * @param userId
+     * @return int
      */
-    void removeDishTagsByUserId(Integer userId);
+    int removeDishTagsByUserId(Integer userId);
 
     /**
      * 根据dishId删除该dishId所有的dishTag
      * @param dishId
+     * @return int
      */
-    void removeDishTagsByDishId(Integer dishId);
+    int removeDishTagsByDishId(Integer dishId);
 
     /**
      * 根据tagId删除该tagId所有的dishTag
      * @param tagId
+     * @return int
      */
-    void removeDishTagsByTagId(Integer tagId);
+    int removeDishTagsByTagId(Integer tagId);
 }

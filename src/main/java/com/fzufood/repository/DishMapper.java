@@ -37,18 +37,21 @@ public interface DishMapper {
     /**
      * 插入新的dish(dishId, dishName, price, byWeight, window)
      * @param dish
+     * @return int
      */
-    void saveDish(Dish dish);
+    int saveDish(Dish dish);
 
     /**
      * 根据dishId更新dish(dishId, dishName, price, byWeight, window)
      * @param dish
+     * @return int
      */
-    void updateDish(Dish dish);
+    int updateDish(Dish dish);
 
     /**
      * 根据dishId删除dish(dishId, dishName, price, byWeight, window)
      * @param dishId
+     * @return int
      */
-    void removeDishById(Integer dishId);
+    int removeDishById(Integer dishId);
 }

@@ -44,19 +44,22 @@ public interface DishCommentMapper {
     /**
      * 插入新的dishComment(commentId, stars, userId, dishId)
      * @param dishComment
+     * @return int
      */
-    void saveDishComment(DishComment dishComment);
+    int saveDishComment(DishComment dishComment);
 
     /**
      * 根据(userId, dishId)更新dishComment(commentId, stars, userId, dishId)
      * @param dishComment
+     * @return int
      */
-    void updateDishComment(DishComment dishComment);
+    int updateDishComment(DishComment dishComment);
 
     /**
      * 根据(userId, dishId)删除dishComment(commentId, stars, userId, dishId)
      * @param userId
      * @param dishId
+     * @return int
      */
-    void removeDishComment(Integer userId, Integer dishId);
+    int removeDishComment(Integer userId, Integer dishId);
 }

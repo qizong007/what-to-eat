@@ -34,18 +34,21 @@ public interface WindowMapper {
     /**
      * 插入新的window(windowId, windowName, location, profile, description, canteen)
      * @param window
+     * @return int
      */
-    void saveWindow(Window window);
+    int saveWindow(Window window);
 
     /**
      * 根据windowId更新window(windowId, windowName, location, profile, description, canteen)
      * @param window
+     * @return int
      */
-    void updateWindow(Window window);
+    int updateWindow(Window window);
 
     /**
      * 根据windowId删除window(windowId, windowName, location, profile, description, canteen)
      * @param windowId
+     * @return int
      */
-    void removeWindowById(Integer windowId);
+    int removeWindowById(Integer windowId);
 }

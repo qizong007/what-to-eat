@@ -29,18 +29,21 @@ public interface TagMapper {
     /**
      * 插入新的tag(tagId, content)
      * @param tag
+     * @return int
      */
-    void saveTag(Tag tag);
+    int saveTag(Tag tag);
 
     /**
      * 根据tagId更新tag(tagId, content)
      * @param tag
+     * @return int
      */
-    void updateTag(Tag tag);
+    int updateTag(Tag tag);
 
     /**
      * 根据tagId删除tag(tagId, content)
      * @param tagId
+     * @return int
      */
-    void removeTagById(Integer tagId);
+    int removeTagById(Integer tagId);
 }

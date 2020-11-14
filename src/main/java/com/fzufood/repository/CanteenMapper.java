@@ -37,18 +37,21 @@ public interface CanteenMapper {
     /**
      * 插入新的canteen(canteenId, canteenName)
      * @param canteen
+     * @return int
      */
-    void saveCanteen(Canteen canteen);
+    int saveCanteen(Canteen canteen);
 
     /**
      *根据canteenId更新canteen(canteenId, canteenName)
      * @param canteen
+     * @return int
      */
-    void updateCanteen(Canteen canteen);
+    int updateCanteen(Canteen canteen);
 
     /**
      * 根据canteenId删除canteen(canteenId, canteenName)
      * @param canteenId
+     * @return int
      */
-    void removeCanteenById(Integer canteenId);
+    int removeCanteenById(Integer canteenId);
 }

@@ -29,20 +29,23 @@ public interface UserMapper {
     /**
      * 插入新的user(userId, openId, phoneNumber, userName, profilePicture)
      * @param user
+     * @return int
      */
-    void saveUser(User user);
+    int saveUser(User user);
 
     /**
      * 根据userId更新user(userId, openId, phoneNumber, userName, profilePicture)
      * @param user
+     * @return int
      */
-    void updateUser(User user);
+    int updateUser(User user);
 
     /**
      * 根据userId删除user(userId, openId, phoneNumber, userName, profilePicture)
      * @param userId
+     * @return int
      */
-    void removeUser(Integer userId);
+    int removeUser(Integer userId);
 
     /**
      * 根据userId查询该userId喜欢的所有dish(dishId, dishName, price, byWeight, window)
@@ -55,15 +58,17 @@ public interface UserMapper {
      * 插入新的likeDish (userId, dishId)
      * @param userId
      * @param dishId
+     * @return int
      */
-    void saveLikeDish(Integer userId, Integer dishId);
+    int saveLikeDish(Integer userId, Integer dishId);
 
     /**
      * 根据(userId, dishId) 删除likeDish
      * @param userId
      * @param dishId
+     * @return int
      */
-    void removeLikeDish(Integer userId, Integer dishId);
+    int removeLikeDish(Integer userId, Integer dishId);
 
     /**
      * 根据userId查询该userId收藏的所有(windowId, windowName, location, profile, description, canteen
@@ -76,15 +81,17 @@ public interface UserMapper {
      * 插入新的markWindow (userId, windowId)
      * @param userId
      * @param windowId
+     * @return int
      */
-    void saveMarkWindow(Integer userId, Integer windowId);
+    int saveMarkWindow(Integer userId, Integer windowId);
 
     /**
      * 根据(userId, windowId) 删除markWindow
      * @param userId
      * @param windowId
+     * @return int
      */
-    void removeMarkWindow(Integer userId, Integer windowId);
+    int removeMarkWindow(Integer userId, Integer windowId);
 
     /**
      * 根据userId查询该userId所有feedback(feedbackId, submitTime, content, user)
@@ -97,15 +104,17 @@ public interface UserMapper {
      * 插入新的myFeedback (userId, feedbackId)
      * @param userId
      * @param feedbackId
+     * @return int
      */
-    void saveMyFeedback(Integer userId, Integer feedbackId);
+    int saveMyFeedback(Integer userId, Integer feedbackId);
 
     /**
      * 根据(userId, feedbackId) 删除myFeedback
      * @param userId
      * @param feedbackId
+     * @return int
      */
-    void removeMyFeedback(Integer userId, Integer feedbackId);
+    int removeMyFeedback(Integer userId, Integer feedbackId);
 
     /**
      * 根据userId查询该userId所有偏好的tag(tagId, content)
@@ -118,15 +127,17 @@ public interface UserMapper {
      * 插入新的preferTag (userId, tagId)
      * @param userId
      * @param tagId
+     * @return int
      */
-    void savePreferTag(Integer userId, Integer tagId);
+    int savePreferTag(Integer userId, Integer tagId);
 
     /**
      * 根据(userId, tagId) 删除preferTag
      * @param userId
      * @param tagId
+     * @return int
      */
-    void removePreferTag(Integer userId, Integer tagId);
+    int removePreferTag(Integer userId, Integer tagId);
 
     /**
      * 根据userId查询该userId所有忌口tag(tagId, content)
@@ -139,13 +150,15 @@ public interface UserMapper {
      * 插入新的avoidTag (userId, tagId)
      * @param userId
      * @param tagId
+     * @return int
      */
-    void saveAvoidTag(Integer userId, Integer tagId);
+    int saveAvoidTag(Integer userId, Integer tagId);
 
     /**
      * 根据(userId, tagId) 删除avoidTag
      * @param userId
      * @param tagId
+     * @return int
      */
-    void removeAvoidTag(Integer userId, Integer tagId);
+    int removeAvoidTag(Integer userId, Integer tagId);
 }

@@ -29,18 +29,21 @@ public interface FeedbackMapper {
     /**
      * 插入新的feedback(feedbackId, submitTime, content, user)
      * @param feedback
+     * @return int
      */
-    void saveFeedback(Feedback feedback);
+    int saveFeedback(Feedback feedback);
 
     /**
      * 根据feedbackId更新feedback(feedbackId, submitTime, content, user)
      * @param feedback
+     * @return int
      */
-    void updateFeedback(Feedback feedback);
+    int updateFeedback(Feedback feedback);
 
     /**
      * 根据feedbackId删除feedback(feedbackId, submitTime, content, user)
      * @param feedbackId
+     * @return int
      */
-    void removeFeedbackById(Integer feedbackId);
+    int removeFeedbackById(Integer feedbackId);
 }

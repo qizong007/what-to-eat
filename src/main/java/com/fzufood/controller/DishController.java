@@ -57,8 +57,7 @@ public class DishController {
     @ApiOperation("获取菜品信息接口")
     @GetMapping("/getDishInfo")
     public DishInfo getDishInfo(Integer dishId){
-        Integer[] arr = {0, 0, 0, 1, 19};
-        return new DishInfo("空心菜",new BigDecimal("1.5"),5d,4.9,arr,null);
+        return dishService.getDishInfo(dishId);
     }
 
     /**
@@ -69,7 +68,7 @@ public class DishController {
     @ApiOperation("最爱的菜接口")
     @GetMapping("/favorites")
     public List<DishEntry> favorites(Integer userId){
-        return null;
+        return dishService.favorites(userId);
     }
 
 }

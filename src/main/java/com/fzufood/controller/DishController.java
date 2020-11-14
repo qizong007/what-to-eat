@@ -31,7 +31,8 @@ public class DishController {
     public UpdateDishTag updateDishTag(@RequestParam("userId") Integer userId,
                                        @RequestParam("dishId")Integer dishId,
                                        @RequestParam("tagId")Integer tagId){
-        return new UpdateDishTag("空心菜",3,20,true);
+
+        return dishService.updateDishTag(userId, dishId, tagId);
     }
 
     /**
@@ -46,7 +47,7 @@ public class DishController {
     public Integer updateDishStar(@RequestParam("userId") Integer userId,
                                        @RequestParam("dishId")Integer dishId,
                                        @RequestParam("star")Double star){
-        return StatusCode.SUCCESS;
+        return dishService.updateDishStar(userId, dishId, star);
     }
 
     /**

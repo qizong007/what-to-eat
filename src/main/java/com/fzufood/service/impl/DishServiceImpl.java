@@ -3,14 +3,10 @@ package com.fzufood.service.impl;
 import com.fzufood.dto.DishEntry;
 import com.fzufood.dto.DishInfo;
 import com.fzufood.dto.UpdateDishTag;
-import com.fzufood.entity.Dish;
-import com.fzufood.entity.DishComment;
-import com.fzufood.entity.User;
-import com.fzufood.repository.DishCommentMapper;
-import com.fzufood.repository.DishMapper;
-import com.fzufood.repository.TagMapper;
-import com.fzufood.repository.UserMapper;
+import com.fzufood.entity.*;
+import com.fzufood.repository.*;
 import com.fzufood.service.DishService;
+import com.fzufood.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,23 +23,85 @@ public class DishServiceImpl implements DishService {
     @Autowired
     private DishCommentMapper dishCommentMapper;
     @Autowired
-    private TagMapper tagMapper;
+    private DishTagMapper dishTagMapper;
 
+    /**
+     * 更新菜品标签
+     * @author qizong007
+     * @date 17:42 2020/11/14
+     * @param userId,dishId,tagId
+     * @return UpdateDishTag
+     **/
     @Override
     public UpdateDishTag updateDishTag(Integer userId, Integer dishId, Integer tagId) {
-        return null;
-    }
-
-    @Override
-    public Integer updateDishStar(Integer userId, Integer dishId, Double star) {
-        return null;
+        List<Integer> tagIdList = dishTagMapper.listTagIdsByDishId(dishId);
+        DishTag dishTag = null;
+        boolean hasTagged = false;
+        for(Integer tagID : tagIdList){
+            dishTag = dishTagMapper.getDishTagById(tagID);
+            if(dishTag.getUserId() == userId){
+                hasTagged = true;
+                break;
+            }
+        }
+        List<DishTag> userInThisDishTag = dishTagMapper.listDishTagByDishIdAndTagId(dishId,tagId);
+        // 某道菜的某个标签多少人点过
+        Integer count = userInThisDishTag.size();
+        UpdateDishTag updateDishTag = new UpdateDishTag();
+        updateDishTag.setDishName(dishMapper.getDishById(dishId).getDishName());
+        updateDishTag.setTagId(tagId);
+        updateDishTag.setCount(count);
+        if(hasTagged){
+            // 用户点过，现在就要取消 -- false
+            dishTagMapper.removeDishTagsByDishId(dishId);
+            updateDishTag.setMarkedTag(false);
+        }else{
+            // 用户还未点过，现在要点亮 -- true
+            dishTagMapper.saveDishTag(new DishTag(userId,dishId,tagId));
+            updateDishTag.setMarkedTag(true);
+        }
+        return updateDishTag;
     }
 
     /**
-     * 获取菜品信息接口
+     * 更新菜品评分
+     * @author qizong007
+     * @date 17:45 2020/11/14
+     * @param  userId,dishId,star
+     * @return Integer
+     **/
+    @Override
+    public Integer updateDishStar(Integer userId, Integer dishId, Double star) {
+        DishComment dishComment = dishCommentMapper.getDishCommentByUserIdDishId(userId, dishId);
+        if(dishComment == null){
+            // 没有就是新增save
+            dishComment = new DishComment();
+            dishComment.setStars(star);
+            dishComment.setDishId(dishId);
+            dishComment.setUserId(userId);
+            // 返回值为受影响的行数
+            if(dishCommentMapper.saveDishComment(dishComment) != 0){
+                return StatusCode.SUCCESS;
+            }else{
+                return StatusCode.FAIL_TO_SAVE_DISH_STAR;
+            }
+        }else{
+            // 有就是更改update
+            dishComment.setStars(star);
+            // 为0即更新失败
+            if(dishCommentMapper.updateDishComment(dishComment) != 0){
+                return StatusCode.SUCCESS;
+            }else{
+                return StatusCode.FAIL_TO_UPDATE_DISH_STAR;
+            }
+        }
+    }
+
+    /**
+     * 获取菜品信息
      * @author qizong007
      * @param dishId
-     * @return
+     * @return DishInfo
      */
     @Override
     public DishInfo getDishInfo(Integer dishId) {
@@ -58,10 +116,10 @@ public class DishServiceImpl implements DishService {
     }
 
     /**
-     * 最爱的菜接口
+     * 最爱的菜
      * @author qizong007
      * @param userId
-     * @return
+     * @return List<DishEntry>
      */
     @Override
     public List<DishEntry> favorites(Integer userId) {
@@ -82,7 +140,7 @@ public class DishServiceImpl implements DishService {
      * 根据dishId，查出该道菜品星级
      * @author qizong007
      * @param dishId
-     * @return
+     * @return Double
      */
     private Double countStarsOnDish(Integer dishId){
         List<DishComment> dishComments = dishCommentMapper.listDishCommentsByDishId(dishId);
@@ -97,7 +155,7 @@ public class DishServiceImpl implements DishService {
      * 根据dishId，查出该道菜品5种星级分别有几人
      * @author qizong007
      * @param dishId
-     * @return
+     * @return Integer[]
      */
     private Integer[] countStarsNumOnDish(Integer dishId){
         List<DishComment> dishComments = dishCommentMapper.listDishCommentsByDishId(dishId);

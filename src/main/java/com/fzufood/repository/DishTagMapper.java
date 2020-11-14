@@ -20,11 +20,25 @@ public interface DishTagMapper {
     List<DishTag> listDishTags();
 
     /**
-     * 根据dishId查询该dishId拥有的所有tagId
+     * 根据dishId查询该dish拥有的所有tagId
      * @param dishId
      * @return List<Integer>
      */
     List<Integer> listTagIdsByDishId(Integer dishId);
+
+    /**
+     * 根据dishId,tagId查询该dish某个tag拥有的用户列表
+     * @param dishId,tagId
+     * @return List<DishTag>
+     */
+    List<DishTag> listDishTagByDishIdAndTagId(Integer dishId,Integer tagId);
+
+    /**
+     * 根据tagId查询该tagId对应的dishTag
+     * @param tagId
+     * @return DishTag
+     */
+    DishTag getDishTagById(Integer tagId);
 
     /**
      * 插入新的dishTag(userId, dishId, tagId)

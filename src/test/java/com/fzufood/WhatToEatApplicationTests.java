@@ -1,5 +1,7 @@
 package com.fzufood;
 
+import com.fzufood.dto.DishEntry;
+import com.fzufood.dto.DishInfo;
 import com.fzufood.dto.SystemInfo;
 import com.fzufood.entity.Canteen;
 import com.fzufood.entity.Tag;
@@ -7,6 +9,7 @@ import com.fzufood.entity.Window;
 import com.fzufood.repository.CanteenMapper;
 import com.fzufood.repository.TagMapper;
 import com.fzufood.repository.WindowMapper;
+import com.fzufood.service.DishService;
 import com.fzufood.service.SystemService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,5 +94,15 @@ class WhatToEatApplicationTests {
             System.out.println(c.getCanteenName());
         }
     }
+
+    @Autowired
+    private DishService dishService;
+
+    @Test
+    public void testForGetDishInfo(){
+        DishInfo dishInfo = dishService.getDishInfo(3);
+        System.out.println(dishInfo.toString());
+    }
+
 
 }

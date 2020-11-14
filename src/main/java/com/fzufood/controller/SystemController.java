@@ -22,8 +22,7 @@ public class SystemController {
     @ApiOperation("获取系统基础数据接口")
     @GetMapping("/getInfo")
     public SystemInfo getInfo(){
-        // TODO
-        return new SystemInfo(null,null);
+        return systemService.getInfo();
     }
 
 }

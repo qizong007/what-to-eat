@@ -4,8 +4,10 @@ import com.fzufood.dto.DishRecommend;
 import com.fzufood.dto.UserInfo;
 import com.fzufood.dto.UserLogin;
 import com.fzufood.entity.Tag;
+import com.fzufood.service.UserService;
 import com.fzufood.util.StatusCode;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -14,6 +16,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 用户登录接口
@@ -34,9 +39,8 @@ public class UserController {
      */
     @ApiOperation("获取用户信息接口")
     @GetMapping("/getInfo")
-    public UserInfo getInfo(String userId){
-        // TODO
-        return new UserInfo(null,null);
+    public UserInfo getInfo(Integer userId){
+        return userService.getInfo(userId);
     }
 
     /**
@@ -81,8 +85,7 @@ public class UserController {
     @PostMapping("/feedback")
     public Integer feedback(@RequestParam("userId") Integer userId,
                             @RequestParam("content") String content){
-        // TODO
-        return StatusCode.SUCCESS;
+        return userService.feedback(userId,content);
     }
 
 }

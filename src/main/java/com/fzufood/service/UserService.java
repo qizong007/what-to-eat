@@ -7,8 +7,8 @@ import com.fzufood.dto.DishRecommend;
 import java.util.List;
 
 public interface UserService {
-    UserLogin login( String code);
-    UserInfo getInfo(String userId);
+    UserLogin login(String code);
+    UserInfo getInfo(Integer userId);
     Integer updateInfo( Integer userId,List<Tag> preferredList, List<Tag> avoidList);
     List<DishRecommend> search(String searchName, Integer userId, List<Tag> tagList, Integer canteenId);
     Integer feedback( Integer userId, String content);

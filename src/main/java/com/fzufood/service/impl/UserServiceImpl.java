@@ -22,6 +22,12 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private FeedbackMapper feedbackMapper;
+    @Autowired
+    private  DishMapper dishMapper;
+    @Autowired
+    private CanteenMapper canteenMapper;
+    @Autowired
+    private TagMapper tagMapper;
 
     @Override
     public UserLogin login( String code) {
@@ -40,13 +46,37 @@ public class UserServiceImpl implements UserService {
         return new UserInfo(userMapper.listPreferTagsById(userId),userMapper.listAvoidTagsById(userId));
     }
 
+    /**
+     * 更新用户信息
+     * @author invainX
+     * @data 15:50 2020/11/15
+     * @param userId preferredList avoidList
+     * @return Integer
+     */
     @Override
     public Integer updateInfo( Integer userId,List<Tag> preferredList, List<Tag> avoidList) {
-        return null;
+        List<tag> preferredList = userMapper.listPreferTagsById(userId);
+        List<Tag> avoidList = userMapper.listAvoidTagsById(userId);
+        //添加喜好的标签
+        preferredList.addTags(tag);
+        //添加忌口标签
+        avoidList.addTags(tag);
+        //删除喜好标签
+        preferredList.deleteTags(tag);
+        //删除忌口标签
+        avoidList.deleteTags(tag);
+        return userId;
     }
 
+    /**
+     * 用户搜索
+     * @author invainX
+     * @data
+     * @param searchName userId tagList canteenId
+     * @return List<DishRecommend>
+     */
     @Override
-    public List<DishRecommend> search(String searchName, Integer userId, List<Tag> tagList, Integer canteenId)  {
+    public List<DishRecommend> search(String searchName, Integer userId, List<Tag> tagList, Integer canteenId)
         return null;
     }
 

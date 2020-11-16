@@ -67,7 +67,7 @@ public class UserController {
      */
     @ApiOperation("用户搜索接口")
     @GetMapping("/search")
-    public List<DishRecommend> search(String searchName, Integer userId, List<Tag> tagList, Integer canteenId){
+    public List<DishRecommend> search(String searchName, List<Tag> tagList, Integer canteenId){
         //TODO
         DishRecommend dishRecommend = new DishRecommend(1,"百味园",null,"干锅贼香","玫瑰园二楼",4.3,null);
         List<DishRecommend> dishRecommendList = new ArrayList<>();

@@ -41,6 +41,13 @@ public interface DishTagMapper {
     DishTag getDishTagById(Integer tagId);
 
     /**
+     * 根据tagId查询该tag拥有的所有DishTag
+     * @param tagId
+     * @return List<DishTag>
+     */
+    List<DishTag> listDishTagsByTagId(Integer tagId);
+
+    /**
      * 插入新的dishTag(userId, dishId, tagId)
      * @param dishTag
      * @return int

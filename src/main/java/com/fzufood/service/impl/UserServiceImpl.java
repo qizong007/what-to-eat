@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.fzufood.entity.Tag;
 import com.fzufood.dto.DishRecommend;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     public Integer feedback(Integer userId, String content) {
         Feedback feedback = new Feedback();
         feedback.setContent(content);
-        feedback.setSubmitTime(new Date());
+        feedback.setSubmitTime(new Timestamp(0));
         feedback.setUser(userMapper.getUserById(userId));
         if(feedbackMapper.saveFeedback(feedback) != 0){
             return StatusCode.SUCCESS;

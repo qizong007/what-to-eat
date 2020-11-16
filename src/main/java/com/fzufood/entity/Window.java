@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.File;
 import java.util.List;
 
 @Data
@@ -22,10 +21,10 @@ public class Window {
     private String windowName;
 
     @ApiModelProperty("窗口位置")
-    private File location;
+    private String locationURI;
 
     @ApiModelProperty("店面图片")
-    private File profile;
+    private String profileURI;
 
     @ApiModelProperty("窗口介绍")
     private String description;

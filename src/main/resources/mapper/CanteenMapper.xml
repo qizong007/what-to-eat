@@ -11,8 +11,8 @@
             <id property="windowId" column="window_id"/>
             <result property="windowName" column="window_name"/>
             <result property="description" column="description"/>
-            <result property="location" column="location" typeHandler="com.fzufood.util.FileTypeHandler"/>
-            <result property="profile" column="profile" typeHandler="com.fzufood.util.FileTypeHandler"/>
+            <result property="locationURI" column="location"/>
+            <result property="profileURI" column="profile"/>
         </collection>
     </resultMap>
 

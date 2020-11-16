@@ -4,4 +4,97 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fzufood.repository.UserMapper">
 
+    <resultMap id="userMap" type="com.fzufood.entity.User">
+        <id property="userId" column="user_id"/>
+        <result property="openId" column="open_id"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="userName" column="user_name"/>
+        <result property="profilePictureURI" column="profile_picture"/>
+    </resultMap>
+
+    <resultMap id="windowMap" type="com.fzufood.entity.Window">
+        <id property="windowId" column="window_id"/>
+        <result property="windowName" column="window_name"/>
+        <result property="locationURI" column="location"/>
+        <result property="profileURI" column="profile"/>
+        <result property="description" column="description"/>
+        <association property="canteen" column="canteen_id" javaType="com.fzufood.entity.Canteen">
+            <id property="canteenId" column="canteen_id" ></id>
+            <result property="canteenName" column="canteen_name" ></result>
+        </association>
+    </resultMap>
+
+    <resultMap id="dishMap" type="com.fzufood.entity.Dish">
+        <id property="dishId" column="dish_id"/>
+        <result property="dishName" column="dish_name"/>
+        <result property="price" column="price"/>
+        <result property="byWeight" column="by_weight"/>
+        <association property="window" column="window_id" javaType="com.fzufood.entity.Window">
+            <id property="windowId" column="window_id"/>
+            <result property="windowName" column="window_name"/>
+            <result property="locationURI" column="location"/>
+            <result property="profileURI" column="profile"/>
+            <result property="description" column="description"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="feedbackMap" type="com.fzufood.entity.Feedback">
+        <id property="feedbackId" column="feedback_id"/>
+        <result property="submitTime" column="submit_time"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
+    <resultMap id="tagMap" type="com.fzufood.entity.Tag">
+        <id property="tagId" column="tag_id"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
+    <select id="listUsers" resultMap="userMap">
+        select user_id, open_id, phone_number, user_name, profile_picture
+        from user;
+    </select>
+
+    <select id="getUserById" parameterType="java.lang.Integer" resultMap="userMap">
+        select user_id, open_id, phone_number, user_name, profile_picture
+        from user where user_id = #{userId};
+    </select>
+
+    <select id="listLikeDishesById" parameterType="java.lang.Integer" resultMap="dishMap">
+        select dish.dish_id dish_id, dish_name, price, by_weight, window.window_id window_id,
+            window_name, location, profile, description
+        from user_like_dish left join dish on user_like_dish.dish_id = dish.dish_id
+        left join window on dish.window_id = window.window_id
+        where user_id = #{userId};
+    </select>
+
+    <select id="listMarkWindowsById" parameterType="java.lang.Integer" resultMap="windowMap">
+        select window.window_id window_id, window_name, location, profile,
+            description, canteen.canteen_id canteen_id, canteen_name
+        from user_mark_window left join window on user_mark_window.window_id = window.window_id
+        left join canteen on window.canteen_id = canteen.canteen_id
+        where user_id = #{userId};
+    </select>
+
+    <select id="listMyFeedbackById" parameterType="java.lang.Integer" resultMap="feedbackMap">
+        select feedback_id, submit_time, content
+        from feedback
+        where user_id = #{userId};
+    </select>
+
+    <select id="listPreferTagsById" parameterType="java.lang.Integer" resultMap="tagMap">
+        select tag.tag_id tag_id, content
+        from user_prefer_tag left join tag on user_prefer_tag.tag_id = tag.tag_id
+        where user_id = #{userId};
+    </select>
+
+    <select id="listAvoidTagsById" parameterType="java.lang.Integer" resultMap="tagMap">
+        select tag.tag_id tag_id, content
+        from user_avoid_tag left join tag on user_avoid_tag.tag_id = tag.tag_id
+        where user_id = #{userId};
+    </select>
+
+<!--    <insert id="saveUser" parameterType="com.fzufood.entity.User">-->
+<!--        insert into user(open_id, phone_number, user_name)-->
+<!--        values(#{openId}, #{phoneNumber}, #{userName},#{profilePicture});-->
+<!--    </insert>-->
 </mapper>

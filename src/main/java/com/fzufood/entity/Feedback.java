@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +18,7 @@ public class Feedback {
     private Integer feedbackId;
 
     @ApiModelProperty("反馈时间")
-    private Date submitTime;
+    private Timestamp submitTime;
 
     @ApiModelProperty("反馈内容")
     private String content;

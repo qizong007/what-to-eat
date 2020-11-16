@@ -38,7 +38,7 @@ public interface FeedbackMapper {
      * @param feedback
      * @return int
      */
-    int updateFeedback(Feedback feedback);
+    int updateFeedbackById(Feedback feedback);
 
     /**
      * 根据feedbackId删除feedback(feedbackId, submitTime, content, user)

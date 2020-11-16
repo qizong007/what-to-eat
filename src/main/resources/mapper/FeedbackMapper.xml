@@ -4,4 +4,44 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fzufood.repository.FeedbackMapper">
 
+    <resultMap id="feedbackMap" type="com.fzufood.entity.Feedback">
+        <id property="feedbackId" column="feedback_id"/>
+        <result property="submitTime" column="submit_time"/>
+        <result property="content" column="content"/>
+        <association property="user" column="user_id" javaType="com.fzufood.entity.User">
+            <id property="userId" column="user_id"/>
+            <result property="openId" column="open_id"/>
+            <result property="phoneNumber" column="phone_number"/>
+            <result property="userName" column="user_name"/>
+            <result property="profilePictureURI" column="profile_picture"/>
+        </association>
+    </resultMap>
+
+    <select id="listFeedback" resultMap="feedbackMap">
+        select feedback_id, submit_time, content, user.user_id user_id,
+            open_id, phone_number, user_name, profile_picture
+        from feedback left join user on feedback.user_id = user.user_id;
+    </select>
+
+    <select id="getFeedbackById" parameterType="java.lang.Integer" resultMap="feedbackMap">
+        select feedback_id, submit_time, content, user.user_id user_id,
+            open_id, phone_number, user_name, profile_picture
+        from feedback left join user on feedback.user_id = user.user_id
+        where feedback_id = #{feedbackId};
+    </select>
+
+    <insert id="saveFeedback" parameterType="com.fzufood.entity.Feedback">
+        insert into feedback(user_id, submit_time, content)
+        values (#{user.userId}, #{submitTime}, #{content})
+    </insert>
+
+    <update id="updateFeedbackById" parameterType="com.fzufood.entity.Feedback">
+        update feedback set user_id = #{user.userId}, submit_time = #{submitTime}, content = #{content}
+        where feedback_id = #{feedbackId};
+    </update>
+
+    <delete id="removeFeedbackById" parameterType="java.lang.Integer">
+        delete from feedback
+        where feedback_id = #{feedbackId};
+    </delete>
 </mapper>

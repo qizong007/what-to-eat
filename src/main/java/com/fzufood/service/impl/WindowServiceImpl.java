@@ -44,13 +44,13 @@ public class WindowServiceImpl implements WindowService {
      */
     @Override
     public List<DishRecommend> getMarkedWindow(Integer userId) {
-        List<Window> windowList = userMapper.listMarkWindowsById(Integer userId);
+        List<Window> windowList = userMapper.listMarkWindowsById(userId);
         List<DishRecommend> dishRecommends = new ArrayList<>();
         for(Window window : windowList){
             DishRecommend dishRecommend = new DishRecommend();
             dishRecommend.setWindowId(window.getWindowId());
             dishRecommend.setWindowName(window.getWindowName());
-            dishRecommend.setPngSrc(window.setProfileURI());
+            dishRecommend.setPngSrc(window.getProfileURI());
             dishRecommend.setDescription(window.getDescription());
             dishRecommend.setStar(countStarsOnWindow(window.getWindowId()));
             dishRecommend.setDish(window.getDishes());
@@ -65,7 +65,7 @@ public class WindowServiceImpl implements WindowService {
      * @return Double
      */
     private Double countStarsOnWindow(Integer windowId){
-        List<Dish> dishList = windowMapper.listDishesById(Integer windowId);
+        List<Dish> dishList = windowMapper.listDishesById(windowId);
         Double stars = 0.0;
         for(Dish dish : dishList){
             stars += countStarsOnDish(dish.getDishId());

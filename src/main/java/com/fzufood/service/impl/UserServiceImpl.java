@@ -2,17 +2,18 @@ package com.fzufood.service.impl;
 
 import com.fzufood.dto.UserLogin;
 import com.fzufood.dto.UserInfo;
-import com.fzufood.entity.Feedback;
-import com.fzufood.entity.User;
+import com.fzufood.entity.*;
 import com.fzufood.repository.*;
 import com.fzufood.service.UserService;
 import com.fzufood.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.fzufood.entity.Tag;
 import com.fzufood.dto.DishRecommend;
 
+import javax.swing.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,7 +29,10 @@ public class UserServiceImpl implements UserService {
     private CanteenMapper canteenMapper;
     @Autowired
     private TagMapper tagMapper;
-
+    @Autowired
+    private WindowMapper windowMapper;
+    @Autowired
+    private DishTagMapper dishTagMapper;
     @Override
     public UserLogin login( String code) {
         return null;
@@ -49,7 +53,7 @@ public class UserServiceImpl implements UserService {
     /**
      * 更新用户信息
      * @author invainX
-     * @data 15:50 2020/11/15
+     * @date 15:50 2020/11/15
      * @param userId preferredList avoidList
      * @return Integer
      */
@@ -68,12 +72,55 @@ public class UserServiceImpl implements UserService {
     /**
      * 用户搜索
      * @author invainX
-     * @data
-     * @param searchName userId tagList canteenId
+     * @param searchName,tagList,canteenId
      * @return List<DishRecommend>
      */
     @Override
-    public List<DishRecommend> search(String searchName, Integer userId, List<Tag> tagList, Integer canteenId){
+    public List<DishRecommend> search(String searchName, List<Tag> tagList, Integer canteenId){
+
+        //TODO:search自定义搜索待实现
+
+
+        List<DishRecommend> dishRecommendList = new ArrayList<>();
+        Tag baseTag = tagList.get(0);
+        List<DishTag> baseDishTags = dishTagMapper.listDishTagsByTagId(baseTag.getTagId());
+        List<Dish> searchedDishList = null;
+        if(tagList.size() == 1){
+
+            for(DishTag dishTag:baseDishTags){
+                searchedDishList.add(dishMapper.getDishById(dishTag.getDishId()));
+            }
+
+            DishRecommend dishRecommend = new DishRecommend();
+            dishRecommend.setDish(searchedDishList);
+            Canteen canteen = canteenMapper.getCanteenById(canteenId);
+
+
+
+            dishRecommendList.add(dishRecommend);
+
+
+
+
+
+
+        }else{
+            for(Tag tag: tagList){
+                if(tag == baseTag) continue;
+                List<DishTag> dishTags = dishTagMapper.listDishTagsByTagId(tag.getTagId());
+                for(DishTag dishTag:baseDishTags){
+                    if(!dishTags.contains(dishTag)){
+                        baseDishTags.remove(dishTag);
+                    }
+                }
+
+
+            }
+        }
+
+
+
+
         return null;
     }
 
@@ -88,7 +135,7 @@ public class UserServiceImpl implements UserService {
     public Integer feedback(Integer userId, String content) {
         Feedback feedback = new Feedback();
         feedback.setContent(content);
-        feedback.setSubmitTime(new Timestamp(0));
+        feedback.setSubmitTime(new Timestamp(new Date().getTime()));
         feedback.setUser(userMapper.getUserById(userId));
         if(feedbackMapper.saveFeedback(feedback) != 0){
             return StatusCode.SUCCESS;

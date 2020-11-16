@@ -3,14 +3,18 @@ package com.fzufood;
 import com.fzufood.dto.DishEntry;
 import com.fzufood.dto.DishInfo;
 import com.fzufood.dto.SystemInfo;
+import com.fzufood.dto.UserInfo;
 import com.fzufood.entity.Canteen;
 import com.fzufood.entity.Tag;
+import com.fzufood.entity.User;
 import com.fzufood.entity.Window;
 import com.fzufood.repository.CanteenMapper;
 import com.fzufood.repository.TagMapper;
+import com.fzufood.repository.UserMapper;
 import com.fzufood.repository.WindowMapper;
 import com.fzufood.service.DishService;
 import com.fzufood.service.SystemService;
+import com.fzufood.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -102,6 +106,18 @@ class WhatToEatApplicationTests {
     public void testForGetDishInfo(){
         DishInfo dishInfo = dishService.getDishInfo(3);
         System.out.println(dishInfo.toString());
+    }
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Test
+    public void testForUser(){
+        List<User> userList = userMapper.listUsers();
+        for(User user : userList){
+            System.out.println(user.getUserName());
+        }
+
     }
 
 

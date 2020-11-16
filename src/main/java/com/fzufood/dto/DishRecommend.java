@@ -15,7 +15,7 @@ public class DishRecommend {
 
     private Integer windowId;
     private String windowName;
-    private File pngSrc;
+    private String pngSrc;
     private String description;
     private String canteenName;
     private Double star;

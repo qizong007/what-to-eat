@@ -10,6 +10,6 @@ public interface UserService {
     UserLogin login(String code);
     UserInfo getInfo(Integer userId);
     Integer updateInfo( Integer userId,List<Tag> preferredList, List<Tag> avoidList);
-    List<DishRecommend> search(String searchName, Integer userId, List<Tag> tagList, Integer canteenId);
+    List<DishRecommend> search(String searchName, List<Tag> tagList, Integer canteenId);
     Integer feedback( Integer userId, String content);
 }

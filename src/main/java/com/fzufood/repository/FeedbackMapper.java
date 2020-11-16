@@ -27,7 +27,7 @@ public interface FeedbackMapper {
     Feedback getFeedbackById(Integer feedbackId);
 
     /**
-     * 插入新的feedback(feedbackId, submitTime, content, user)
+     * 插入新的feedback(user, submitTime, content) 只使用了user中的userId
      * @param feedback
      * @return int
      */

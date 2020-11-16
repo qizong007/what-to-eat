@@ -3,8 +3,8 @@ package com.fzufood.service.impl;
 import com.fzufood.dto.UserLogin;
 import com.fzufood.dto.UserInfo;
 import com.fzufood.entity.Feedback;
-import com.fzufood.repository.FeedbackMapper;
-import com.fzufood.repository.UserMapper;
+import com.fzufood.entity.User;
+import com.fzufood.repository.*;
 import com.fzufood.service.UserService;
 import com.fzufood.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private FeedbackMapper feedbackMapper;
     @Autowired
-    private  DishMapper dishMapper;
+    private DishMapper dishMapper;
     @Autowired
     private CanteenMapper canteenMapper;
     @Autowired
@@ -54,18 +54,15 @@ public class UserServiceImpl implements UserService {
      * @return Integer
      */
     @Override
-    public Integer updateInfo( Integer userId,List<Tag> preferredList, List<Tag> avoidList) {
-        List<tag> preferredList = userMapper.listPreferTagsById(userId);
-        List<Tag> avoidList = userMapper.listAvoidTagsById(userId);
-        //添加喜好的标签
-        preferredList.addTags(tag);
-        //添加忌口标签
-        avoidList.addTags(tag);
-        //删除喜好标签
-        preferredList.deleteTags(tag);
-        //删除忌口标签
-        avoidList.deleteTags(tag);
-        return userId;
+    public Integer updateInfo(Integer userId,List<Tag> preferredList, List<Tag> avoidList) {
+        User user = userMapper.getUserById(userId);
+        user.setPreferTags(preferredList);
+        user.setAvoidTags(avoidList);
+        if(userMapper.updateUser(user) != 0){
+            return StatusCode.SUCCESS;
+        }else {
+            return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+        }
     }
 
     /**
@@ -76,7 +73,7 @@ public class UserServiceImpl implements UserService {
      * @return List<DishRecommend>
      */
     @Override
-    public List<DishRecommend> search(String searchName, Integer userId, List<Tag> tagList, Integer canteenId)
+    public List<DishRecommend> search(String searchName, Integer userId, List<Tag> tagList, Integer canteenId){
         return null;
     }
 

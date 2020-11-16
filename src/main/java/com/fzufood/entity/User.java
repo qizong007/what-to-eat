@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.File;
 import java.util.List;
 
 @Data
@@ -28,7 +27,7 @@ public class User {
     private String userName;
 
     @ApiModelProperty("用户头像")
-    private File profilePicture;
+    private String profilePictureURI;
 
     @ApiModelProperty("我的爱心")
     private List<Dish> likeDishes;

@@ -94,7 +94,7 @@ public interface UserMapper {
     int removeMarkWindow(Integer userId, Integer windowId);
 
     /**
-     * 根据userId查询该userId所有feedback(feedbackId, submitTime, content, user)
+     * 根据userId查询该userId所有feedback(feedbackId, submitTime, content)
      * @param userId
      * @return List<Feedback>
      */

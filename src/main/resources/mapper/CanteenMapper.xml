@@ -6,23 +6,35 @@
 
     <resultMap id="canteenMap" type="com.fzufood.entity.Canteen">
         <id property="canteenId" column="canteen_id" ></id>
+        <result property="canteenId" column="canteen_id" ></result>
         <result property="canteenName" column="canteen_name" ></result>
-        <collection property="windows" ofType="com.fzufood.entity.Window">
-            <id property="windowId" column="window_id"/>
-            <result property="windowName" column="window_name"/>
-            <result property="description" column="description"/>
-            <result property="locationURI" column="location"/>
-            <result property="profileURI" column="profile"/>
-        </collection>
     </resultMap>
+    <resultMap id="windowMap" type="com.fzufood.entity.Window">
+        <id property="windowId" column="window_id" ></id>
+        <result property="windowId" column="window_id" ></result>
+        <result property="windowName" column="window_name" ></result>
+        <result property="description" column="description"/>
+        <result property="locationURI" column="location" />
+        <result property="profileURI" column="profile" />
+    </resultMap>
+    <insert id="saveCanteen" parameterType="com.fzufood.entity.Canteen">
+        insert into canteen(canteen_id,canteen_name)values(#{canteenId},#{canteenName})
+    </insert>
+    <update id="updateCanteen">
+        update canteen set canteen_name=#{canteenName} where canteen_id=#{canteenId}
+    </update>
+    <delete id="removeCanteenById">
+        delete from canteen where canteen_id=#{canteenId}
+    </delete>
 
     <select id="listCanteens" resultMap="canteenMap">
-        select * from canteen left outer join window on canteen.canteen_id = window.canteen_id
+        select canteen_id,canteen_name from canteen
     </select>
-    
     <select id="getCanteenById" parameterType="java.lang.Integer" resultMap="canteenMap">
-        select * from canteen left outer join window on canteen.canteen_id = window.canteen_id
-        where canteen.canteen_id = #{id}
+        select canteen_id,canteen_name from canteen where canteen_id=#{canteenId}
     </select>
-    
+    <select id="listWindowsById" parameterType="java.lang.Integer" resultMap="windowMap">
+            select * from window where canteen_id=#{canteenId}
+    </select>
 </mapper>
+

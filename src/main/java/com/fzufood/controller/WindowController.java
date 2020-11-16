@@ -20,9 +20,8 @@ public class WindowController {
      */
     @ApiOperation("首页窗口推荐接口")
     @GetMapping("/recommend")
-    public DishRecommend recommend(Integer type,Integer userId){
-        //TODO
-        return new DishRecommend(1,"百味园",null,"干锅贼香","玫瑰园二楼",4.3,null);
+    public List<DishRecommend> recommend(Integer type,Integer userId){
+       return null;
     }
 
     /**
@@ -44,7 +43,7 @@ public class WindowController {
      */
     @ApiOperation("获取收藏窗口接口")
     @GetMapping("/getMarkedWindow")
-    public List<WindowEntry> getMarkedWindow(Integer userId) {
+    public List<DishRecommend> getMarkedWindow(Integer userId) {
         return null;
     }
 

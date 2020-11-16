@@ -110,14 +110,21 @@ class WhatToEatApplicationTests {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserService userService;
 
     @Test
     public void testForUser(){
-        List<User> userList = userMapper.listUsers();
-        for(User user : userList){
-            System.out.println(user.getUserName());
-        }
-
+//        List<User> userList = userMapper.listUsers();
+//        for(User user : userList){
+//            System.out.println(user.getUserName());
+//        }
+//        UserInfo userInfo = userService.getInfo(1);
+//        List<Tag> preferredTags = userInfo.getPreferTags();
+//        for(Tag tag : preferredTags){
+//            System.out.println(tag.getContent());
+//        }
+        //userService.feedback(2,"吃点儿啥就这就这？？？");
     }
 
 

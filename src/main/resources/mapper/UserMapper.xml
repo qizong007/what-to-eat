@@ -93,8 +93,58 @@
         where user_id = #{userId};
     </select>
 
-<!--    <insert id="saveUser" parameterType="com.fzufood.entity.User">-->
-<!--        insert into user(open_id, phone_number, user_name)-->
-<!--        values(#{openId}, #{phoneNumber}, #{userName},#{profilePicture});-->
-<!--    </insert>-->
+    <insert id="saveUser" parameterType="com.fzufood.entity.User">
+        insert into user(open_id, phone_number, user_name, profile_picture)
+        values(#{openId}, #{phoneNumber}, #{userName},#{profilePictureURI});
+    </insert>
+    
+    <update id="updateUser" parameterType="com.fzufood.entity.User">
+        update user set open_id = #{openId}, phone_number = #{phoneNumber}, user_name = #{userName},
+            profile_picture = #{profilePictureURI}
+        where user_id = #{userId};
+    </update>
+
+    <delete id="removeUser" parameterType="java.lang.Integer">
+        delete from user where user_id = #{userId};
+    </delete>
+
+    <insert id="saveLikeDish">
+        insert into user_like_dish(user_id, dish_id)
+        values(#{userId}, #{dishId});
+    </insert>
+
+    <delete id="removeLikeDish">
+        delete from user_like_dish
+        where user_id = #{userId} and dish_id = #{dishId};
+    </delete>
+
+    <insert id="saveMarkWindow">
+        insert into user_mark_window(user_id, window_id)
+        values (#{userId}, #{windowId});
+    </insert>
+
+    <delete id="removeMarkWindow">
+        delete from user_mark_window
+        where user_id = #{userId} and window_id = #{windowId};
+    </delete>
+
+    <insert id="savePreferTag">
+        insert into user_prefer_tag(user_id, tag_id)
+        values (#{userId}, #{tagId});
+    </insert>
+
+    <delete id="removePreferTag">
+        delete from user_prefer_tag
+        where user_id = #{userId} and tag_id = #{tagId};
+    </delete>
+
+    <insert id="saveAvoidTag">
+        insert into user_prefer_tag(user_id, tag_id)
+        values (#{userId}, #{tagId});
+    </insert>
+
+    <delete id="removeAvoidTag">
+        delete from user_prefer_tag
+        where user_id = #{userId} and tag_id = #{tagId};
+    </delete>
 </mapper>

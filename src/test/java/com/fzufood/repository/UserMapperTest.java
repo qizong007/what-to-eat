@@ -77,13 +77,69 @@ public class UserMapperTest {
         }
     }
 
-//    @Test
-//    void saveUser() {
-//        User user = new User();
-//        user.setOpenId("123456");
-//        user.setPhoneNumber("13202020202");
-//        user.setUserName("saveTest");
-//        user.setProfilePictureURI("path");
-//        userMapper.saveUser(user);
-//    }
+    @Test
+    void saveUserTest() {
+        User user = new User();
+        user.setOpenId("123456");
+        user.setPhoneNumber("13202020202");
+        user.setUserName("saveTest");
+        user.setProfilePictureURI("path");
+        userMapper.saveUser(user);
+    }
+
+    @Test
+    void updateUserTest() {
+        User user = new User();
+        user.setUserId(10);
+        user.setOpenId("123456");
+        user.setPhoneNumber("13202020202");
+        user.setUserName("updateTest");
+        user.setProfilePictureURI("path");
+        userMapper.updateUser(user);
+    }
+
+    @Test
+    void removeUserTest() {
+        userMapper.removeUser(11);
+    }
+
+    @Test
+    void saveLikeDishTest() {
+        userMapper.saveLikeDish(1,99);
+    }
+
+    @Test
+    void removeLikeDishTest() {
+        userMapper.removeLikeDish(1,99);
+    }
+
+    @Test
+    void saveMarkWindowTest() {
+        userMapper.saveMarkWindow(1,99);
+    }
+
+    @Test
+    void removeMarkWindowTest(){
+        userMapper.removeMarkWindow(1,99);
+    }
+
+    @Test
+    void savePreferTagTest() {
+        userMapper.savePreferTag(1,6);
+    }
+
+    @Test
+    void removePreferTagTest() {
+        userMapper.removePreferTag(1,6);
+    }
+
+    @Test
+    void saveAvoidTagTest() {
+        userMapper.saveAvoidTag(1,6);
+    }
+
+    @Test
+    void removeAvoidTagTest() {
+        userMapper.removeAvoidTag(1,6);
+    }
 }

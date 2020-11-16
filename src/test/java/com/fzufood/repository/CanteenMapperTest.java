@@ -1,6 +1,7 @@
 package com.fzufood.repository;
 
 import com.fzufood.entity.Canteen;
+import com.fzufood.entity.Window;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,16 +25,44 @@ public class CanteenMapperTest {
     }
 
     @Test
-    void findById() {
+    void findCanteenById() {
         Canteen canteen = canteenMapper.getCanteenById(1);
         System.out.println(canteen);
     }
-
     @Test
-    void findAll() {
+    void findWindowById(){
+        List<Window> windows= canteenMapper.listWindowsById(2);
+        for(Window window : windows) {
+            System.out.println(window);
+        }
+    }
+    @Test
+    void findCanteenAll() {
         List<Canteen> canteens = canteenMapper.listCanteens();
         for(Canteen canteen : canteens) {
             System.out.println(canteen);
         }
     }
+    @Test
+    void addCanteen() {
+        Canteen canteen = new Canteen();
+        canteen.setCanteenName("添加了一个新食堂");
+        System.out.println(canteenMapper.saveCanteen(canteen));
+        findCanteenAll();
+    }
+    @Test
+    void updateCanteenById(){
+        Canteen canteen = new Canteen();
+        canteen.setCanteenName("修改食堂");
+        canteen.setCanteenId(10);
+        System.out.println(canteenMapper.updateCanteen(canteen));
+        findCanteenAll();
+    }
+    @Test
+    void removeCanteenById(){
+        System.out.println(canteenMapper.removeCanteenById(10));
+        findCanteenAll();
+    }
+
+
 }

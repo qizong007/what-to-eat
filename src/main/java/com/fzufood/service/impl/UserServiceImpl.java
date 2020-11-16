@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.fzufood.dto.DishRecommend;
 
 import javax.swing.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -134,7 +135,7 @@ public class UserServiceImpl implements UserService {
     public Integer feedback(Integer userId, String content) {
         Feedback feedback = new Feedback();
         feedback.setContent(content);
-        feedback.setSubmitTime(new Date());
+        feedback.setSubmitTime(new Timestamp(new Date().getTime()));
         feedback.setUser(userMapper.getUserById(userId));
         if(feedbackMapper.saveFeedback(feedback) != 0){
             return StatusCode.SUCCESS;

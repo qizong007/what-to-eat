@@ -16,15 +16,15 @@ import java.util.List;
 public class WindowServiceImpl implements WindowService {
 
     @Override
-    public DishRecommend recommend(Integer type, Integer userId) {
+    public List<DishRecommend> recommend(Integer type, Integer userId) {
         return null;
     }
     @Override
-    public List<WindowEntry> info(Integer windowId, Integer userId) {
+    public WindowEntry info(Integer windowId, Integer userId) {
         return null;
     }
     @Override
-    public List<WindowEntry> getMarkedWindow(Integer userId) {
+    public List<DishRecommend> getMarkedWindow(Integer userId) {
         return null;
     }
     @Override

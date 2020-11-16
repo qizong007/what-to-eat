@@ -33,7 +33,7 @@ public class WindowController {
      */
     @ApiOperation("窗口列表接口")
     @GetMapping("/info")
-    public List<WindowEntry> info(Integer windowId, Integer userId) {
+    public WindowEntry info(Integer windowId, Integer userId) {
         return null;
     }
 

@@ -1,5 +1,6 @@
 package com.fzufood.dto;
 
+import com.fzufood.entity.Dish;
 import com.fzufood.entity.Tag;
 import com.fzufood.entity.Window;
 import lombok.AllArgsConstructor;
@@ -16,10 +17,14 @@ import java.util.List;
 @AllArgsConstructor
 public class WindowEntry {
 
-    private Window window;
-    private List<Tag> tags;
+    private Integer windowId;
+    private String windowName;
+    private String pngSrc;
+    private String description;
+    private String mapSrc;
     private String canteenName;
-    private Double stars;
+    private Double star;
+    private List<Tag> tags;
     private Boolean isMarked;
-
+    private List<Dish> dishes;
 }

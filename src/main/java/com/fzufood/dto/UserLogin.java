@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserLogin extends Code{
+public class UserLogin{
 
     private Integer userId;
     private Boolean hasRegistered;

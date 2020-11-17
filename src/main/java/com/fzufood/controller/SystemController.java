@@ -1,5 +1,6 @@
 package com.fzufood.controller;
 
+import com.fzufood.dto.JsonObject;
 import com.fzufood.dto.SystemInfo;
 import com.fzufood.service.SystemService;
 import io.swagger.annotations.ApiOperation;
@@ -17,11 +18,11 @@ public class SystemController {
 
     /**
      * 获取系统基础数据接口
-     * @return
+     * @return JsonObject<SystemInfo>
      */
     @ApiOperation("获取系统基础数据接口")
     @GetMapping("/getInfo")
-    public SystemInfo getInfo(){
+    public JsonObject<SystemInfo> getInfo(){
         return systemService.getInfo();
     }
 

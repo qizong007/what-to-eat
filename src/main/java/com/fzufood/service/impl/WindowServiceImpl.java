@@ -1,8 +1,6 @@
 package com.fzufood.service.impl;
 
-import com.fzufood.dto.Code;
-import com.fzufood.dto.DishRecommend;
-import com.fzufood.dto.WindowEntry;
+import com.fzufood.dto.*;
 import com.fzufood.entity.Dish;
 import com.fzufood.entity.DishComment;
 import com.fzufood.entity.User;
@@ -29,12 +27,12 @@ public class WindowServiceImpl implements WindowService {
     private DishCommentMapper dishCommentMapper;
 
     @Override
-    public List<DishRecommend> recommend(Integer type, Integer userId) {
+    public JsonObject<List<DishRecommend>> recommend(Integer type, Integer userId) {
         return null;
     }
 
     @Override
-    public WindowEntry info(Integer windowId, Integer userId) {
+    public JsonObject<WindowEntry> info(Integer windowId, Integer userId) {
         return null;
     }
 
@@ -42,10 +40,18 @@ public class WindowServiceImpl implements WindowService {
      * 获取收藏窗口
      * @author gaoyichao33
      * @param userId
-     * @return List<DishRecommend>
+     * @return JsonObject<List<DishRecommend>>
      */
     @Override
-    public List<DishRecommend> getMarkedWindow(Integer userId) {
+    public JsonObject<List<DishRecommend>> getMarkedWindow(Integer userId) {
+        JsonObject<List<DishRecommend>> jsonObject = new JsonObject<>();
+        Code code = new Code();
+        if(userId == null){
+            code.setCode(StatusCode.MISSING_PARAMETERS);
+            jsonObject.setCode(code);
+            jsonObject.setData(null);
+            return jsonObject;
+        }
         List<Window> windowList = userMapper.listMarkWindowsById(userId);
         List<DishRecommend> dishRecommends = new ArrayList<>();
         for(Window window : windowList){
@@ -58,7 +64,9 @@ public class WindowServiceImpl implements WindowService {
             dishRecommend.setDish(window.getDishes());
             dishRecommends.add(dishRecommend);
         }
-        return dishRecommends;
+        jsonObject.setCode(new Code(StatusCode.SUCCESS));
+        jsonObject.setData(dishRecommends);
+        return jsonObject;
     }
 
     /**

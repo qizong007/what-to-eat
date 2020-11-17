@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class WindowEntry extends Code{
+public class WindowEntry{
 
     private Integer windowId;
     private String windowName;

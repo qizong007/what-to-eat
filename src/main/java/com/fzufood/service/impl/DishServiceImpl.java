@@ -1,9 +1,6 @@
 package com.fzufood.service.impl;
 
-import com.fzufood.dto.Code;
-import com.fzufood.dto.DishEntry;
-import com.fzufood.dto.DishInfo;
-import com.fzufood.dto.UpdateDishTag;
+import com.fzufood.dto.*;
 import com.fzufood.entity.*;
 import com.fzufood.repository.*;
 import com.fzufood.service.DishService;
@@ -31,15 +28,19 @@ public class DishServiceImpl implements DishService {
      * @author qizong007
      * @date 17:42 2020/11/14
      * @param userId,dishId,tagId
-     * @return UpdateDishTag
+     * @return JsonObject<UpdateDishTag>
      **/
     @Override
-    public UpdateDishTag updateDishTag(Integer userId, Integer dishId, Integer tagId) {
-        UpdateDishTag updateDishTag = new UpdateDishTag();
+    public JsonObject<UpdateDishTag> updateDishTag(Integer userId, Integer dishId, Integer tagId) {
+        JsonObject<UpdateDishTag> jsonObject = new JsonObject<>();
+        Code code = new Code();
         if(userId == null || dishId == null || tagId == null){
-            updateDishTag.setCode(StatusCode.MISSING_PARAMETERS);
-            return updateDishTag;
+            code.setCode(StatusCode.MISSING_PARAMETERS);
+            jsonObject.setCode(code);
+            jsonObject.setData(null);
+            return jsonObject;
         }
+        UpdateDishTag updateDishTag = new UpdateDishTag();
         List<Integer> tagIdList = dishTagMapper.listTagIdsByDishId(dishId);
         DishTag dishTag = null;
         boolean hasTagged = false;
@@ -56,7 +57,7 @@ public class DishServiceImpl implements DishService {
         updateDishTag.setDishName(dishMapper.getDishById(dishId).getDishName());
         updateDishTag.setTagId(tagId);
         updateDishTag.setCount(count);
-        updateDishTag.setCode(StatusCode.SUCCESS);
+        code.setCode(StatusCode.SUCCESS);
         if(hasTagged){
             // 用户点过，现在就要取消 -- false
             dishTagMapper.removeDishTagsByDishId(dishId);
@@ -66,7 +67,9 @@ public class DishServiceImpl implements DishService {
             dishTagMapper.saveDishTag(new DishTag(userId,dishId,tagId));
             updateDishTag.setMarkedTag(true);
         }
-        return updateDishTag;
+        jsonObject.setCode(code);
+        jsonObject.setData(updateDishTag);
+        return jsonObject;
     }
 
     /**
@@ -74,7 +77,7 @@ public class DishServiceImpl implements DishService {
      * @author qizong007
      * @date 17:45 2020/11/14
      * @param  userId,dishId,star
-     * @return Integer
+     * @return Code
      **/
     @Override
     public Code updateDishStar(Integer userId, Integer dishId, Double star) {
@@ -110,33 +113,47 @@ public class DishServiceImpl implements DishService {
      * 获取菜品信息
      * @author qizong007
      * @param dishId
-     * @return DishInfo
+     * @return JsonObject<DishInfo>
      */
     @Override
-    public DishInfo getDishInfo(Integer dishId) {
-        DishInfo dishInfo = new DishInfo();
+    public JsonObject<DishInfo> getDishInfo(Integer dishId) {
+        JsonObject<DishInfo> jsonObject = new JsonObject<>();
+        Code code = new Code();
         if(dishId == null){
-            dishInfo.setCode(StatusCode.MISSING_PARAMETERS);
-            return dishInfo;
+            code.setCode(StatusCode.MISSING_PARAMETERS);
+            jsonObject.setCode(code);
+            jsonObject.setData(null);
+            return jsonObject;
         }
-        dishInfo.setCode(StatusCode.SUCCESS);
+        DishInfo dishInfo = new DishInfo();
+        code.setCode(StatusCode.SUCCESS);
         Dish dish = dishMapper.getDishById(dishId);
         dishInfo.setDishName(dish.getDishName());
         dishInfo.setPrice(dish.getPrice());
         dishInfo.setStar(countStarsOnDish(dishId));
         dishInfo.setStarNum(countStarsNumOnDish(dishId));
         dishInfo.setTagList(dish.getTags());
-        return dishInfo;
+        jsonObject.setData(dishInfo);
+        jsonObject.setCode(code);
+        return jsonObject;
     }
 
     /**
      * 最爱的菜
      * @author qizong007
      * @param userId
-     * @return List<DishEntry>
+     * @return JsonObject<List<DishEntry>>
      */
     @Override
-    public List<DishEntry> favorites(Integer userId) {
+    public JsonObject<List<DishEntry>> favorites(Integer userId) {
+        JsonObject<List<DishEntry>> jsonObject = new JsonObject<>();
+        Code code = new Code();
+        if(userId == null){
+            code.setCode(StatusCode.MISSING_PARAMETERS);
+            jsonObject.setCode(code);
+            jsonObject.setData(null);
+            return jsonObject;
+        }
         List<Dish> dishList = userMapper.listLikeDishesById(userId);
         List<DishEntry> dishEntries = new ArrayList<>();
         for(Dish dish : dishList){
@@ -147,7 +164,10 @@ public class DishServiceImpl implements DishService {
             dishEntry.setStar(countStarsOnDish(dish.getDishId()));
             dishEntries.add(dishEntry);
         }
-        return dishEntries;
+        code.setCode(StatusCode.SUCCESS);
+        jsonObject.setCode(code);
+        jsonObject.setData(dishEntries);
+        return jsonObject;
     }
 
     /**

@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DishInfo extends Code{
+public class DishInfo{
 
     private String dishName;
     private BigDecimal price;

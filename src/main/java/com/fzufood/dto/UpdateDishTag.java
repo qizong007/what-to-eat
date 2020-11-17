@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateDishTag extends Code{
+public class UpdateDishTag{
 
     private String dishName;
     private Integer tagId;

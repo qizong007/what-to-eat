@@ -1,9 +1,7 @@
 package com.fzufood.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.fzufood.dto.Code;
-import com.fzufood.dto.UserLogin;
-import com.fzufood.dto.UserInfo;
+import com.fzufood.dto.*;
 import com.fzufood.entity.*;
 import com.fzufood.http.HttpRequest;
 import com.fzufood.http.LoginResponse;
@@ -12,9 +10,7 @@ import com.fzufood.service.UserService;
 import com.fzufood.util.StatusCode;
 import com.fzufood.util.WeChatAppCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.fzufood.dto.DishRecommend;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -46,16 +42,18 @@ public class UserServiceImpl implements UserService {
      * @author qizong007
      * @date 19:31 2020/11/17
      * @param code
-     * @return UserLogin
+     * @return JsonObject<UserLogin>
      **/
     @Override
-    public UserLogin login(String code) {
-        UserLogin userLogin = new UserLogin();
+    public JsonObject<UserLogin> login(String code) {
+        JsonObject<UserLogin> jsonObject = new JsonObject<>();
         // 缺少参数
         if(code == null){
-            userLogin.setCode(StatusCode.MISSING_PARAMETERS);
-            return userLogin;
+            jsonObject.setCode(new Code(StatusCode.MISSING_PARAMETERS));
+            jsonObject.setData(null);
+            return jsonObject;
         }
+        UserLogin userLogin = new UserLogin();
         // 拿前端给的code去请求openId
         String str = HttpRequest.sendGet(WeChatAppCode.URL,
                 "appid="+WeChatAppCode.APP_ID
@@ -68,19 +66,20 @@ public class UserServiceImpl implements UserService {
         // code无效
         if(errCode == StatusCode.INVALID_CODE){
             System.out.println(response.getErrmsg());
-            userLogin.setCode(StatusCode.INVALID_CODE);
-            return userLogin;
+            jsonObject.setCode(new Code(StatusCode.INVALID_CODE));
+            jsonObject.setData(null);
+            return jsonObject;
         }
         // 系统繁忙
         if(errCode == StatusCode.SYSTEM_BUSY){
             System.out.println(response.getErrmsg());
-            userLogin.setCode(StatusCode.SYSTEM_BUSY);
-            return userLogin;
+            jsonObject.setCode(new Code(StatusCode.SYSTEM_BUSY));
+            jsonObject.setData(null);
+            return jsonObject;
         }
         String openId = response.getOpenid();
         User user = userMapper.getUserByOpenId(openId);
         Integer userId;
-        userLogin.setCode(StatusCode.SUCCESS);
         if(user == null){
             // 还未注册
             user = new User();
@@ -95,27 +94,33 @@ public class UserServiceImpl implements UserService {
             userLogin.setUserId(userId);
             userLogin.setHasRegistered(true);
         }
-        return userLogin;
+        jsonObject.setData(userLogin);
+        jsonObject.setCode(new Code(StatusCode.SUCCESS));
+        return jsonObject;
     }
 
     /**
      * 获取用户信息
      * @param userId
-     * @return UserInfo
+     * @return JsonObject<UserInfo>
      * @author qizong007
      * @date 14:11 2020/11/15
      **/
     @Override
-    public UserInfo getInfo(Integer userId) {
-        UserInfo userInfo = new UserInfo();
+    public JsonObject<UserInfo> getInfo(Integer userId) {
+        JsonObject<UserInfo> jsonObject = new JsonObject<>();
+        // 缺少参数
         if(userId == null){
-            userInfo.setCode(StatusCode.MISSING_PARAMETERS);
-            return userInfo;
+            jsonObject.setCode(new Code(StatusCode.MISSING_PARAMETERS));
+            jsonObject.setData(null);
+            return jsonObject;
         }
-        userInfo.setCode(StatusCode.SUCCESS);
+        UserInfo userInfo = new UserInfo();
         userInfo.setPreferTags(userMapper.listPreferTagsById(userId));
         userInfo.setAvoidTags(userMapper.listAvoidTagsById(userId));
-        return userInfo;
+        jsonObject.setCode(new Code(StatusCode.SUCCESS));
+        jsonObject.setData(userInfo);
+        return jsonObject;
     }
 
     /**
@@ -144,12 +149,13 @@ public class UserServiceImpl implements UserService {
      * @param searchName
      * @param tagList
      * @param canteenId
-     * @return List<DishRecommend>
+     * @return JsonObject<List<DishRecommend>>
      * @author invainX
      */
     @Override
-    public List<DishRecommend> search(String searchName, List<Tag> tagList, Integer canteenId) {
+    public JsonObject<List<DishRecommend>> search(String searchName, List<Tag> tagList, Integer canteenId) {
 
+        JsonObject<List<DishRecommend>> jsonObject = new JsonObject<>();
         //TODO:search自定义搜索待实现
 
 
@@ -277,7 +283,10 @@ public class UserServiceImpl implements UserService {
 
 
         }
-        return dishRecommendList;
+
+        jsonObject.setData(dishRecommendList);
+        jsonObject.setCode(new Code(StatusCode.SUCCESS));
+        return jsonObject;
 
     }
 

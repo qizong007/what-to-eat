@@ -1,17 +1,14 @@
 package com.fzufood.service;
 
-import com.fzufood.dto.Code;
-import com.fzufood.dto.DishEntry;
-import com.fzufood.dto.DishInfo;
-import com.fzufood.dto.UpdateDishTag;
+import com.fzufood.dto.*;
 
 import java.util.List;
 
 public interface DishService {
 
-    UpdateDishTag updateDishTag(Integer userId, Integer dishId, Integer tagId);
+    JsonObject<UpdateDishTag> updateDishTag(Integer userId, Integer dishId, Integer tagId);
     Code updateDishStar(Integer userId, Integer dishId, Double star);
-    DishInfo getDishInfo(Integer dishId);
-    List<DishEntry> favorites(Integer userId);
+    JsonObject<DishInfo> getDishInfo(Integer dishId);
+    JsonObject<List<DishEntry>> favorites(Integer userId);
 
 }

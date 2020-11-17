@@ -1,18 +1,19 @@
 package com.fzufood.dto;
 
-import com.fzufood.entity.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
+/**
+ * @Author qizong007
+ * @create 2020/11/17 21:10
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfo{
+public class JsonObject<T> {
 
-    private List<Tag> preferTags;
-    private List<Tag> avoidTags;
+    Code code;
+    T data;
 
 }

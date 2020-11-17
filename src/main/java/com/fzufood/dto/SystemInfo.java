@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SystemInfo extends Code{
+public class SystemInfo{
 
     private List<Tag> tags;
     private List<Canteen> canteens;

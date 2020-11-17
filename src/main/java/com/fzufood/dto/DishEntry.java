@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DishEntry extends Code{
+public class DishEntry{
 
     private Integer dishId;
     private String dishName;

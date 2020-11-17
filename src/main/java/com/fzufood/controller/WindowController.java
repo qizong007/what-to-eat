@@ -2,6 +2,7 @@ package com.fzufood.controller;
 
 import com.fzufood.dto.Code;
 import com.fzufood.dto.DishRecommend;
+import com.fzufood.dto.JsonObject;
 import com.fzufood.dto.WindowEntry;
 import com.fzufood.service.WindowService;
 import com.fzufood.util.StatusCode;
@@ -22,12 +23,12 @@ public class WindowController {
      * 首页窗口推荐接口
      * @param type
      * @param userId
-     * @return List<DishRecommend>
+     * @return JsonObject<List<DishRecommend>>
      */
     @ApiOperation("首页窗口推荐接口")
     @GetMapping("/recommend")
-    public List<DishRecommend> recommend(@RequestParam("type")Integer type,
-                                         @RequestParam("userId")Integer userId){
+    public JsonObject<List<DishRecommend>> recommend(@RequestParam("type")Integer type,
+                                                     @RequestParam("userId")Integer userId){
        return windowService.recommend(type, userId);
     }
 
@@ -35,11 +36,11 @@ public class WindowController {
      * 窗口列表接口
      * @param windowId
      * @param userId
-     * @return WindowEntry
+     * @return JsonObject<WindowEntry>
      */
     @ApiOperation("窗口列表接口")
     @GetMapping("/info")
-    public WindowEntry info(@RequestParam("windowId")Integer windowId,
+    public JsonObject<WindowEntry> info(@RequestParam("windowId")Integer windowId,
                             @RequestParam("userId")Integer userId) {
         return windowService.info(windowId, userId);
     }
@@ -47,11 +48,11 @@ public class WindowController {
     /**
      * 获取收藏窗口接口
      * @param userId
-     * @return List<DishRecommend>
+     * @return JsonObject<List<DishRecommend>>
      */
     @ApiOperation("获取收藏窗口接口")
     @GetMapping("/getMarkedWindow")
-    public List<DishRecommend> getMarkedWindow(@RequestParam("userId")Integer userId) {
+    public JsonObject<List<DishRecommend>> getMarkedWindow(@RequestParam("userId")Integer userId) {
         return windowService.getMarkedWindow(userId);
     }
 

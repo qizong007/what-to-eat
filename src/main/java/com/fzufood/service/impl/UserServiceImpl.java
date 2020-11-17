@@ -30,17 +30,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CanteenMapper canteenMapper;
     @Autowired
-    private TagMapper tagMapper;
-    @Autowired
     private WindowMapper windowMapper;
     @Autowired
     private DishTagMapper dishTagMapper;
     @Autowired
     private DishCommentMapper dishCommentMapper;
-    @Override
-    public UserLogin login(String code) {
-        return null;
-    }
+
 
     private Double countStarsOnWindow(Integer windowId){
         List<Dish> dishList = windowMapper.listDishesById(windowId);
@@ -58,6 +53,15 @@ public class UserServiceImpl implements UserService {
         }
         return stars/dishComments.size();
     }
+
+
+
+    @Override
+    public UserLogin login(String code) {
+        return null;
+    }
+
+
 
     /**
      * 获取用户信息

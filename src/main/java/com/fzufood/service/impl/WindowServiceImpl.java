@@ -3,13 +3,8 @@ package com.fzufood.service.impl;
 import com.fzufood.dto.DishEntry;
 import com.fzufood.dto.DishRecommend;
 import com.fzufood.dto.WindowEntry;
-import com.fzufood.entity.Dish;
-import com.fzufood.entity.DishComment;
-import com.fzufood.entity.User;
-import com.fzufood.entity.Window;
-import com.fzufood.repository.DishCommentMapper;
-import com.fzufood.repository.UserMapper;
-import com.fzufood.repository.WindowMapper;
+import com.fzufood.entity.*;
+import com.fzufood.repository.*;
 import com.fzufood.service.WindowService;
 import com.fzufood.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +23,33 @@ public class WindowServiceImpl implements WindowService {
     private WindowMapper windowMapper;
     @Autowired
     private DishCommentMapper dishCommentMapper;
+    @Autowired
+    private DishMapper dishMapper;
     @Override
     public List<DishRecommend> recommend(Integer type, Integer userId) {
+
         return null;
     }
     @Override
     public WindowEntry info(Integer windowId, Integer userId) {
-        return null;
+        WindowEntry windowEntry = new WindowEntry();
+        List<Dish> dishList =  windowMapper.listDishesById(windowId);
+
+        windowEntry.setWindowId(windowMapper.getWindowById(windowId).getWindowId());
+        windowEntry.setWindowName(windowMapper.getWindowById(windowId).getWindowName());
+        windowEntry.setPngSrc(windowMapper.getWindowById(windowId).getProfileURI());
+        windowEntry.setDescription(windowMapper.getWindowById(windowId).getDescription());
+        windowEntry.setMapSrc(windowMapper.getWindowById(windowId).getLocationURI());
+        windowEntry.setCanteenName(windowMapper.getWindowById(windowId).getCanteen().getCanteenName());
+        windowEntry.setStar(countStarsOnWindow(windowId));
+//        for (Dish dish : dishList){
+//            List<Tag> tags = dishMapper.listTagsById(dish.getDishId());
+//          TODO: 窗口的List<Tag>
+//        }
+        List<Window> windowList = userMapper.listMarkWindowsById(userId);
+        windowEntry.setIsMarked(windowList.contains(windowId));
+        windowEntry.setDishes(dishList);
+        return windowEntry;
     }
     /**
      * 获取收藏窗口

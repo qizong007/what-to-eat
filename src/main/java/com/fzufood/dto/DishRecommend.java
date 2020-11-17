@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DishRecommend {
+public class DishRecommend extends Code{
 
     private Integer windowId;
     private String windowName;

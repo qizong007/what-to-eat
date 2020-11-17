@@ -1,5 +1,6 @@
 package com.fzufood.service.impl;
 
+import com.fzufood.dto.Code;
 import com.fzufood.dto.DishEntry;
 import com.fzufood.dto.DishInfo;
 import com.fzufood.dto.UpdateDishTag;
@@ -34,6 +35,11 @@ public class DishServiceImpl implements DishService {
      **/
     @Override
     public UpdateDishTag updateDishTag(Integer userId, Integer dishId, Integer tagId) {
+        UpdateDishTag updateDishTag = new UpdateDishTag();
+        if(userId == null || dishId == null || tagId == null){
+            updateDishTag.setCode(StatusCode.MISSING_PARAMETERS);
+            return updateDishTag;
+        }
         List<Integer> tagIdList = dishTagMapper.listTagIdsByDishId(dishId);
         DishTag dishTag = null;
         boolean hasTagged = false;
@@ -47,10 +53,10 @@ public class DishServiceImpl implements DishService {
         List<DishTag> userInThisDishTag = dishTagMapper.listDishTagByDishIdAndTagId(dishId,tagId);
         // 某道菜的某个标签多少人点过
         Integer count = userInThisDishTag.size();
-        UpdateDishTag updateDishTag = new UpdateDishTag();
         updateDishTag.setDishName(dishMapper.getDishById(dishId).getDishName());
         updateDishTag.setTagId(tagId);
         updateDishTag.setCount(count);
+        updateDishTag.setCode(StatusCode.SUCCESS);
         if(hasTagged){
             // 用户点过，现在就要取消 -- false
             dishTagMapper.removeDishTagsByDishId(dishId);
@@ -71,7 +77,10 @@ public class DishServiceImpl implements DishService {
      * @return Integer
      **/
     @Override
-    public Integer updateDishStar(Integer userId, Integer dishId, Double star) {
+    public Code updateDishStar(Integer userId, Integer dishId, Double star) {
+        if(userId == null || dishId == null || star == null){
+            return new Code(StatusCode.MISSING_PARAMETERS);
+        }
         DishComment dishComment = dishCommentMapper.getDishCommentByUserIdDishId(userId, dishId);
         if(dishComment == null){
             // 没有就是新增save
@@ -81,18 +90,18 @@ public class DishServiceImpl implements DishService {
             dishComment.setUserId(userId);
             // 返回值为受影响的行数
             if(dishCommentMapper.saveDishComment(dishComment) != 0){
-                return StatusCode.SUCCESS;
+                return new Code(StatusCode.SUCCESS);
             }else{
-                return StatusCode.FAIL_TO_SAVE_DISH_STAR;
+                return new Code(StatusCode.FAIL_TO_SAVE_DISH_STAR);
             }
         }else{
             // 有就是更改update
             dishComment.setStars(star);
             // 为0即更新失败
             if(dishCommentMapper.updateDishComment(dishComment) != 0){
-                return StatusCode.SUCCESS;
+                return new Code(StatusCode.SUCCESS);
             }else{
-                return StatusCode.FAIL_TO_UPDATE_DISH_STAR;
+                return new Code(StatusCode.FAIL_TO_UPDATE_DISH_STAR);
             }
         }
     }
@@ -105,8 +114,13 @@ public class DishServiceImpl implements DishService {
      */
     @Override
     public DishInfo getDishInfo(Integer dishId) {
-        Dish dish = dishMapper.getDishById(dishId);
         DishInfo dishInfo = new DishInfo();
+        if(dishId == null){
+            dishInfo.setCode(StatusCode.MISSING_PARAMETERS);
+            return dishInfo;
+        }
+        dishInfo.setCode(StatusCode.SUCCESS);
+        Dish dish = dishMapper.getDishById(dishId);
         dishInfo.setDishName(dish.getDishName());
         dishInfo.setPrice(dish.getPrice());
         dishInfo.setStar(countStarsOnDish(dishId));

@@ -1,18 +1,17 @@
 package com.fzufood.dto;
 
-import com.fzufood.entity.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
+/**
+ * 每一个返回的json对象都要有状态码
+ * @Author qizong007
+ * @create 2020/11/17 16:52
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfo extends Code{
-
-    private List<Tag> preferTags;
-    private List<Tag> avoidTags;
-
+public class Code {
+    Integer code;
 }

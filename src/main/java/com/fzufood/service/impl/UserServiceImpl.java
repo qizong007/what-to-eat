@@ -1,5 +1,6 @@
 package com.fzufood.service.impl;
 
+import com.fzufood.dto.Code;
 import com.fzufood.dto.UserLogin;
 import com.fzufood.dto.UserInfo;
 import com.fzufood.entity.*;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fzufood.dto.DishRecommend;
 
-import javax.swing.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,8 +29,6 @@ public class UserServiceImpl implements UserService {
     private DishMapper dishMapper;
     @Autowired
     private CanteenMapper canteenMapper;
-    @Autowired
-    private TagMapper tagMapper;
     @Autowired
     private WindowMapper windowMapper;
     @Autowired
@@ -61,42 +59,50 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 获取用户信息
-     *
      * @param userId
-     * @return Integer
+     * @return UserInfo
      * @author qizong007
      * @date 14:11 2020/11/15
      **/
     @Override
     public UserInfo getInfo(Integer userId) {
-        return new UserInfo(userMapper.listPreferTagsById(userId), userMapper.listAvoidTagsById(userId));
+        UserInfo userInfo = new UserInfo();
+        if(userId == null){
+            userInfo.setCode(StatusCode.MISSING_PARAMETERS);
+            return userInfo;
+        }
+        userInfo.setCode(StatusCode.SUCCESS);
+        userInfo.setPreferTags(userMapper.listPreferTagsById(userId));
+        userInfo.setAvoidTags(userMapper.listAvoidTagsById(userId));
+        return userInfo;
     }
 
     /**
      * 更新用户信息
-     *
-     * @param userId preferredList avoidList
-     * @return Integer
+     * @param userId
+     * @param preferredList
+     * @param avoidList
+     * @return Code
      * @author invainX
      * @date 15:50 2020/11/15
      */
     @Override
-    public Integer updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList) {
+    public Code updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList) {
         User user = userMapper.getUserById(userId);
         user.setPreferTags(preferredList);
         user.setAvoidTags(avoidList);
-
         if (userMapper.updateUser(user) != 0) {
-            return StatusCode.SUCCESS;
+            return new Code(StatusCode.SUCCESS);
         } else {
-            return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+            return new Code(StatusCode.FAIL_TO_UPDATE_USER_INFO);
         }
     }
 
     /**
      * 用户搜索
-     *
-     * @param searchName,tagList,canteenId
+     * @param searchName
+     * @param tagList
+     * @param canteenId
      * @return List<DishRecommend>
      * @author invainX
      */
@@ -236,22 +242,22 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 用户反馈
-     *
-     * @param userId,content
-     * @return Integer
+     * @param userId
+     * @param content
+     * @return Code
      * @author qizong007
      * @date 14:09 2020/11/15
      **/
     @Override
-    public Integer feedback(Integer userId, String content) {
+    public Code feedback(Integer userId, String content) {
         Feedback feedback = new Feedback();
         feedback.setContent(content);
         feedback.setSubmitTime(new Timestamp(new Date().getTime()));
         feedback.setUser(userMapper.getUserById(userId));
         if (feedbackMapper.saveFeedback(feedback) != 0) {
-            return StatusCode.SUCCESS;
+            return new Code(StatusCode.SUCCESS);
         } else {
-            return StatusCode.FAIL_TO_SAVE_FEEDBACK;
+            return new Code(StatusCode.FAIL_TO_SAVE_FEEDBACK);
         }
     }
 }

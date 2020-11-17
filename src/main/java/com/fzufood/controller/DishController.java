@@ -1,15 +1,14 @@
 package com.fzufood.controller;
 
+import com.fzufood.dto.Code;
 import com.fzufood.dto.DishEntry;
 import com.fzufood.dto.DishInfo;
 import com.fzufood.dto.UpdateDishTag;
 import com.fzufood.service.DishService;
-import com.fzufood.util.StatusCode;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -24,7 +23,7 @@ public class DishController {
      * @param userId
      * @param dishId
      * @param tagId
-     * @return
+     * @return UpdateDishTag
      */
     @ApiOperation("更新菜品标签接口")
     @PostMapping("/updateDishTag")
@@ -40,13 +39,13 @@ public class DishController {
      * @param userId
      * @param dishId
      * @param star
-     * @return
+     * @return Code
      */
     @ApiOperation("更新菜品评分接口")
     @PostMapping("/updateDishStar")
-    public Integer updateDishStar(@RequestParam("userId") Integer userId,
-                                       @RequestParam("dishId")Integer dishId,
-                                       @RequestParam("star")Double star){
+    public Code updateDishStar(@RequestParam("userId") Integer userId,
+                               @RequestParam("dishId")Integer dishId,
+                               @RequestParam("star")Double star){
         return dishService.updateDishStar(userId, dishId, star);
     }
 

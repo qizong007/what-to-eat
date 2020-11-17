@@ -1,6 +1,6 @@
 package com.fzufood.service.impl;
 
-import com.fzufood.dto.DishEntry;
+import com.fzufood.dto.Code;
 import com.fzufood.dto.DishRecommend;
 import com.fzufood.dto.WindowEntry;
 import com.fzufood.entity.Dish;
@@ -14,7 +14,6 @@ import com.fzufood.service.WindowService;
 import com.fzufood.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +27,17 @@ public class WindowServiceImpl implements WindowService {
     private WindowMapper windowMapper;
     @Autowired
     private DishCommentMapper dishCommentMapper;
+
     @Override
     public List<DishRecommend> recommend(Integer type, Integer userId) {
         return null;
     }
+
     @Override
     public WindowEntry info(Integer windowId, Integer userId) {
         return null;
     }
+
     /**
      * 获取收藏窗口
      * @author gaoyichao33
@@ -56,8 +58,9 @@ public class WindowServiceImpl implements WindowService {
             dishRecommend.setDish(window.getDishes());
             dishRecommends.add(dishRecommend);
         }
-        return  dishRecommends;
+        return dishRecommends;
     }
+
     /**
      * 根据windowId，查出该窗口星级
      * @author gaoyichao33
@@ -72,6 +75,7 @@ public class WindowServiceImpl implements WindowService {
         }
         return stars/dishList.size();
     }
+
     private Double countStarsOnDish(Integer dishId){
         List<DishComment> dishComments = dishCommentMapper.listDishCommentsByDishId(dishId);
         Double stars = 0.0;
@@ -80,6 +84,7 @@ public class WindowServiceImpl implements WindowService {
         }
         return stars/dishComments.size();
     }
+
     /**
      * 更新收藏窗口
      * @author gaoyichao33
@@ -87,16 +92,16 @@ public class WindowServiceImpl implements WindowService {
      * @return Integer
      */
     @Override
-    public Integer updateMarkedWindow( Integer userId, Integer windowId)  {
+    public Code updateMarkedWindow(Integer userId, Integer windowId)  {
         User user = userMapper.getUserById(userId);
         List<Window> windowList = userMapper.listMarkWindowsById(userId);
         Window  window = windowMapper.getWindowById(windowId);
         windowList.add(window);
         user.setMarkWindows(windowList);
         if(windowMapper.updateWindow(window) != 0){
-            return StatusCode.SUCCESS;
+            return new Code(StatusCode.SUCCESS);
         }else {
-            return StatusCode.FAIL_TO_UPDATE_MARKEDWINDOW;
+            return new Code(StatusCode.FAIL_TO_UPDATE_MARKED_WINDOW);
     }
 
 }

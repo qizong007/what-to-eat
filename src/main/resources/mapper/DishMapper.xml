@@ -3,5 +3,48 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fzufood.repository.DishMapper">
+    <resultMap id="dishMap" type="com.fzufood.entity.Dish">
+        <id property="dishId" column="dish_id"/>
+        <result property="dishName" column="dish_name"/>
+        <result property="price" column="price"/>
+        <result property="byWeight" column="by_weight"/>
+        <association property="window" column="window_id" javaType="com.fzufood.entity.Window">
+            <id property="windowId" column="window_id"/>
+            <result property="windowName" column="window_name"/>
+            <result property="locationURI" column="location"/>
+            <result property="profileURI" column="profile"/>
+            <result property="description" column="description"/>
+        </association>
+    </resultMap>
+    <resultMap id="TagMap" type="com.fzufood.entity.Tag">
+        <id property="tagId" column="tag_id" ></id>
+        <result property="content" column="content" ></result>
+    </resultMap>
+    <insert id="saveDish">
+        insert  into dish(window_id,dish_name,price,by_weight) values(#{dishId},#{window.windowId},#{dishName},#{price},#{byWeight})
+    </insert>
+    <update id="updateDish" parameterType="com.fzufood.entity.Dish">
+        update dish set dish_name=#{dishName},price=#{price},by_weight=#{byWeight} ,window_id=#{window.windowId}where dish_id=#{dishId}
+    </update>
+    <delete id="removeDishById" parameterType="com.fzufood.entity.Dish">
+        delete from dish where dish_id=#{dishId}
+    </delete>
+    <select id="listDishes" resultMap="dishMap">
+            select dish_id,dish_name,price,by_weight,window.window_id window_id, window_name, location, profile,
+            description,canteen.canteen_id canteen_id, canteen_name
+        from dish  join window on window.window_id = dish.window_id
+        left join canteen on window.canteen_id = canteen.canteen_id
+
+    </select>
+    <select id="getDishById" parameterType="java.lang.Integer" resultMap="dishMap">
+        select dish_id,dish_name,price,by_weight,window.window_id window_id, window_name, location, profile,
+            description,canteen.canteen_id canteen_id, canteen_name
+        from dish  left join window on window.window_id = dish.window_id
+        left join canteen on window.canteen_id = canteen.canteen_id
+        where dish_id=#{dishId}
+    </select>
+    <select id="listTagsById" parameterType="java.lang.Integer" resultMap="TagMap">
+        select tag_id,content from tag where tag_id in (select tag_id from dish_tag where dish_id = #{dishId})
+    </select>
 
 </mapper>

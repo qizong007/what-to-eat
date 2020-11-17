@@ -3,22 +3,54 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fzufood.repository.WindowMapper">
+    <resultMap id="windowMap" type="com.fzufood.entity.Window">
+        <id property="windowId" column="window_id"/>
+        <result property="windowName" column="window_name"/>
+        <result property="locationURI" column="location"/>
+        <result property="profileURI" column="profile"/>
+        <result property="description" column="description"/>
+        <association property="canteen" column="canteen_id" javaType="com.fzufood.entity.Canteen">
+            <id property="canteenId" column="canteen_id" ></id>
+            <result property="canteenName" column="canteen_name" ></result>
+        </association>
+    </resultMap>
+    <resultMap id="dishMap" type="com.fzufood.entity.Dish">
+        <id property="dishId" column="dish_id"/>
+        <result property="dishName" column="dish_name"/>
+        <result property="price" column="price"/>
+        <result property="byWeight" column="by_weight"/>
+        <association property="window" column="window_id" javaType="com.fzufood.entity.Window">
+            <id property="windowId" column="window_id"/>
+            <result property="windowName" column="window_name"/>
+            <result property="locationURI" column="location"/>
+            <result property="profileURI" column="profile"/>
+            <result property="description" column="description"/>
+        </association>
+    </resultMap>
+    <insert id="saveWindow" parameterType="com.fzufood.entity.Window">
+        insert into window(window_name,location,profile,description,canteen_id)values(#{windowName},,#{location},#{profile},#{description},#{canteen.canteenId})
+    </insert>
+    <select id="listWindows" resultMap="windowMap">
+        select window_id,window_name,location,profile,description,canteen.canteen_id canteen_id,canteen.canteen_name
+        from window
+        left join  canteen on window.canteen_id=canteen.canteen_id
+    </select>
+    <select id="getWindowById" resultMap="windowMap">
+        select window_id,window_name,location,profile,description,canteen.canteen_id canteen_id,canteen.canteen_name
+        from window
+        left join  canteen on window.canteen_id=canteen.canteen_id
+        where window_id=#{windowId}
+    </select>
+    <select id="listDishesById" parameterType="java.lang.Integer" resultMap="dishMap">
+        select dish_id, dish_name, price, by_weight from dish where window_id=#{window.windowId}
+    </select>
+    <update id="updateWindow" parameterType="com.fzufood.entity.Window">
+         update window set window_name=#{windowName}, location=#{location}, profile={profile}, description={description},canteen.canteen_id canteen_id =#{canteen.canteenId} where window_id=#{windowId}
+    </update>
+    <delete id="removeWindowById">
+        delete from window where window_id=#{windowId}
+    </delete>
 
-<!--    <resultMap id="windowMap" type="com.fzufood.entity.Window">-->
-<!--        <id column="window_id" property="windowId"></id>-->
-<!--        <result column="window_name" property="windowName"></result>-->
-<!--    </resultMap>-->
 
-<!--    <select id="listWindows" resultMap="windowMap">-->
-<!--        select * from window-->
-<!--    </select>-->
-
-<!--    <select id="getWindowById" parameterType="java.lang.Integer" resultMap="windowMap">-->
-<!--        select * from window where window_id = #{id}-->
-<!--    </select>-->
-
-<!--    <insert id="save" parameterType="com.fzufood.entity.Window">-->
-<!--        insert into window(window_name) values(#{windowName})-->
-<!--    </insert>-->
 
 </mapper>

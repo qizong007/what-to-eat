@@ -2,6 +2,7 @@ package com.fzufood.repository;
 
 import com.fzufood.entity.DishComment;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public interface DishCommentMapper {
      * @param dishId
      * @return DishComment
      */
-    DishComment getDishCommentByUserIdDishId(Integer userId, Integer dishId);
+    DishComment getDishCommentByUserIdDishId(@Param("userId") Integer userId, @Param("dishId") Integer dishId);
 
     /**
      * 插入新的dishComment(commentId, stars, userId, dishId)
@@ -49,7 +50,7 @@ public interface DishCommentMapper {
     int saveDishComment(DishComment dishComment);
 
     /**
-     * 根据(userId, dishId)更新dishComment(commentId, stars, userId, dishId)
+     * 根据(userId, dishId)更新dishComment(commentId, stars, userId, dishId) 只能改stars
      * @param dishComment
      * @return int
      */
@@ -61,5 +62,5 @@ public interface DishCommentMapper {
      * @param dishId
      * @return int
      */
-    int removeDishComment(Integer userId, Integer dishId);
+    int removeDishComment(@Param("userId") Integer userId, @Param("dishId") Integer dishId);
 }

@@ -4,4 +4,48 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fzufood.repository.DishCommentMapper">
 
+    <resultMap id="dishCommentMap" type="com.fzufood.entity.DishComment">
+        <id property="commentId" column="comment_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="dishId" column="dish_id"/>
+        <result property="starts" column="starts"/>
+    </resultMap>
+
+    <select id="listDishComments" resultMap="dishCommentMap">
+        select comment_id, user_id , dish_id, stars
+        from dish_comment;
+    </select>
+
+    <select id="listDishCommentsByUserId" parameterType="java.lang.Integer" resultMap="dishCommentMap">
+        select comment_id, user_id , dish_id, stars
+        from dish_comment
+        where user_id = #{userId};
+    </select>
+
+    <select id="listDishCommentsByDishId" parameterType="java.lang.Integer" resultMap="dishCommentMap">
+        select comment_id, user_id , dish_id, stars
+        from dish_comment
+        where dish_id = #{dishId};
+    </select>
+
+    <select id="getDishCommentByUserIdDishId" resultMap="dishCommentMap">
+        select comment_id, user_id , dish_id, stars
+        from dish_comment
+        where user_id = #{userId} and dish_id = #{dishId};
+    </select>
+
+    <insert id="saveDishComment" parameterType="com.fzufood.entity.DishComment">
+        insert into dish_comment(user_id, dish_id, stars)
+        values (#{userId}, #{dishId}, #{stars})
+    </insert>
+
+    <update id="updateDishComment" parameterType="com.fzufood.entity.DishComment">
+        update dish_comment set stars = #{stars}
+        where user_id = #{userId} and dish_id = #{dishId};
+    </update>
+
+    <delete id="removeDishComment">
+        delete from dish_comment
+        where user_id = #{userId} and dish_id = #{dishId};
+    </delete>
 </mapper>

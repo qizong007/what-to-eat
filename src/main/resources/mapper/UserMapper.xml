@@ -59,6 +59,11 @@
         from user where user_id = #{userId};
     </select>
 
+    <select id="getUserByOpenId" parameterType="java.lang.String" resultMap="userMap">
+        select user_id, open_id, phone_number, user_name, profile_picture
+        from user where open_id = #{openId};
+    </select>
+
     <select id="listLikeDishesById" parameterType="java.lang.Integer" resultMap="dishMap">
         select dish.dish_id dish_id, dish_name, price, by_weight, window.window_id window_id,
             window_name, location, profile, description

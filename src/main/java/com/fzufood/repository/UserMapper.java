@@ -28,6 +28,13 @@ public interface UserMapper {
     User getUserById(Integer userId);
 
     /**
+     * 根据openId查询对应的user(userId, openId, phoneNumber, userName, profilePictureURI)
+     * @param openId
+     * @return User
+     */
+    User getUserByOpenId(String openId);
+
+    /**
      * 插入新的user(userId, openId, phoneNumber, userName, profilePictureURI)
      * @param user
      * @return int

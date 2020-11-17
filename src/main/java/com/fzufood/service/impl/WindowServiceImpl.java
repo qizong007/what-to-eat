@@ -1,11 +1,9 @@
 package com.fzufood.service.impl;
 
 import com.fzufood.dto.*;
-import com.fzufood.entity.Dish;
-import com.fzufood.entity.DishComment;
-import com.fzufood.entity.User;
-import com.fzufood.entity.Window;
+import com.fzufood.entity.*;
 import com.fzufood.repository.DishCommentMapper;
+import com.fzufood.repository.DishMapper;
 import com.fzufood.repository.UserMapper;
 import com.fzufood.repository.WindowMapper;
 import com.fzufood.service.WindowService;
@@ -25,7 +23,8 @@ public class WindowServiceImpl implements WindowService {
     private WindowMapper windowMapper;
     @Autowired
     private DishCommentMapper dishCommentMapper;
-
+    @Autowired
+    private DishMapper dishMapper;
     @Override
     public JsonObject<List<DishRecommend>> recommend(Integer type, Integer userId) {
         return null;
@@ -33,7 +32,41 @@ public class WindowServiceImpl implements WindowService {
 
     @Override
     public JsonObject<WindowEntry> info(Integer windowId, Integer userId) {
-        return null;
+        JsonObject<WindowEntry> jsonObject = new JsonObject<>();
+        Code code = new Code();
+        if(userId == null){
+            code.setCode(StatusCode.MISSING_PARAMETERS);
+            jsonObject.setCode(code);
+            jsonObject.setData(null);
+            return jsonObject;
+        }
+        WindowEntry windowEntry = new WindowEntry();
+        List<Dish> dishList =  windowMapper.listDishesById(windowId);
+        List<Tag> tagList = new ArrayList<>();
+        windowEntry.setWindowId(windowMapper.getWindowById(windowId).getWindowId());
+        windowEntry.setWindowName(windowMapper.getWindowById(windowId).getWindowName());
+        windowEntry.setPngSrc(windowMapper.getWindowById(windowId).getProfileURI());
+        windowEntry.setDescription(windowMapper.getWindowById(windowId).getDescription());
+        windowEntry.setMapSrc(windowMapper.getWindowById(windowId).getLocationURI());
+        windowEntry.setCanteenName(windowMapper.getWindowById(windowId).getCanteen().getCanteenName());
+        windowEntry.setStar(countStarsOnWindow(windowId));
+        for (Dish dish : dishList){
+            List<Tag> tags = dishMapper.listTagsById(dish.getDishId());
+            for(Tag tag : tags){
+                if(!tagList.contains(tag)){
+                    tagList.add(tag);
+                }
+
+            }
+        }
+        windowEntry.setTags(tagList);
+        List<Window> windowList = userMapper.listMarkWindowsById(userId);
+        windowEntry.setIsMarked(windowList.contains(windowId));
+        windowEntry.setDishes(dishList);
+        jsonObject.setCode(new Code(StatusCode.SUCCESS));
+        jsonObject.setData(windowEntry);
+        return jsonObject;
+
     }
 
     /**

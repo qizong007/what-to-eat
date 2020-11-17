@@ -132,7 +132,7 @@ public class DishServiceImpl implements DishService {
         dishInfo.setPrice(dish.getPrice());
         dishInfo.setStar(countStarsOnDish(dishId));
         dishInfo.setStarNum(countStarsNumOnDish(dishId));
-        // TODO: windowName
+        dishInfo.setWindowName(dish.getWindow().getWindowName());
         dishInfo.setTagList(dish.getTags());
         jsonObject.setData(dishInfo);
         jsonObject.setCode(code);

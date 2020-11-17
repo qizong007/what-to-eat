@@ -35,10 +35,28 @@ public class UserServiceImpl implements UserService {
     private WindowMapper windowMapper;
     @Autowired
     private DishTagMapper dishTagMapper;
-
+    @Autowired
+    private DishCommentMapper dishCommentMapper;
     @Override
     public UserLogin login(String code) {
         return null;
+    }
+
+    private Double countStarsOnWindow(Integer windowId){
+        List<Dish> dishList = windowMapper.listDishesById(windowId);
+        Double stars = 0.0;
+        for(Dish dish : dishList){
+            stars += countStarsOnDish(dish.getDishId());
+        }
+        return stars/dishList.size();
+    }
+    private Double countStarsOnDish(Integer dishId){
+        List<DishComment> dishComments = dishCommentMapper.listDishCommentsByDishId(dishId);
+        Double stars = 0.0;
+        for(DishComment dishComment : dishComments){
+            stars += dishComment.getStars();
+        }
+        return stars/dishComments.size();
     }
 
     /**
@@ -87,7 +105,7 @@ public class UserServiceImpl implements UserService {
 
         //TODO:search自定义搜索待实现
 
-        //TODO:null null null返回最热门的五个
+
 
         List<DishRecommend> dishRecommendList = new ArrayList<>();
         Tag baseTag = tagList.get(0);
@@ -96,7 +114,10 @@ public class UserServiceImpl implements UserService {
 
         if (searchName == null) {
             if (canteenId == null) {
-                if (tagList.size() == 1) {
+                if(tagList.size() == 0){
+                    //TODO:null null null返回最热门的五个
+                }
+                else if (tagList.size() == 1) {
                     for (DishTag dishTag : baseDishTags) {
                         DishRecommend dishRecommend = new DishRecommend();
                         Dish dish = dishMapper.getDishById(dishTag.getDishId());
@@ -105,7 +126,8 @@ public class UserServiceImpl implements UserService {
                         dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
                         dishRecommend.setDescription(dish.getWindow().getDescription());
                         dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                        //TODO:星级计算
+                        //星级计算
+                        dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
                         //获取窗口的dishes
                         dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
                         dishRecommendList.add(dishRecommend);
@@ -129,7 +151,8 @@ public class UserServiceImpl implements UserService {
                         dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
                         dishRecommend.setDescription(dish.getWindow().getDescription());
                         dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                        //TODO:星级计算
+                        //星级计算
+                        dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
                         //获取窗口的dishes
                         dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
                         dishRecommendList.add(dishRecommend);
@@ -139,20 +162,37 @@ public class UserServiceImpl implements UserService {
                 }
             } else {
                 List<Window> windows = canteenMapper.listWindowsById(canteenId);
-                if (tagList.size() == 1) {
+                if (tagList.size() == 0){
+                    for(Window window : windows){
+                        DishRecommend dishRecommend = new DishRecommend();
+                        dishRecommend.setWindowId(window.getWindowId());
+                        dishRecommend.setWindowName(window.getWindowName());
+                        dishRecommend.setPngSrc(window.getProfileURI());
+                        dishRecommend.setDescription(window.getDescription());
+                        dishRecommend.setCanteenName(window.getCanteen().getCanteenName());
+                        //窗口星级计算
+                        dishRecommend.setStar(countStarsOnWindow(window.getWindowId()));
+                        //获取窗口的dishes
+                        dishRecommend.setDish(window.getDishes());
+                        dishRecommendList.add(dishRecommend);
+                    }
+                }
+                else if (tagList.size() == 1) {
                     for (DishTag dishTag : baseDishTags) {
                         DishRecommend dishRecommend = new DishRecommend();
                         Dish dish = dishMapper.getDishById(dishTag.getDishId());
-                        if (windows.contains(dish.getWindow().getWindowId()))
+                        if (windows.contains(dish.getWindow().getWindowId())) {
                             dishRecommend.setWindowId(dish.getWindow().getWindowId());
-                        dishRecommend.setWindowName(dish.getWindow().getWindowName());
-                        dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
-                        dishRecommend.setDescription(dish.getWindow().getDescription());
-                        dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                        //TODO:星级计算
-                        //获取窗口的dishes
-                        dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
-                        dishRecommendList.add(dishRecommend);
+                            dishRecommend.setWindowName(dish.getWindow().getWindowName());
+                            dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
+                            dishRecommend.setDescription(dish.getWindow().getDescription());
+                            dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
+                            //星级计算
+                            dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
+                            //获取窗口的dishes
+                            dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
+                            dishRecommendList.add(dishRecommend);
+                        }
                     }
 
                 } else {
@@ -168,20 +208,27 @@ public class UserServiceImpl implements UserService {
                     for (DishTag dishTag : baseDishTags) {
                         DishRecommend dishRecommend = new DishRecommend();
                         Dish dish = dishMapper.getDishById(dishTag.getDishId());
-                        dishRecommend.setWindowId(dish.getWindow().getWindowId());
-                        dishRecommend.setWindowName(dish.getWindow().getWindowName());
-                        dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
-                        dishRecommend.setDescription(dish.getWindow().getDescription());
-                        dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                        //TODO:星级计算
-                        //获取窗口的dishes
-                        dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
-                        dishRecommendList.add(dishRecommend);
+                        if (windows.contains(dish.getWindow().getWindowId())) {
+                            dishRecommend.setWindowId(dish.getWindow().getWindowId());
+                            dishRecommend.setWindowName(dish.getWindow().getWindowName());
+                            dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
+                            dishRecommend.setDescription(dish.getWindow().getDescription());
+                            dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
+                            //星级计算
+                            dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
+                            //获取窗口的dishes
+                            dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
+                            dishRecommendList.add(dishRecommend);
+                        }
                     }
 
 
                 }
             }
+
+
+
+
         }
         return dishRecommendList;
 

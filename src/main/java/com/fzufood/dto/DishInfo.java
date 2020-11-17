@@ -18,6 +18,7 @@ public class DishInfo{
     private Double userStar;
     private Double star;
     private Integer[] starNum;
+    private String windowName;
     private List<Tag> tagList;
 
 }

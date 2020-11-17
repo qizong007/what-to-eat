@@ -71,32 +71,39 @@ public class UserServiceImpl implements UserService {
             return jsonObject;
         }
         // 系统繁忙
-        if(errCode == StatusCode.SYSTEM_BUSY){
+        else if(errCode == StatusCode.SYSTEM_BUSY){
             System.out.println(response.getErrmsg());
             jsonObject.setCode(new Code(StatusCode.SYSTEM_BUSY));
             jsonObject.setData(null);
             return jsonObject;
         }
-        String openId = response.getOpenid();
-        User user = userMapper.getUserByOpenId(openId);
-        Integer userId;
-        if(user == null){
-            // 还未注册
-            user = new User();
-            user.setOpenId(openId);
-            userMapper.saveUser(user);
-            userId = userMapper.getUserByOpenId(openId).getUserId();
-            userLogin.setUserId(userId);
-            userLogin.setHasRegistered(false);
-        }else{
-            // 已注册
-            userId = user.getUserId();
-            userLogin.setUserId(userId);
-            userLogin.setHasRegistered(true);
+        else if(errCode == StatusCode.SUCCESS){
+            String openId = response.getOpenid();
+            User user = userMapper.getUserByOpenId(openId);
+            Integer userId;
+            if(user == null){
+                // 还未注册
+                user = new User();
+                user.setOpenId(openId);
+                userMapper.saveUser(user);
+                userId = userMapper.getUserByOpenId(openId).getUserId();
+                userLogin.setUserId(userId);
+                userLogin.setHasRegistered(false);
+            }else{
+                // 已注册
+                userId = user.getUserId();
+                userLogin.setUserId(userId);
+                userLogin.setHasRegistered(true);
+            }
+            jsonObject.setData(userLogin);
+            jsonObject.setCode(new Code(StatusCode.SUCCESS));
+            return jsonObject;
         }
-        jsonObject.setData(userLogin);
-        jsonObject.setCode(new Code(StatusCode.SUCCESS));
-        return jsonObject;
+        else{
+            jsonObject.setData(null);
+            jsonObject.setCode(new Code(StatusCode.UNKNOWN_LOGIN_FAULT));
+            return jsonObject;
+        }
     }
 
     /**

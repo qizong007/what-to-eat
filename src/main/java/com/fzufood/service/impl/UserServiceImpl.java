@@ -132,6 +132,13 @@ public class UserServiceImpl implements UserService {
         return jsonObject;
     }
 
+    private boolean contain(List<Tag> preferredTags, Integer tagId){
+        for (Tag tag : preferredTags){
+            if (tag.getTagId() == tagId)
+                return true;
+        }
+        return false;
+    }
     /**
      * 更新用户信息
      * @param userId
@@ -141,12 +148,14 @@ public class UserServiceImpl implements UserService {
      * @author invainX
      * @date 15:50 2020/11/15
      */
+
+    //FIXME
     @Override
     public Integer updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList) {
         User user = userMapper.getUserById(userId);
         //对喜好tag的更改
         for(Tag tag : preferredList){
-            if (user.getPreferTags().contains(tag)){
+            if (!contain(user.getPreferTags(),tag.getTagId())){
                 user.getPreferTags().add(tag);
             }
             if(tagMapper.getTagById(tag.getTagId()) == null){
@@ -154,14 +163,14 @@ public class UserServiceImpl implements UserService {
             }
         }
         for (Tag tag : user.getPreferTags()){
-            if(!preferredList.contains(tag)){
+            if(!contain(preferredList,tag.getTagId())){
                 user.getPreferTags().remove(tag);
             }
         }
 
         //对忌口tag的更改
         for(Tag tag : avoidList){
-            if (!user.getAvoidTags().contains(tag)){
+            if (!contain(user.getAvoidTags(),tag.getTagId())){
                 user.getAvoidTags().add(tag);
             }
             if(tagMapper.getTagById(tag.getTagId()) == null){
@@ -169,7 +178,7 @@ public class UserServiceImpl implements UserService {
             }
         }
         for (Tag tag : user.getAvoidTags()){
-            if(!preferredList.contains(tag)){
+            if(!contain(avoidList,tag.getTagId())){
                 user.getAvoidTags().remove(tag);
             }
         }
@@ -189,6 +198,8 @@ public class UserServiceImpl implements UserService {
      * @return JsonObject<List<DishRecommend>>
      * @author invainX
      */
+
+    //TODO:search自定义搜索待实现
     @Override
     public JsonObject<List<DishRecommend>> search(String searchName, List<Tag> tagList, Integer canteenId) {
 
@@ -198,8 +209,6 @@ public class UserServiceImpl implements UserService {
             }
         }
         JsonObject<List<DishRecommend>> jsonObject = new JsonObject<>();
-        //TODO:search自定义搜索待实现
-
 
 
         List<DishRecommend> dishRecommendList = new ArrayList<>();

@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.getUserById(userId);
         //对喜好tag的更改
         for(Tag tag : preferredList){
-            if (!user.getPreferTags().contains(tag)){
+            if (user.getPreferTags().contains(tag)){
                 user.getPreferTags().add(tag);
             }
             if(tagMapper.getTagById(tag.getTagId()) == null){

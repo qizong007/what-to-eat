@@ -1,8 +1,17 @@
 package com.fzufood.service;
 
+import com.alibaba.fastjson.JSON;
+import com.fzufood.dto.DishEntry;
+import com.fzufood.dto.DishInfo;
+import com.fzufood.dto.JsonObject;
+import com.fzufood.dto.UpdateDishTag;
+import com.fzufood.util.StatusCode;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 /**
  * @Author qizong007
@@ -14,24 +23,35 @@ public class DishServiceTest {
     @Autowired
     private DishService dishService;
 
+    // 测试通过
     @Test
     void updateDishTag(){
-
+        JsonObject<UpdateDishTag> jsonObject = dishService.updateDishTag(1,1,3);
+        String str = JSON.toJSONString(jsonObject);
+        System.out.println(str);
     }
 
+    // 测试通过
     @Test
     void updateDishStar(){
-
+        Integer code = dishService.updateDishStar(1,1,3.0);
+        Assertions.assertEquals(StatusCode.SUCCESS,code);
     }
 
+    // 测试通过
     @Test
     void getDishInfo(){
-
+        JsonObject<DishInfo> jsonObject = dishService.getDishInfo(1);
+        String str = JSON.toJSONString(jsonObject);
+        System.out.println(str);
     }
 
+    // 测试通过
     @Test
     void favorites(){
-
+        JsonObject<List<DishEntry>> jsonObject = dishService.favorites(1);
+        String str = JSON.toJSONString(jsonObject);
+        System.out.println(str);
     }
 
 

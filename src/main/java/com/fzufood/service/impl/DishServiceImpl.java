@@ -185,7 +185,7 @@ public class DishServiceImpl implements DishService {
      */
     private Integer[] countStarsNumOnDish(Integer dishId){
         List<DishComment> dishComments = dishCommentMapper.listDishCommentsByDishId(dishId);
-        Integer[] starNum = new Integer[5];
+        Integer[] starNum = new Integer[]{0,0,0,0,0};
         Double star;
         for(DishComment dishComment : dishComments){
             star = dishComment.getStars();

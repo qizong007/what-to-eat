@@ -115,6 +115,7 @@ public class UserServiceImpl implements UserService {
      * @author qizong007
      * @date 14:11 2020/11/15
      **/
+
     @Override
     public JsonObject<UserInfo> getInfo(Integer userId) {
         JsonObject<UserInfo> jsonObject = new JsonObject<>();
@@ -156,32 +157,39 @@ public class UserServiceImpl implements UserService {
         //对喜好tag的更改
         for(Tag tag : preferredList){
             if (!contain(userMapper.listPreferTagsById(userId),tag.getTagId())){
-                userMapper.listPreferTagsById(userId).add(tag);
+                userMapper.savePreferTag(userId,tag.getTagId());
             }
             if(tagMapper.getTagById(tag.getTagId()) == null){
                 tagMapper.saveTag(tag);
             }
         }
+
+
         for (Tag tag : userMapper.listPreferTagsById(userId)){
             if(!contain(preferredList,tag.getTagId())){
-                userMapper.listPreferTagsById(userId).remove(tag);
+                userMapper.removePreferTag(userId,tag.getTagId());
             }
         }
+        System.out.println(userMapper.listPreferTagsById(userId));
+
 
         //对忌口tag的更改
         for(Tag tag : avoidList){
             if (!contain(userMapper.listAvoidTagsById(userId),tag.getTagId())){
-                userMapper.listAvoidTagsById(userId).add(tag);
+                userMapper.saveAvoidTag(userId,tag.getTagId());
             }
             if(tagMapper.getTagById(tag.getTagId()) == null){
                 tagMapper.saveTag(tag);
             }
         }
+        System.out.println(userMapper.listAvoidTagsById(userId));
         for (Tag tag : userMapper.listAvoidTagsById(userId)){
             if(!contain(avoidList,tag.getTagId())){
-                userMapper.listAvoidTagsById(userId).remove(tag);
+                userMapper.removeAvoidTag(userId,tag.getTagId());
             }
         }
+        System.out.println(userMapper.listAvoidTagsById(userId));
+
 
         if (userMapper.updateUser(user) != 0) {
             return StatusCode.SUCCESS;

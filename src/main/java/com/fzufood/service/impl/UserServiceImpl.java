@@ -155,31 +155,31 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.getUserById(userId);
         //对喜好tag的更改
         for(Tag tag : preferredList){
-            if (!contain(user.getPreferTags(),tag.getTagId())){
-                user.getPreferTags().add(tag);
+            if (!contain(userMapper.listPreferTagsById(userId),tag.getTagId())){
+                userMapper.listPreferTagsById(userId).add(tag);
             }
             if(tagMapper.getTagById(tag.getTagId()) == null){
                 tagMapper.saveTag(tag);
             }
         }
-        for (Tag tag : user.getPreferTags()){
+        for (Tag tag : userMapper.listPreferTagsById(userId)){
             if(!contain(preferredList,tag.getTagId())){
-                user.getPreferTags().remove(tag);
+                userMapper.listPreferTagsById(userId).remove(tag);
             }
         }
 
         //对忌口tag的更改
         for(Tag tag : avoidList){
-            if (!contain(user.getAvoidTags(),tag.getTagId())){
-                user.getAvoidTags().add(tag);
+            if (!contain(userMapper.listAvoidTagsById(userId),tag.getTagId())){
+                userMapper.listAvoidTagsById(userId).add(tag);
             }
             if(tagMapper.getTagById(tag.getTagId()) == null){
                 tagMapper.saveTag(tag);
             }
         }
-        for (Tag tag : user.getAvoidTags()){
+        for (Tag tag : userMapper.listAvoidTagsById(userId)){
             if(!contain(avoidList,tag.getTagId())){
-                user.getAvoidTags().remove(tag);
+                userMapper.listAvoidTagsById(userId).remove(tag);
             }
         }
 

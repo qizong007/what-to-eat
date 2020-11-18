@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
         JsonObject<UserLogin> jsonObject = new JsonObject<>();
         // 缺少参数
         if(code == null){
-            jsonObject.setCode(new Code(StatusCode.MISSING_PARAMETERS));
+            jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
             jsonObject.setData(null);
             return jsonObject;
         }
@@ -68,14 +68,14 @@ public class UserServiceImpl implements UserService {
         // code无效
         if(errCode == StatusCode.INVALID_CODE){
             System.out.println(response.getErrmsg());
-            jsonObject.setCode(new Code(StatusCode.INVALID_CODE));
+            jsonObject.setCode(StatusCode.INVALID_CODE);
             jsonObject.setData(null);
             return jsonObject;
         }
         // 系统繁忙
         else if(errCode == StatusCode.SYSTEM_BUSY){
             System.out.println(response.getErrmsg());
-            jsonObject.setCode(new Code(StatusCode.SYSTEM_BUSY));
+            jsonObject.setCode(StatusCode.SYSTEM_BUSY);
             jsonObject.setData(null);
             return jsonObject;
         }
@@ -98,12 +98,12 @@ public class UserServiceImpl implements UserService {
                 userLogin.setHasRegistered(true);
             }
             jsonObject.setData(userLogin);
-            jsonObject.setCode(new Code(StatusCode.SUCCESS));
+            jsonObject.setCode(StatusCode.SUCCESS);
             return jsonObject;
         }
         else{
             jsonObject.setData(null);
-            jsonObject.setCode(new Code(StatusCode.UNKNOWN_LOGIN_FAULT));
+            jsonObject.setCode(StatusCode.UNKNOWN_LOGIN_FAULT);
             return jsonObject;
         }
     }
@@ -120,14 +120,14 @@ public class UserServiceImpl implements UserService {
         JsonObject<UserInfo> jsonObject = new JsonObject<>();
         // 缺少参数
         if(userId == null){
-            jsonObject.setCode(new Code(StatusCode.MISSING_PARAMETERS));
+            jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
             jsonObject.setData(null);
             return jsonObject;
         }
         UserInfo userInfo = new UserInfo();
         userInfo.setPreferTags(userMapper.listPreferTagsById(userId));
         userInfo.setAvoidTags(userMapper.listAvoidTagsById(userId));
-        jsonObject.setCode(new Code(StatusCode.SUCCESS));
+        jsonObject.setCode(StatusCode.SUCCESS);
         jsonObject.setData(userInfo);
         return jsonObject;
     }
@@ -142,14 +142,14 @@ public class UserServiceImpl implements UserService {
      * @date 15:50 2020/11/15
      */
     @Override
-    public Code updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList) {
+    public Integer updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList) {
         User user = userMapper.getUserById(userId);
         user.setPreferTags(preferredList);
         user.setAvoidTags(avoidList);
         if (userMapper.updateUser(user) != 0) {
-            return new Code(StatusCode.SUCCESS);
+            return StatusCode.SUCCESS;
         } else {
-            return new Code(StatusCode.FAIL_TO_UPDATE_USER_INFO);
+            return StatusCode.FAIL_TO_UPDATE_USER_INFO;
         }
     }
 
@@ -294,7 +294,7 @@ public class UserServiceImpl implements UserService {
         }
 
         jsonObject.setData(dishRecommendList);
-        jsonObject.setCode(new Code(StatusCode.SUCCESS));
+        jsonObject.setCode(StatusCode.SUCCESS);
         return jsonObject;
 
     }
@@ -308,18 +308,18 @@ public class UserServiceImpl implements UserService {
      * @date 14:09 2020/11/15
      **/
     @Override
-    public Code feedback(Integer userId, String content) {
+    public Integer feedback(Integer userId, String content) {
         if(userId == null || content == null){
-            return new Code(StatusCode.MISSING_PARAMETERS);
+            return StatusCode.MISSING_PARAMETERS;
         }
         Feedback feedback = new Feedback();
         feedback.setContent(content);
         feedback.setSubmitTime(new Timestamp(new Date().getTime()));
         feedback.setUser(userMapper.getUserById(userId));
         if (feedbackMapper.saveFeedback(feedback) != 0) {
-            return new Code(StatusCode.SUCCESS);
+            return StatusCode.SUCCESS;
         } else {
-            return new Code(StatusCode.FAIL_TO_SAVE_FEEDBACK);
+            return StatusCode.FAIL_TO_SAVE_FEEDBACK;
         }
     }
 

@@ -1,7 +1,5 @@
 package com.fzufood.service.impl;
 
-import com.fzufood.dto.Code;
-import com.fzufood.dto.DishEntry;
 import com.fzufood.dto.JsonObject;
 import com.fzufood.dto.SystemInfo;
 import com.fzufood.entity.Canteen;
@@ -31,14 +29,12 @@ public class SystemServiceImpl implements SystemService{
     @Override
     public JsonObject<SystemInfo> getInfo() {
         JsonObject<SystemInfo> jsonObject = new JsonObject<>();
-        Code code = new Code();
         SystemInfo systemInfo = new SystemInfo();
         List<Tag> allTags = tagMapper.listTags();
         List<Canteen> allCanteen = canteenMapper.listCanteens();
-        code.setCode(StatusCode.SUCCESS);
         systemInfo.setTags(allTags);
         systemInfo.setCanteens(allCanteen);
-        jsonObject.setCode(code);
+        jsonObject.setCode(StatusCode.SUCCESS);
         jsonObject.setData(systemInfo);
         return jsonObject;
     }

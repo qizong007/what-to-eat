@@ -1,18 +1,13 @@
 package com.fzufood.service;
 
 import com.alibaba.fastjson.JSON;
-import com.fzufood.dto.Code;
 import com.fzufood.dto.JsonObject;
 import com.fzufood.dto.UserInfo;
-import com.fzufood.entity.Tag;
 import com.fzufood.util.StatusCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Author qizong007
@@ -50,8 +45,8 @@ public class UserServiceTest {
     // 测试通过
     @Test
     void feedback(){
-        Code code = userService.feedback(1,"这小程序不得行啊~");
-        Assertions.assertEquals(StatusCode.SUCCESS,code.getCode());
+        Integer code = userService.feedback(1,"这小程序不得行啊~");
+        Assertions.assertEquals(StatusCode.SUCCESS,code);
     }
 
 }

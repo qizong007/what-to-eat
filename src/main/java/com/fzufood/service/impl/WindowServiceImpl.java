@@ -33,10 +33,8 @@ public class WindowServiceImpl implements WindowService {
     @Override
     public JsonObject<List<DishRecommend>> recommend(Integer type, Integer userId) {
         JsonObject<List<DishRecommend>> jsonObject = new JsonObject<>();
-        Code code = new Code();
         if(userId == null){
-            code.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setCode(code);
+            jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
             jsonObject.setData(null);
             return jsonObject;
         }
@@ -72,7 +70,7 @@ public class WindowServiceImpl implements WindowService {
                 dishRecommends.add(dishRecommend);
             }
         }
-        jsonObject.setCode(new Code(StatusCode.SUCCESS));
+        jsonObject.setCode(StatusCode.SUCCESS);
         jsonObject.setData(dishRecommends);
         return jsonObject;
     }
@@ -80,10 +78,8 @@ public class WindowServiceImpl implements WindowService {
     @Override
     public JsonObject<WindowEntry> info(Integer windowId, Integer userId) {
         JsonObject<WindowEntry> jsonObject = new JsonObject<>();
-        Code code = new Code();
         if(userId == null){
-            code.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setCode(code);
+            jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
             jsonObject.setData(null);
             return jsonObject;
         }
@@ -110,7 +106,7 @@ public class WindowServiceImpl implements WindowService {
         List<Window> windowList = userMapper.listMarkWindowsById(userId);
         windowEntry.setIsMarked(windowList.contains(windowId));
         windowEntry.setDishes(dishList);
-        jsonObject.setCode(new Code(StatusCode.SUCCESS));
+        jsonObject.setCode(StatusCode.SUCCESS);
         jsonObject.setData(windowEntry);
         return jsonObject;
 
@@ -125,10 +121,8 @@ public class WindowServiceImpl implements WindowService {
     @Override
     public JsonObject<List<DishRecommend>> getMarkedWindow(Integer userId) {
         JsonObject<List<DishRecommend>> jsonObject = new JsonObject<>();
-        Code code = new Code();
         if(userId == null){
-            code.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setCode(code);
+            jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
             jsonObject.setData(null);
             return jsonObject;
         }
@@ -144,7 +138,7 @@ public class WindowServiceImpl implements WindowService {
             dishRecommend.setDish(window.getDishes());
             dishRecommends.add(dishRecommend);
         }
-        jsonObject.setCode(new Code(StatusCode.SUCCESS));
+        jsonObject.setCode(StatusCode.SUCCESS);
         jsonObject.setData(dishRecommends);
         return jsonObject;
     }
@@ -180,16 +174,16 @@ public class WindowServiceImpl implements WindowService {
      * @return Integer
      */
     @Override
-    public Code updateMarkedWindow(Integer userId, Integer windowId)  {
+    public Integer updateMarkedWindow(Integer userId, Integer windowId)  {
         User user = userMapper.getUserById(userId);
         List<Window> windowList = userMapper.listMarkWindowsById(userId);
         Window  window = windowMapper.getWindowById(windowId);
         windowList.add(window);
         user.setMarkWindows(windowList);
         if(windowMapper.updateWindow(window) != 0){
-            return new Code(StatusCode.SUCCESS);
+            return StatusCode.SUCCESS;
         }else {
-            return new Code(StatusCode.FAIL_TO_UPDATE_MARKED_WINDOW);
+            return StatusCode.FAIL_TO_UPDATE_MARKED_WINDOW;
     }
 
 }

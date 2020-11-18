@@ -40,7 +40,7 @@ public class DishController {
      */
     @ApiOperation("更新菜品评分接口")
     @PostMapping("/updateDishStar")
-    public Code updateDishStar(@RequestParam("userId") Integer userId,
+    public Integer updateDishStar(@RequestParam("userId") Integer userId,
                                @RequestParam("dishId")Integer dishId,
                                @RequestParam("star")Double star){
         return dishService.updateDishStar(userId, dishId, star);

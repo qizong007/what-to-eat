@@ -36,6 +36,8 @@ public class UserServiceImpl implements UserService {
     private DishTagMapper dishTagMapper;
     @Autowired
     private DishCommentMapper dishCommentMapper;
+    @Autowired
+    private TagMapper tagMapper;
 
     /**
      * 用户登录
@@ -142,8 +144,36 @@ public class UserServiceImpl implements UserService {
     @Override
     public Code updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList) {
         User user = userMapper.getUserById(userId);
-        user.setPreferTags(preferredList);
-        user.setAvoidTags(avoidList);
+        //对喜好tag的更改
+        for(Tag tag : preferredList){
+            if (!user.getPreferTags().contains(tag)){
+                user.getPreferTags().add(tag);
+            }
+            if(tagMapper.getTagById(tag.getTagId()) == null){
+                tagMapper.saveTag(tag);
+            }
+        }
+        for (Tag tag : user.getPreferTags()){
+            if(!preferredList.contains(tag)){
+                user.getPreferTags().remove(tag);
+            }
+        }
+
+        //对忌口tag的更改
+        for(Tag tag : avoidList){
+            if (!user.getAvoidTags().contains(tag)){
+                user.getAvoidTags().add(tag);
+            }
+            if(tagMapper.getTagById(tag.getTagId()) == null){
+                tagMapper.saveTag(tag);
+            }
+        }
+        for (Tag tag : user.getAvoidTags()){
+            if(!preferredList.contains(tag)){
+                user.getAvoidTags().remove(tag);
+            }
+        }
+
         if (userMapper.updateUser(user) != 0) {
             return new Code(StatusCode.SUCCESS);
         } else {
@@ -162,6 +192,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public JsonObject<List<DishRecommend>> search(String searchName, List<Tag> tagList, Integer canteenId) {
 
+        for(Tag tag :tagList){
+            if(tagMapper.getTagById(tag.getTagId()) == null){
+                tagMapper.saveTag(tag);
+            }
+        }
         JsonObject<List<DishRecommend>> jsonObject = new JsonObject<>();
         //TODO:search自定义搜索待实现
 

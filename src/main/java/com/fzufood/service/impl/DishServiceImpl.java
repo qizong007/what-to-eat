@@ -22,6 +22,8 @@ public class DishServiceImpl implements DishService {
     private DishCommentMapper dishCommentMapper;
     @Autowired
     private DishTagMapper dishTagMapper;
+    @Autowired
+    private TagMapper tagMapper;
 
     /**
      * 更新菜品标签
@@ -44,28 +46,25 @@ public class DishServiceImpl implements DishService {
         List<Integer> tagIdList = dishTagMapper.listTagIdsByDishId(dishId);
         DishTag dishTag = null;
         boolean hasTagged = false;
-        for(Integer tagID : tagIdList){
-            dishTag = dishTagMapper.getDishTagById(tagID);
-            if(dishTag.getUserId() == userId){
-                hasTagged = true;
-                break;
-            }
+        dishTag = dishTagMapper.getDishTagById(userId, dishId, tagId);
+        if(dishTag != null){
+            hasTagged = true;;
         }
         List<DishTag> userInThisDishTag = dishTagMapper.listDishTagByDishIdAndTagId(dishId,tagId);
         // 某道菜的某个标签多少人点过
         Integer count = userInThisDishTag.size();
-        updateDishTag.setDishName(dishMapper.getDishById(dishId).getDishName());
+        updateDishTag.setTagName(tagMapper.getTagById(tagId).getContent());
         updateDishTag.setTagId(tagId);
-        updateDishTag.setCount(count);
+        updateDishTag.setTagNum(count);
         code.setCode(StatusCode.SUCCESS);
         if(hasTagged){
             // 用户点过，现在就要取消 -- false
-            dishTagMapper.removeDishTagsByDishId(dishId);
-            updateDishTag.setMarkedTag(false);
+            dishTagMapper.removeDishTagByDishTag(dishTag);
+            updateDishTag.setHasTagged(false);
         }else{
             // 用户还未点过，现在要点亮 -- true
             dishTagMapper.saveDishTag(new DishTag(userId,dishId,tagId));
-            updateDishTag.setMarkedTag(true);
+            updateDishTag.setHasTagged(true);
         }
         jsonObject.setCode(code);
         jsonObject.setData(updateDishTag);

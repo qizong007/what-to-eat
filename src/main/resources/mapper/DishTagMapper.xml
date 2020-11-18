@@ -27,7 +27,11 @@
         where dish_id = #{dishId} and tag_id = #{tagId};
     </select>
 
-
+    <select id="getDishTagById" resultMap="dishTagMap">
+        select user_id, dish_id, tag_id
+        from dish_tag
+        where dish_id = #{dishId} and tag_id = #{tagId} and user_id = #{userId};
+    </select>
 
     <select id="listDishTagsByTagId" parameterType="java.lang.Integer" resultMap="dishTagMap">
         select user_id, dish_id, tag_id

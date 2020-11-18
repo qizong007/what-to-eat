@@ -34,12 +34,14 @@ public interface DishTagMapper {
      */
     List<DishTag> listDishTagByDishIdAndTagId(@Param("dishId") Integer dishId, @Param("tagId") Integer tagId);
 
-//    /**
-//     * 根据tagId查询该tagId对应的dishTag
-//     * @param tagId
-//     * @return DishTag
-//     */
-//    DishTag getDishTagById(Integer tagId);//写错，废弃
+    /**
+     * 根据三个id查询对应的dishTag
+     * @param userId
+     * @param dishId
+     * @param tagId
+     * @return DishTag
+     */
+    DishTag getDishTagById(@Param("userId") Integer userId, @Param("dishId") Integer dishId, @Param("tagId") Integer tagId);
 
     /**
      * 根据tagId查询该tag拥有的所有DishTag

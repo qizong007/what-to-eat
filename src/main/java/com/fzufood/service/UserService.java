@@ -10,5 +10,5 @@ public interface UserService {
     JsonObject<UserInfo> getInfo(Integer userId);
     Code updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList);
     JsonObject<List<DishRecommend>> search(String searchName, List<Tag> tagList, Integer canteenId);
-    Code feedback( Integer userId, String content);
+    Code feedback(Integer userId, String content);
 }

@@ -36,6 +36,8 @@ public class UserServiceImpl implements UserService {
     private DishTagMapper dishTagMapper;
     @Autowired
     private DishCommentMapper dishCommentMapper;
+    @Autowired
+    private TagMapper tagMapper;
 
     /**
      * 用户登录
@@ -307,6 +309,9 @@ public class UserServiceImpl implements UserService {
      **/
     @Override
     public Code feedback(Integer userId, String content) {
+        if(userId == null || content == null){
+            return new Code(StatusCode.MISSING_PARAMETERS);
+        }
         Feedback feedback = new Feedback();
         feedback.setContent(content);
         feedback.setSubmitTime(new Timestamp(new Date().getTime()));

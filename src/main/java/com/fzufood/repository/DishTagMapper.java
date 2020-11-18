@@ -2,6 +2,7 @@ package com.fzufood.repository;
 
 import com.fzufood.entity.DishTag;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -31,14 +32,14 @@ public interface DishTagMapper {
      * @param dishId,tagId
      * @return List<DishTag>
      */
-    List<DishTag> listDishTagByDishIdAndTagId(Integer dishId,Integer tagId);
+    List<DishTag> listDishTagByDishIdAndTagId(@Param("dishId") Integer dishId, @Param("tagId") Integer tagId);
 
-    /**
-     * 根据tagId查询该tagId对应的dishTag
-     * @param tagId
-     * @return DishTag
-     */
-    DishTag getDishTagById(Integer tagId);
+//    /**
+//     * 根据tagId查询该tagId对应的dishTag
+//     * @param tagId
+//     * @return DishTag
+//     */
+//    DishTag getDishTagById(Integer tagId);//写错，废弃
 
     /**
      * 根据tagId查询该tag拥有的所有DishTag
@@ -53,6 +54,13 @@ public interface DishTagMapper {
      * @return int
      */
     int saveDishTag(DishTag dishTag);
+
+    /**
+     * 根据dishTag(userId, dishId, tagId)删除一个dishTag
+     * @param dishTag
+     * @return int
+     */
+    int removeDishTagByDishTag(DishTag dishTag);
 
     /**
      * 根据userId删除该userId所有的dishTag

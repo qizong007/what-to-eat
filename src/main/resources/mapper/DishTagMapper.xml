@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzufood.repository.DishTagMapper">
+
+    <resultMap id="dishTagMap" type="com.fzufood.entity.DishTag">
+        <result property="userId" column="user_id"/>
+        <result property="dishId" column="dish_id"/>
+        <result property="tagId" column="tag_id"/>
+    </resultMap>
+
+    <select id="listDishTags" resultMap="dishTagMap">
+        select user_id, dish_id, tag_id
+        from dish_tag;
+    </select>
+
+    <select id="listTagIdsByDishId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select user_id, dish_id, tag_id
+        from dish_tag
+        where dish_id = #{dishId};
+    </select>
+
+    <select id="listDishTagByDishIdAndTagId" resultMap="dishTagMap">
+        select user_id, dish_id, tag_id
+        from dish_tag
+        where dish_id = #{dishId} and tag_id = #{tagId};
+    </select>
+
+
+
+    <select id="listDishTagsByTagId" parameterType="java.lang.Integer" resultMap="dishTagMap">
+        select user_id, dish_id, tag_id
+        from dish_tag
+        where tag_id = #{tagId};
+    </select>
+
+    <insert id="saveDishTag" parameterType="com.fzufood.entity.DishTag">
+        insert into dish_tag(user_id, dish_id, tag_id)
+        values (#{userId}, #{dishId}, #{tagId});
+    </insert>
+
+    <delete id="removeDishTagByDishTag" parameterType="com.fzufood.entity.DishTag">
+        delete from dish_tag
+        where user_id = #{userId} and dish_id = #{dishId} and tag_id = #{tagId};
+    </delete>
+
+    <delete id="removeDishTagsByUserId" parameterType="java.lang.Integer">
+        delete from dish_tag
+        where user_id = #{userId};
+    </delete>
+
+    <delete id="removeDishTagsByDishId" parameterType="java.lang.Integer">
+        delete from dish_tag
+        where dish_id = #{dishId};
+    </delete>
+
+    <delete id="removeDishTagsByTagId" parameterType="java.lang.Integer">
+        delete from dish_tag
+        where tag_id = #{tag_id};
+    </delete>
+</mapper>

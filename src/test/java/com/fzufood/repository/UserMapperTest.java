@@ -125,21 +125,21 @@ public class UserMapperTest {
 
     @Test
     void savePreferTagTest() {
-        userMapper.savePreferTag(1,6);
+        userMapper.savePreferTag(9,6);
     }
 
     @Test
     void removePreferTagTest() {
-        userMapper.removePreferTag(1,6);
+        userMapper.removePreferTag(9,6);
     }
 
     @Test
     void saveAvoidTagTest() {
-        userMapper.saveAvoidTag(1,6);
+        userMapper.saveAvoidTag(4,1);
     }
 
     @Test
     void removeAvoidTagTest() {
-        userMapper.removeAvoidTag(1,6);
+        userMapper.removeAvoidTag(4,1);
     }
 }

@@ -144,12 +144,12 @@
     </delete>
 
     <insert id="saveAvoidTag">
-        insert into user_prefer_tag(user_id, tag_id)
+        insert into user_avoid_tag(user_id, tag_id)
         values (#{userId}, #{tagId});
     </insert>
 
     <delete id="removeAvoidTag">
-        delete from user_prefer_tag
+        delete from user_avoid_tag
         where user_id = #{userId} and tag_id = #{tagId};
     </delete>
 </mapper>

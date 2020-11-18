@@ -153,49 +153,53 @@ public class UserServiceImpl implements UserService {
     //FIXME
     @Override
     public Integer updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList) {
-        User user = userMapper.getUserById(userId);
+        if(userId == null){
+            return StatusCode.MISSING_PARAMETERS;
+        }
         //对喜好tag的更改
         for(Tag tag : preferredList){
-            if (!contain(userMapper.listPreferTagsById(userId),tag.getTagId())){
-                userMapper.savePreferTag(userId,tag.getTagId());
+            // 没有就先加tag
+            if(tag.getTagId() == null || tagMapper.getTagById(tag.getTagId()) == null){
+                if(tagMapper.saveTag(tag) == 0){
+                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                }
             }
-            if(tagMapper.getTagById(tag.getTagId()) == null){
-                tagMapper.saveTag(tag);
+            if (!contain(userMapper.listPreferTagsById(userId),tag.getTagId())){
+                if(userMapper.savePreferTag(userId,tag.getTagId()) == 0){
+                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                }
             }
         }
-
-
         for (Tag tag : userMapper.listPreferTagsById(userId)){
             if(!contain(preferredList,tag.getTagId())){
-                userMapper.removePreferTag(userId,tag.getTagId());
+                if(userMapper.removePreferTag(userId,tag.getTagId()) == 0){
+                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                }
+            }
+        }
+        //对忌口tag的更改
+        for(Tag tag : avoidList){
+            if(tag.getTagId() == null || tagMapper.getTagById(tag.getTagId()) == null){
+                if(tagMapper.saveTag(tag) == 0){
+                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                }
+            }
+            if (!contain(userMapper.listAvoidTagsById(userId),tag.getTagId())){
+                if(userMapper.saveAvoidTag(userId,tag.getTagId()) == 0){
+                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                }
+            }
+        }
+        for (Tag tag : userMapper.listAvoidTagsById(userId)){
+            if(!contain(avoidList,tag.getTagId())){
+                if(userMapper.removeAvoidTag(userId,tag.getTagId()) == 0){
+                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                }
             }
         }
         System.out.println(userMapper.listPreferTagsById(userId));
-
-
-        //对忌口tag的更改
-        for(Tag tag : avoidList){
-            if (!contain(userMapper.listAvoidTagsById(userId),tag.getTagId())){
-                userMapper.saveAvoidTag(userId,tag.getTagId());
-            }
-            if(tagMapper.getTagById(tag.getTagId()) == null){
-                tagMapper.saveTag(tag);
-            }
-        }
         System.out.println(userMapper.listAvoidTagsById(userId));
-        for (Tag tag : userMapper.listAvoidTagsById(userId)){
-            if(!contain(avoidList,tag.getTagId())){
-                userMapper.removeAvoidTag(userId,tag.getTagId());
-            }
-        }
-        System.out.println(userMapper.listAvoidTagsById(userId));
-
-
-        if (userMapper.updateUser(user) != 0) {
-            return StatusCode.SUCCESS;
-        } else {
-            return StatusCode.FAIL_TO_UPDATE_USER_INFO;
-        }
+        return StatusCode.SUCCESS;
     }
 
     /**

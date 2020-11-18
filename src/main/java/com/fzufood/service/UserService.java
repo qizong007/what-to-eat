@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserService {
     JsonObject<UserLogin> login(String code);
     JsonObject<UserInfo> getInfo(Integer userId);
-    Code updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList);
+    Integer updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList);
     JsonObject<List<DishRecommend>> search(String searchName, List<Tag> tagList, Integer canteenId);
-    Code feedback( Integer userId, String content);
+    Integer feedback(Integer userId, String content);
 }

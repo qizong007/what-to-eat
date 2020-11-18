@@ -45,7 +45,7 @@ public class UserController {
      */
     @ApiOperation("获取用户信息接口")
     @PostMapping("/updateInfo")
-    public Code updateInfo(@RequestParam("userId") Integer userId,
+    public Integer updateInfo(@RequestParam("userId") Integer userId,
                            @RequestParam("preferredList") List<Tag> preferredList,
                            @RequestParam("avoidList") List<Tag> avoidList){
         return userService.updateInfo(userId, preferredList, avoidList);
@@ -74,7 +74,7 @@ public class UserController {
      */
     @ApiOperation("用户反馈接口")
     @PostMapping("/feedback")
-    public Code feedback(@RequestParam("userId") Integer userId,
+    public Integer feedback(@RequestParam("userId") Integer userId,
                          @RequestParam("content") String content){
         return userService.feedback(userId,content);
     }

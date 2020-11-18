@@ -1,6 +1,5 @@
 package com.fzufood.service;
 
-import com.fzufood.dto.DishInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,8 +26,7 @@ public class DishServiceTest {
 
     @Test
     void getDishInfo(){
-        DishInfo dishInfo = dishService.getDishInfo(1);
-        System.out.println(dishInfo.toString());
+
     }
 
     @Test

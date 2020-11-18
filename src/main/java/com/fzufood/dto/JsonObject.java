@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class JsonObject<T> {
 
-    Code code;
+    Integer code;
     T data;
 
 }

@@ -2,10 +2,7 @@ package com.fzufood.service.impl;
 
 import com.fzufood.dto.*;
 import com.fzufood.entity.*;
-import com.fzufood.repository.DishCommentMapper;
-import com.fzufood.repository.DishMapper;
-import com.fzufood.repository.UserMapper;
-import com.fzufood.repository.WindowMapper;
+import com.fzufood.repository.*;
 import com.fzufood.service.WindowService;
 import com.fzufood.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +17,64 @@ public class WindowServiceImpl implements WindowService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
+    private DishTagMapper dishTagMapper;
+    @Autowired
     private WindowMapper windowMapper;
     @Autowired
     private DishCommentMapper dishCommentMapper;
     @Autowired
     private DishMapper dishMapper;
+    /**
+     * 首页推荐窗口
+     * @author gaoyichao33
+     * @param type,userId
+     * @return JsonObject<List<DishRecommend>>
+     */
     @Override
     public JsonObject<List<DishRecommend>> recommend(Integer type, Integer userId) {
-        return null;
+        JsonObject<List<DishRecommend>> jsonObject = new JsonObject<>();
+        Code code = new Code();
+        if(userId == null){
+            code.setCode(StatusCode.MISSING_PARAMETERS);
+            jsonObject.setCode(code);
+            jsonObject.setData(null);
+            return jsonObject;
+        }
+        List<Tag> preferList =   userMapper.listPreferTagsById(userId);
+        List<Tag> avoidList = userMapper.listAvoidTagsById(userId);
+        List<DishRecommend> dishRecommends = new ArrayList<>();
+        for(Tag prefer : preferList){
+            List<DishTag> dishTagList = dishTagMapper.listDishTagsByTagId(prefer.getTagId()) ;
+            for (DishTag dishTag : dishTagList){
+                DishRecommend dishRecommend = new DishRecommend();
+                Dish dish =  dishMapper.getDishById(dishTag.getDishId());
+                int flag = 0;
+                for(Tag avoid : avoidList){
+                    List<Tag> tagList = dishMapper.listTagsById(dishTag.getDishId());
+                    for (Tag tag : tagList) {
+                        if (tag.getTagId() == avoid.getTagId()) {
+                            flag = 1;
+                            break;
+                        }
+                    }
+                    if(flag==1)
+                        break;
+                }
+                if(flag==1)
+                    continue;
+                Window window = dish.getWindow();
+                dishRecommend.setWindowId(window.getWindowId());
+                dishRecommend.setWindowName(window.getWindowName());
+                dishRecommend.setPngSrc(window.getProfileURI());
+                dishRecommend.setDescription(window.getDescription());
+                dishRecommend.setStar(countStarsOnWindow(window.getWindowId()));
+                dishRecommend.setDish(window.getDishes());
+                dishRecommends.add(dishRecommend);
+            }
+        }
+        jsonObject.setCode(new Code(StatusCode.SUCCESS));
+        jsonObject.setData(dishRecommends);
+        return jsonObject;
     }
 
     @Override

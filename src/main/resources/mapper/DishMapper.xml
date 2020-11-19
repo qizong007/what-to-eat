@@ -16,10 +16,12 @@
             <result property="description" column="description"/>
         </association>
     </resultMap>
+
     <resultMap id="TagMap" type="com.fzufood.entity.Tag">
         <id property="tagId" column="tag_id" ></id>
         <result property="content" column="content" ></result>
     </resultMap>
+
     <insert id="saveDish" parameterType="com.fzufood.entity.Dish">
         insert  into dish(dish_id,dish_name,price,by_weight,window_id)values(#{dishId},#{dishName},#{price},#{byWeight},#{window.windowId})
     </insert>
@@ -27,6 +29,7 @@
     <delete id="removeDishById" parameterType="java.lang.Integer">
         delete from dish where dish_id=#{dishId}
     </delete>
+
     <select id="listDishes" resultMap="dishMap">
             select dish_id,dish_name,price,by_weight,window.window_id window_id, window_name, location, profile,
             description,canteen.canteen_id canteen_id, canteen_name
@@ -34,6 +37,15 @@
         left join canteen on window.canteen_id = canteen.canteen_id
 
     </select>
+
+    <select id="listDishesByName" parameterType="java.lang.String" resultMap="dishMap">
+        select dish_id,dish_name,price,by_weight,window.window_id window_id, window_name, location, profile,
+            description,canteen.canteen_id canteen_id, canteen_name
+        from dish  join window on window.window_id = dish.window_id
+        left join canteen on window.canteen_id = canteen.canteen_id
+        where dish_name like "%"#{dishName}"%";
+    </select>
+
     <select id="getDishById" parameterType="java.lang.Integer" resultMap="dishMap">
         select dish_id,dish_name,price,by_weight,window.window_id window_id, window_name, location, profile,
             description,canteen.canteen_id canteen_id, canteen_name
@@ -41,9 +53,11 @@
         left join canteen on window.canteen_id = canteen.canteen_id
         where dish_id=#{dishId}
     </select>
+
     <select id="listTagsById" parameterType="java.lang.Integer" resultMap="TagMap">
         select tag_id,content from tag where tag_id in (select tag_id from dish_tag where dish_id = #{dishId})
     </select>
+
     <update id="updateDish" parameterType="com.fzufood.entity.Dish">
         update dish set dish_name=#{dishName},price=#{price},by_weight=#{byWeight}, window_id=#{window.windowId} where dish_id=#{dishId}
     </update>

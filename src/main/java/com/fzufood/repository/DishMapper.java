@@ -21,6 +21,13 @@ public interface DishMapper {
     List<Dish> listDishes();
 
     /**
+     * 根据dishName模糊查询菜品
+     * @param dishName
+     * @return List<Dish>
+     */
+    List<Dish> listDishesByName(String dishName);
+
+    /**
      * 根据dishId查询对应的dish(dishId, dishName, price, byWeight, window)
      * @param dishId
      * @return Dish

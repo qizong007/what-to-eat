@@ -45,6 +45,15 @@ public class DishMapperTest {
             System.out.println(dish);
         }
     }
+
+    @Test
+    void listDishesByNameTest() {
+        List<Dish> dishes = dishMapper.listDishesByName("菜");
+        for(Dish dish : dishes) {
+            System.out.println(dish);
+        }
+    }
+
     @Test
     void addDish() {
         Window window =new Window();

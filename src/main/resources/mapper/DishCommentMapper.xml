@@ -34,6 +34,30 @@
         where user_id = #{userId} and dish_id = #{dishId};
     </select>
 
+    <select id="getCountUserByDishId" resultType="java.lang.Integer">
+        select count_user
+        from dish_stars
+        where dish_id = #{dishId};
+    </select>
+
+    <select id="getAvgStarsByDishId" resultType="java.lang.Double">
+        select sum_stars/count_user avg_stars
+        from dish_stars
+        where dish_id = #{dishId};
+    </select>
+
+    <select id="getCountUserByWindowId" resultType="java.lang.Integer">
+        select count_user
+        from window_stars
+        where window_id = #{windowId};
+    </select>
+
+    <select id="getAvgStarsByWindowId" resultType="java.lang.Double">
+        select sum_stars/count_user avg_stars
+        from window_stars
+        where window_id = #{windowId}
+    </select>
+
     <insert id="saveDishComment" parameterType="com.fzufood.entity.DishComment">
         insert into dish_comment(user_id, dish_id, stars)
         values (#{userId}, #{dishId}, #{stars})

@@ -54,6 +54,26 @@ public class DishCommentTest {
     }
 
     @Test
+    void getCountUserByDishIdTest() {
+        System.out.println(dishCommentMapper.getCountUserByDishId(1));
+    }
+
+    @Test
+    void getAvgStarsByDishIdTest() {
+        System.out.println(dishCommentMapper.getAvgStarsByDishId(1));
+    }
+
+    @Test
+    void getCountUserByWindowIdTest() {
+        System.out.println(dishCommentMapper.getCountUserByWindowId(1));
+    }
+
+    @Test
+    void getAvgStarsByWindowIdTest() {
+        System.out.println(dishCommentMapper.getAvgStarsByWindowId(1));
+    }
+
+    @Test
     void saveDishCommentTest() {
         DishComment dishComment = new DishComment();
         dishComment.setUserId(1);

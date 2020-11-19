@@ -45,25 +45,33 @@ public class DishMapperTest {
             System.out.println(dish);
         }
     }
-//    @Test
-//    void addDish() {
-//        Window window =new Window();
-//        window.setWindowId(1);
-//        Dish dish = new Dish();
-//        dish.setDishName("添加了一道新菜");
-//        dish.setByWeight(false);
-//        System.out.println(dishMapper.saveDish(dish));
-//    }
-//    @Test
-//    void removeDishById(){
-//        System.out.println(dishMapper.removeDishById(4058));
-//    }
-//    @Test
-//    void updateDishById(){
-//        Dish dish = new Dish();
-//        dish.setDishName("222");
-//        dish.setDishId(4048);
-//        System.out.println(dishMapper.updateDish(dish));
-//    }
+    @Test
+    void addDish() {
+        Window window =new Window();
+        window.setWindowId(1);
+        Dish dish = new Dish();
+        dish.setDishName("添加了一道新菜");
+        dish.setByWeight(false);
+        dish.setDishId(5000);
+        dish.setWindow(window);
+        System.out.println(dishMapper.saveDish(dish));
+        findDishesAll();
+    }
+    @Test
+    void removeDishById(){
+        System.out.println(dishMapper.removeDishById(5000));
+        findDishesAll();
+    }
+    @Test
+    void updateDishById(){
+        Window window =new Window();
+        window.setWindowId(1);
+        Dish dish = new Dish();
+        dish.setDishName("更改菜品信息");
+        dish.setDishId(5000);
+        dish.setWindow(window);
+        System.out.println(dishMapper.updateDish(dish));
+        findDishesAll();
+    }
 }
 

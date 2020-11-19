@@ -20,13 +20,11 @@
         <id property="tagId" column="tag_id" ></id>
         <result property="content" column="content" ></result>
     </resultMap>
-    <insert id="saveDish">
-        insert  into dish(window_id,dish_name,price,by_weight) values(#{dishId},#{window.windowId},#{dishName},#{price},#{byWeight})
+    <insert id="saveDish" parameterType="com.fzufood.entity.Dish">
+        insert  into dish(dish_id,dish_name,price,by_weight,window_id)values(#{dishId},#{dishName},#{price},#{byWeight},#{window.windowId})
     </insert>
-    <update id="updateDish" parameterType="com.fzufood.entity.Dish">
-        update dish set dish_name=#{dishName},price=#{price},by_weight=#{byWeight} ,window_id=#{window.windowId}where dish_id=#{dishId}
-    </update>
-    <delete id="removeDishById" parameterType="com.fzufood.entity.Dish">
+
+    <delete id="removeDishById" parameterType="java.lang.Integer">
         delete from dish where dish_id=#{dishId}
     </delete>
     <select id="listDishes" resultMap="dishMap">
@@ -46,5 +44,8 @@
     <select id="listTagsById" parameterType="java.lang.Integer" resultMap="TagMap">
         select tag_id,content from tag where tag_id in (select tag_id from dish_tag where dish_id = #{dishId})
     </select>
+    <update id="updateDish" parameterType="com.fzufood.entity.Dish">
+        update dish set dish_name=#{dishName},price=#{price},by_weight=#{byWeight}, window_id=#{window.windowId} where dish_id=#{dishId}
+    </update>
 
 </mapper>

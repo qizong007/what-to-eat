@@ -61,17 +61,16 @@ public class WindowMapperTest {
         System.out.println(windowMapper.removeWindowById(147));
         findWindowAll();
     }
-//    @Test
-//有问题
-//    void updateWindowById(){
-//        Window window= new Window();
-//        window.setWindowName("修改窗口名");
-//        window.setWindowId(146);
-//        Canteen canteen=new Canteen();
-//        canteen.setCanteenId(1);
-//        window.setCanteen(canteen);
-//        System.out.println(windowMapper.updateWindow(window));
-//        findWindowAll();
-//
-//    }
+    @Test
+    void updateWindowById(){
+        Window window= new Window();
+        window.setWindowName("修改窗口名");
+        window.setWindowId(150);
+        Canteen canteen=new Canteen();
+        canteen.setCanteenId(1);
+        window.setCanteen(canteen);
+        System.out.println(windowMapper.updateWindow(window));
+        findWindowAll();
+
+    }
 }

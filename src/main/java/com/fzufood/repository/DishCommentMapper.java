@@ -63,4 +63,32 @@ public interface DishCommentMapper {
      * @return int
      */
     int removeDishComment(@Param("userId") Integer userId, @Param("dishId") Integer dishId);
+
+    /**
+     * 根据dishId查出给此dish评星级的总人数
+     * @param dishId
+     * @return Integer
+     */
+    Integer getCountUserByDishId(Integer dishId);
+
+    /**
+     * 根据dishId查出给此dish的评分
+     * @param dishId
+     * @return Double
+     */
+    Double getAvgStarsByDishId(Integer dishId);
+
+    /**
+     * 根据windowId查出给此window的所有菜评星级的总人数
+     * @param windowId
+     * @return Integer
+     */
+    Integer getCountUserByWindowId(Integer windowId);
+
+    /**
+     * 根据windowId查出给此window的评分
+     * @param windowId
+     * @return Integer
+     */
+    Double getAvgStarsByWindowId(Integer windowId);
 }

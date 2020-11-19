@@ -254,12 +254,21 @@ public class WindowServiceImpl implements WindowService {
      */
     @Override
     public Integer updateMarkedWindow(Integer userId, Integer windowId)  {
-        User user = userMapper.getUserById(userId);
         List<Window> windowList = userMapper.listMarkWindowsById(userId);
-        Window  window = windowMapper.getWindowById(windowId);
-        windowList.add(window);
-        //user.setMarkWindows(windowList);
-        if(windowMapper.updateWindow(window) != 0){
+        int flag=0;
+        for(Window window : windowList){
+            if(window.getWindowId()==windowId)
+            {
+                userMapper.removeMarkWindow(userId,windowId);
+                break;
+            }
+        }
+        if(flag==1)
+        {
+            userMapper.saveMarkWindow(userId,windowId);
+        }
+
+        if(windowMapper.updateWindow(windowMapper.getWindowById(windowId)) != 0){
             return StatusCode.SUCCESS;
         }else {
             return StatusCode.FAIL_TO_UPDATE_MARKED_WINDOW;

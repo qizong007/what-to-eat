@@ -1,12 +1,12 @@
 package com.fzufood.controller;
 
 import com.fzufood.dto.*;
+import com.fzufood.http.UpdateDishStarResponse;
+import com.fzufood.http.UpdateDishTagResponse;
 import com.fzufood.service.DishService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/dish")
@@ -17,33 +17,25 @@ public class DishController {
 
     /**
      * 更新菜品标签接口
-     * @param userId
-     * @param dishId
-     * @param tagId
-     * @return JsonObject<UpdateDishTag>
+     * @param response
+     * @return JsonObject<UpdateDishTagResponse>
      */
     @ApiOperation("更新菜品标签接口")
     @PostMapping("/updateDishTag")
-    public JsonObject<UpdateDishTag> updateDishTag(@RequestParam("userId") Integer userId,
-                                                   @RequestParam("dishId")Integer dishId,
-                                                   @RequestParam("tagId")Integer tagId){
+    public JsonObject<UpdateDishTag> updateDishTag(@RequestBody UpdateDishTagResponse response){
 
-        return dishService.updateDishTag(userId, dishId, tagId);
+        return dishService.updateDishTag(response.getUserId(),response.getDishId(),response.getTagId());
     }
 
     /**
      * 更新菜品评分接口
-     * @param userId
-     * @param dishId
-     * @param star
+     * @param response
      * @return Code
      */
     @ApiOperation("更新菜品评分接口")
     @PostMapping("/updateDishStar")
-    public Integer updateDishStar(@RequestParam("userId") Integer userId,
-                               @RequestParam("dishId")Integer dishId,
-                               @RequestParam("star")Double star){
-        return dishService.updateDishStar(userId, dishId, star);
+    public Integer updateDishStar(@RequestBody UpdateDishStarResponse response){
+        return dishService.updateDishStar(response.getUserId(),response.getDishId(),response.getStar());
     }
 
     /**

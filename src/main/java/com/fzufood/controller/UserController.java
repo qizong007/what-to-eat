@@ -2,6 +2,8 @@ package com.fzufood.controller;
 
 import com.fzufood.dto.*;
 import com.fzufood.entity.Tag;
+import com.fzufood.http.FeedbackResponse;
+import com.fzufood.http.UpdateInfoResponse;
 import com.fzufood.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class UserController {
      */
     @ApiOperation("用户登录接口")
     @PostMapping("/login")
-    public JsonObject<UserLogin> login(@RequestParam("code") String code){
+    public JsonObject<UserLogin> login(@RequestBody String code){
         return userService.login(code);
     }
 
@@ -40,15 +42,13 @@ public class UserController {
 
     /**
      * 获取用户信息接口
-     * @param userId
+     * @param response
      * @return Code
      */
     @ApiOperation("获取用户信息接口")
     @PostMapping("/updateInfo")
-    public Integer updateInfo(@RequestParam("userId") Integer userId,
-                           @RequestParam("preferredList") List<Tag> preferredList,
-                           @RequestParam("avoidList") List<Tag> avoidList){
-        return userService.updateInfo(userId, preferredList, avoidList);
+    public Integer updateInfo(@RequestBody UpdateInfoResponse response){
+        return userService.updateInfo(response.getUserId(),response.getPreferredList(),response.getAvoidList() );
     }
 
     /**
@@ -68,15 +68,13 @@ public class UserController {
 
     /**
      * 用户反馈接口
-     * @param userId
-     * @param content
+     * @param response
      * @return Code
      */
     @ApiOperation("用户反馈接口")
     @PostMapping("/feedback")
-    public Integer feedback(@RequestParam("userId") Integer userId,
-                         @RequestParam("content") String content){
-        return userService.feedback(userId,content);
+    public Integer feedback(@RequestBody FeedbackResponse response){
+        return userService.feedback(response.getUserId(),response.getContent());
     }
 
 }

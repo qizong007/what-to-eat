@@ -22,7 +22,7 @@ public class WindowServiceTest {
     // FIXME
     @Test
     void recommend(){
-        JsonObject<Recommend> jsonObject = windowService.recommend(1,1);
+        JsonObject<Recommend> jsonObject = windowService.recommend(2,1);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }

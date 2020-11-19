@@ -1,15 +1,13 @@
 package com.fzufood.controller;
 
-import com.fzufood.dto.DishRecommend;
 import com.fzufood.dto.JsonObject;
 import com.fzufood.dto.Recommend;
 import com.fzufood.dto.WindowEntry;
+import com.fzufood.http.UpdateMarkedWindowResponse;
 import com.fzufood.service.WindowService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/window")
@@ -57,14 +55,12 @@ public class WindowController {
 
     /**
      * 更新收藏窗口接口
-     * @param userId
-     * @param windowId
+     * @param response
      * @return Code
      */
     @ApiOperation("更新收藏窗口接口")
     @PostMapping("/updateMarkedWindow")
-    public Integer updateMarkedWindow(@RequestParam("userId") Integer userId,
-                                   @RequestParam("windowId")Integer windowId) {
-        return windowService.updateMarkedWindow(userId, windowId);
+    public Integer updateMarkedWindow(@RequestBody UpdateMarkedWindowResponse response) {
+        return windowService.updateMarkedWindow(response.getUserId(), response.getWindowId());
     }
 }

@@ -30,7 +30,7 @@ public class DishServiceImpl implements DishService {
      * @author qizong007
      * @date 17:42 2020/11/14
      * @param userId,dishId,tagId
-     * @return JsonObject<UpdateDishTag>
+     * @return JsonObject<UpdateDishTagResponse>
      **/
     @Override
     public JsonObject<UpdateDishTag> updateDishTag(Integer userId, Integer dishId, Integer tagId) {

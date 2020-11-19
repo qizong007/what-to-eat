@@ -104,14 +104,29 @@ public class WindowServiceImpl implements WindowService {
         List<Window> windowList = windowMapper.listWindows();
         System.out.println("sort start");
         Collections.sort(windowList, new Comparator<Window>() {
+            double tagnum1;
+            double i1;
+            double tagnum2;
+            double i2;
+            double diff;
+            Double avgStarsByWindowId;
             public int compare(Window window1, Window window2) {
-                double tagnum1 = countTagNumOnWindow(window1.getWindowId());
-                double i1 = countStarsOnWindow(window1.getWindowId())*0.6+tagnum1*0.4;
-                System.out.println(i1);
-                double tagnum2 = countTagNumOnWindow(window2.getWindowId());
-                double i2 = countStarsOnWindow(window2.getWindowId())*0.6+tagnum2*0.4;
-                System.out.println(i2);
-                double diff = i2 - i1;
+                tagnum1 = countTagNumOnWindow(window1.getWindowId());
+                avgStarsByWindowId = dishCommentMapper.getAvgStarsByWindowId(window1.getWindowId());
+                if(avgStarsByWindowId != null){
+                    i1 = avgStarsByWindowId*0.6+tagnum1*0.4;
+                }else{
+                    i1 = 0.0;
+                }
+                tagnum2 = countTagNumOnWindow(window2.getWindowId());
+                avgStarsByWindowId = dishCommentMapper.getAvgStarsByWindowId(window2.getWindowId());
+                if(avgStarsByWindowId != null){
+                    i2 = avgStarsByWindowId*0.6+tagnum1*0.4;
+                }else{
+                    i2 = 0.0;
+                }
+                diff = i2 - i1;
+                System.out.println(diff);
                 if(diff > 0){
                     return 1;
                 }else if(diff < 0){

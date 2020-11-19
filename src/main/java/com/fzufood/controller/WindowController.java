@@ -2,6 +2,7 @@ package com.fzufood.controller;
 
 import com.fzufood.dto.DishRecommend;
 import com.fzufood.dto.JsonObject;
+import com.fzufood.dto.Recommend;
 import com.fzufood.dto.WindowEntry;
 import com.fzufood.service.WindowService;
 import io.swagger.annotations.ApiOperation;
@@ -25,8 +26,8 @@ public class WindowController {
      */
     @ApiOperation("首页窗口推荐接口")
     @GetMapping("/recommend")
-    public JsonObject<List<DishRecommend>> recommend(@RequestParam("type")Integer type,
-                                                     @RequestParam("userId")Integer userId){
+    public JsonObject<Recommend> recommend(@RequestParam("type")Integer type,
+                                           @RequestParam("userId")Integer userId){
        return windowService.recommend(type, userId);
     }
 
@@ -50,7 +51,7 @@ public class WindowController {
      */
     @ApiOperation("获取收藏窗口接口")
     @GetMapping("/getMarkedWindow")
-    public JsonObject<List<DishRecommend>> getMarkedWindow(@RequestParam("userId")Integer userId) {
+    public JsonObject<Recommend> getMarkedWindow(@RequestParam("userId")Integer userId) {
         return windowService.getMarkedWindow(userId);
     }
 

@@ -30,6 +30,9 @@ public class Dish {
     @ApiModelProperty("所属的窗口")
     private Window window;
 
+    @ApiModelProperty("菜品的星级")
+    private Double star;
+
     @ApiModelProperty("菜品标签")
     private List<Tag> tags;
 }

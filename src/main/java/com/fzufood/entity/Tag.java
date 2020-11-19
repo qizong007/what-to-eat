@@ -1,5 +1,7 @@
 package com.fzufood.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -16,5 +18,7 @@ public class Tag {
     private Integer tagId;
 
     @ApiModelProperty("标签内容")
+    @JSONField(name = "tagName")
+    @JsonProperty("tagName")
     private String content;
 }

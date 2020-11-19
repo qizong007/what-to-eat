@@ -48,7 +48,7 @@ public class DishMapperTest {
 
     @Test
     void listDishesByNameTest() {
-        List<Dish> dishes = dishMapper.listDishesByName("菜");
+        List<Dish> dishes = dishMapper.listDishesByName("薯");
         for(Dish dish : dishes) {
             System.out.println(dish);
         }

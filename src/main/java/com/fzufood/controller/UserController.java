@@ -47,8 +47,9 @@ public class UserController {
     @PostMapping("/updateInfo")
     public Integer updateInfo(@RequestParam("userId") Integer userId,
                            @RequestParam("preferredList") List<Tag> preferredList,
-                           @RequestParam("avoidList") List<Tag> avoidList){
-        return userService.updateInfo(userId, preferredList, avoidList);
+                           @RequestParam("avoidList") List<Tag> avoidList,
+                           @RequestParam("allList") List<Tag> allList){
+        return userService.updateInfo(userId, preferredList, avoidList,allList);
     }
 
     /**
@@ -60,7 +61,7 @@ public class UserController {
      */
     @ApiOperation("用户搜索接口")
     @GetMapping("/search")
-    public JsonObject<List<DishRecommend>> search(@RequestParam("searchName")String searchName,
+    public JsonObject<Search> search(@RequestParam("searchName")String searchName,
                                       @RequestParam("tagList")List<Tag> tagList,
                                       @RequestParam("canteenId")Integer canteenId){
         return userService.search(searchName, tagList, canteenId);

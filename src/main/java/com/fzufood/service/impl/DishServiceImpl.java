@@ -140,8 +140,8 @@ public class DishServiceImpl implements DishService {
      * @return JsonObject<List<DishEntry>>
      */
     @Override
-    public JsonObject<List<DishEntry>> favorites(Integer userId) {
-        JsonObject<List<DishEntry>> jsonObject = new JsonObject<>();
+    public JsonObject<Favorites> favorites(Integer userId) {
+        JsonObject<Favorites> jsonObject = new JsonObject<>();
         if(userId == null){
             jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
             jsonObject.setData(null);
@@ -158,7 +158,7 @@ public class DishServiceImpl implements DishService {
             dishEntries.add(dishEntry);
         }
         jsonObject.setCode(StatusCode.SUCCESS);
-        jsonObject.setData(dishEntries);
+        jsonObject.setData(new Favorites(dishEntries));
         return jsonObject;
     }
 

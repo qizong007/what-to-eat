@@ -1,19 +1,20 @@
 package com.fzufood.dto;
 
-import com.fzufood.entity.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * @Author qizong007
+ * @create 2020/11/19 20:44
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfo{
+public class Search {
 
-    private List<Tag> preferredList;
-    private List<Tag> avoidList;
-    private List<Tag> allList;
+    private List<DishRecommend> searchList;
 
 }

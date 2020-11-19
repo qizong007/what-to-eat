@@ -64,7 +64,7 @@ public class DishController {
      */
     @ApiOperation("最爱的菜接口")
     @GetMapping("/favorites")
-    public JsonObject<List<DishEntry>> favorites(Integer userId){
+    public JsonObject<Favorites> favorites(Integer userId){
         return dishService.favorites(userId);
     }
 

@@ -1,10 +1,7 @@
 package com.fzufood.service;
 
 import com.alibaba.fastjson.JSON;
-import com.fzufood.dto.DishEntry;
-import com.fzufood.dto.DishInfo;
-import com.fzufood.dto.JsonObject;
-import com.fzufood.dto.UpdateDishTag;
+import com.fzufood.dto.*;
 import com.fzufood.util.StatusCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -49,7 +46,7 @@ public class DishServiceTest {
     // 测试通过
     @Test
     void favorites(){
-        JsonObject<List<DishEntry>> jsonObject = dishService.favorites(1);
+        JsonObject<Favorites> jsonObject = dishService.favorites(1);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }

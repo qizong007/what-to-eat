@@ -1,14 +1,13 @@
 package com.fzufood.service;
 
 import com.alibaba.fastjson.JSON;
-import com.fzufood.dto.DishRecommend;
 import com.fzufood.dto.JsonObject;
+import com.fzufood.dto.Recommend;
 import com.fzufood.dto.WindowEntry;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
 
 /**
  * @Author qizong007
@@ -23,7 +22,7 @@ public class WindowServiceTest {
     // FIXME
     @Test
     void recommend(){
-        JsonObject<List<DishRecommend>> jsonObject = windowService.recommend(1,1);
+        JsonObject<Recommend> jsonObject = windowService.recommend(1,2);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }
@@ -39,17 +38,17 @@ public class WindowServiceTest {
     // 测试通过
     @Test
     void getMarkedWindow(){
-        JsonObject<List<DishRecommend>> jsonObject = windowService.getMarkedWindow(1);
+        JsonObject<Recommend> jsonObject = windowService.getMarkedWindow(1);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }
 
-    // FIXME
+    // 测试通过
     @Test
     void updateMarkedWindow(){
         Integer code = windowService.updateMarkedWindow(1,1);
         System.out.println(code);
-        JsonObject<List<DishRecommend>> jsonObject = windowService.getMarkedWindow(1);
+        JsonObject<Recommend> jsonObject = windowService.getMarkedWindow(1);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
         code = windowService.updateMarkedWindow(1,1);

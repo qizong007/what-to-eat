@@ -1,10 +1,7 @@
 package com.fzufood.service;
 
 import com.alibaba.fastjson.JSON;
-import com.fzufood.dto.DishRecommend;
-import com.fzufood.dto.JsonObject;
-import com.fzufood.dto.UserInfo;
-import com.fzufood.dto.UserLogin;
+import com.fzufood.dto.*;
 import com.fzufood.entity.Tag;
 import com.fzufood.repository.TagMapper;
 import com.fzufood.util.StatusCode;
@@ -50,11 +47,14 @@ public class UserServiceTest {
     void updateInfo(){
         List<Tag> avoidTags = new ArrayList<>();
         List<Tag> preferTags = new ArrayList<>();
+        List<Tag> allList = new ArrayList<>();
         avoidTags.add(tagMapper.getTagById(1));
         preferTags.add(tagMapper.getTagById(8));
         preferTags.add(tagMapper.getTagById(9));
-        Integer code = userService.updateInfo(9,preferTags,avoidTags);
+        allList.add(new Tag(10,"很淦"));
+        Integer code = userService.updateInfo(9,preferTags,avoidTags,allList);
         Assertions.assertEquals(StatusCode.SUCCESS,code);
+        getInfo();
     }
 
     // FIXME
@@ -63,7 +63,7 @@ public class UserServiceTest {
         List<Tag> tagList = new ArrayList<>();
         tagList.add(tagMapper.getTagById(1));
         tagList.add(tagMapper.getTagById(2));
-        JsonObject<List<DishRecommend>> jsonObject = userService.search(null,tagList,null);
+        JsonObject<Search> jsonObject = userService.search(null,tagList,null);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }

@@ -39,6 +39,12 @@
         where tag_id = #{tagId};
     </select>
 
+    <select id="listDishTagsByUserId" parameterType="java.lang.Integer" resultMap="dishTagMap">
+        select user_id, dish_id, tag_id
+        from dish_tag
+        where user_id = #{userId};
+    </select>
+
     <insert id="saveDishTag" parameterType="com.fzufood.entity.DishTag">
         insert into dish_tag(user_id, dish_id, tag_id)
         values (#{userId}, #{dishId}, #{tagId});

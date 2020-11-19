@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import java.util.*;
 
 
 @Service
@@ -130,20 +127,22 @@ public class UserServiceImpl implements UserService {
             return jsonObject;
         }
         UserInfo userInfo = new UserInfo();
-        userInfo.setPreferTags(userMapper.listPreferTagsById(userId));
-        userInfo.setAvoidTags(userMapper.listAvoidTagsById(userId));
+        userInfo.setPreferredList(userMapper.listPreferTagsById(userId));
+        userInfo.setAvoidList(userMapper.listAvoidTagsById(userId));
+        userInfo.setAllList(tagMapper.listTags());
         jsonObject.setCode(StatusCode.SUCCESS);
         jsonObject.setData(userInfo);
         return jsonObject;
     }
 
-    private boolean contain(List<Tag> preferredTags, Integer tagId){
-        for (Tag tag : preferredTags){
+    private boolean contain(List<Tag> tags, Integer tagId){
+        for (Tag tag : tags){
             if (tag.getTagId() == tagId)
                 return true;
         }
         return false;
     }
+
     /**
      * 更新用户信息
      * @param userId
@@ -156,7 +155,7 @@ public class UserServiceImpl implements UserService {
 
     //FIXME
     @Override
-    public Integer updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList) {
+    public Integer updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList, List<Tag> allList) {
         if(userId == null){
             return StatusCode.MISSING_PARAMETERS;
         }
@@ -201,8 +200,14 @@ public class UserServiceImpl implements UserService {
                 }
             }
         }
-        System.out.println(userMapper.listPreferTagsById(userId));
-        System.out.println(userMapper.listAvoidTagsById(userId));
+        //对用户给菜品点过的tag的更改
+        for(Tag tag : allList){
+            if(tag.getTagId() == null || tagMapper.getTagById(tag.getTagId()) == null){
+                if(tagMapper.saveTag(tag) == 0){
+                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                }
+            }
+        }
         return StatusCode.SUCCESS;
     }
 
@@ -217,14 +222,14 @@ public class UserServiceImpl implements UserService {
 
     //TODO:search自定义搜索待实现
     @Override
-    public JsonObject<List<DishRecommend>> search(String searchName, List<Tag> tagList, Integer canteenId) {
+    public JsonObject<Search> search(String searchName, List<Tag> tagList, Integer canteenId) {
 
         for(Tag tag :tagList){
             if(tagMapper.getTagById(tag.getTagId()) == null){
                 tagMapper.saveTag(tag);
             }
         }
-        JsonObject<List<DishRecommend>> jsonObject = new JsonObject<>();
+        JsonObject<Search> jsonObject = new JsonObject<>();
 
 
         List<DishRecommend> dishRecommendList = new ArrayList<>();
@@ -350,8 +355,7 @@ public class UserServiceImpl implements UserService {
 
 
         }
-
-        jsonObject.setData(dishRecommendList);
+        jsonObject.setData(new Search(dishRecommendList));
         jsonObject.setCode(StatusCode.SUCCESS);
         return jsonObject;
 

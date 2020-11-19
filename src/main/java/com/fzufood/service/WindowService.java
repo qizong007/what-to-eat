@@ -12,4 +12,5 @@ public interface WindowService {
     JsonObject<WindowEntry> info(Integer windowId, Integer userId);
     JsonObject<List<DishRecommend>> getMarkedWindow(Integer userId);
     Integer updateMarkedWindow(Integer userId, Integer windowId);
+    JsonObject<List<DishRecommend>> popular(Integer userId);
 }

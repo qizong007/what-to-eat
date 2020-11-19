@@ -81,9 +81,6 @@ public class UserMapperTest {
     void saveUserTest() {
         User user = new User();
         user.setOpenId("123456");
-        user.setPhoneNumber("13202020202");
-        user.setUserName("saveTest");
-        user.setProfilePictureURI("path");
         userMapper.saveUser(user);
     }
 
@@ -92,9 +89,6 @@ public class UserMapperTest {
         User user = new User();
         user.setUserId(10);
         user.setOpenId("123456");
-        user.setPhoneNumber("13202020202");
-        user.setUserName("updateTest");
-        user.setProfilePictureURI("path");
         userMapper.updateUser(user);
     }
 

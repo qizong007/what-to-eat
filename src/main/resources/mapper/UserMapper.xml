@@ -7,9 +7,6 @@
     <resultMap id="userMap" type="com.fzufood.entity.User">
         <id property="userId" column="user_id"/>
         <result property="openId" column="open_id"/>
-        <result property="phoneNumber" column="phone_number"/>
-        <result property="userName" column="user_name"/>
-        <result property="profilePictureURI" column="profile_picture"/>
     </resultMap>
 
     <resultMap id="windowMap" type="com.fzufood.entity.Window">
@@ -50,17 +47,17 @@
     </resultMap>
 
     <select id="listUsers" resultMap="userMap">
-        select user_id, open_id, phone_number, user_name, profile_picture
+        select user_id, open_id
         from user;
     </select>
 
     <select id="getUserById" parameterType="java.lang.Integer" resultMap="userMap">
-        select user_id, open_id, phone_number, user_name, profile_picture
+        select user_id, open_id
         from user where user_id = #{userId};
     </select>
 
     <select id="getUserByOpenId" parameterType="java.lang.String" resultMap="userMap">
-        select user_id, open_id, phone_number, user_name, profile_picture
+        select user_id, open_id
         from user where open_id = #{openId};
     </select>
 
@@ -99,13 +96,12 @@
     </select>
 
     <insert id="saveUser" parameterType="com.fzufood.entity.User">
-        insert into user(open_id, phone_number, user_name, profile_picture)
-        values(#{openId}, #{phoneNumber}, #{userName},#{profilePictureURI});
+        insert into user(open_id)
+        values(#{openId});
     </insert>
     
     <update id="updateUser" parameterType="com.fzufood.entity.User">
-        update user set open_id = #{openId}, phone_number = #{phoneNumber}, user_name = #{userName},
-            profile_picture = #{profilePictureURI}
+        update user set open_id = #{openId}
         where user_id = #{userId};
     </update>
 

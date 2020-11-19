@@ -28,7 +28,7 @@
         </association>
     </resultMap>
     <insert id="saveWindow" parameterType="com.fzufood.entity.Window">
-        insert into window(window_name,location,profile,description,canteen_id)values(#{windowName},,#{location},#{profile},#{description},#{canteen.canteenId})
+        insert into window(window_id,window_name,location,profile,description,canteen_id)values(#{windowId},#{windowName},#{locationURI},#{profileURI},#{description},#{canteen.canteenId})
     </insert>
     <select id="listWindows" resultMap="windowMap">
         select window_id,window_name,location,profile,description,canteen.canteen_id canteen_id,canteen.canteen_name
@@ -45,7 +45,7 @@
         select dish_id, dish_name, price, by_weight from dish where window_id=#{window.windowId}
     </select>
     <update id="updateWindow" parameterType="com.fzufood.entity.Window">
-         update window set window_name=#{windowName}, location=#{location}, profile={profile}, description={description},canteen.canteen_id canteen_id =#{canteen.canteenId} where window_id=#{windowId}
+         update window set window_name=#{windowName}, location=#{locationURI}, profile=#{profileURI}, description=#{description}, canteen.canteen_id canteen_id =#{canteen.canteenId} where window_id=#{windowId}
     </update>
     <delete id="removeWindowById">
         delete from window where window_id=#{windowId}

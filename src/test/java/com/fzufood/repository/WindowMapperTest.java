@@ -1,5 +1,6 @@
 package com.fzufood.repository;
 
+import com.fzufood.entity.Canteen;
 import com.fzufood.entity.Dish;
 import com.fzufood.entity.Window;
 import org.junit.jupiter.api.Test;
@@ -41,23 +42,36 @@ public class WindowMapperTest {
             System.out.println(window);
         }
     }
+    @Test
+    void addWindow() {
+        Window window = new Window();
+        window.setWindowId(147);
+        window.setWindowName("添加新窗口");
+        window.setDescription("好吃");
+        window.setLocationURI("添加新窗口");
+        window.setProfileURI("添加新窗口");
+        Canteen canteen=new Canteen();
+        canteen.setCanteenId(1);
+        window.setCanteen(canteen);
+        System.out.println(windowMapper.saveWindow(window));
+        findWindowAll();
+    }
+    @Test
+    void removeWindowById(){
+        System.out.println(windowMapper.removeWindowById(147));
+        findWindowAll();
+    }
 //    @Test
-//    void addWindow() {
-//        Window window = new Window();
-//        window.setWindowName("的规划复活甲");
-//        System.out.println(windowMapper.saveWindow(window));
-//        findWindowAll();
-//    }
-//    @Test
-//    void removeWindowById(){
-//        System.out.println(windowMapper.removeWindowById(10));
-//    }
-//    @Test
+//有问题
 //    void updateWindowById(){
 //        Window window= new Window();
-//        window.setWindowName("222");
-//        window.setWindowId(11);
+//        window.setWindowName("修改窗口名");
+//        window.setWindowId(146);
+//        Canteen canteen=new Canteen();
+//        canteen.setCanteenId(1);
+//        window.setCanteen(canteen);
 //        System.out.println(windowMapper.updateWindow(window));
+//        findWindowAll();
 //
 //    }
 }

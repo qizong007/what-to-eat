@@ -37,6 +37,7 @@ public class TagMapperTest {
     @Test
     void addTag() {
         Tag tag = new Tag();
+        tag.setTagId(11);
         tag.setContent("偏酸");;
         System.out.println(tagMapper.saveTag(tag));
         findTagAll();
@@ -51,7 +52,7 @@ public class TagMapperTest {
     }
     @Test
     void removeTagById(){
-        System.out.println(tagMapper.removeTagById(10));
+        System.out.println(tagMapper.removeTagById(11));
         findTagAll();
     }
 

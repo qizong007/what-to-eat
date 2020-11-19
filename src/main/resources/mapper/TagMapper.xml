@@ -8,7 +8,7 @@
         <result property="content" column="content" ></result>
     </resultMap>
     <insert id="saveTag">
-        insert into tag(content) values (#{content})
+        insert into tag(tag_id,content) values (#{tagId},#{content})
     </insert>
     <update id="updateTag">
         update tag set content=#{content} where tag_id=#{tagId}

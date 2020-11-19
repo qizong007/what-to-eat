@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
 
     //FIXME
     @Override
-    public Integer updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList, List<Tag> allList) {
+    public Integer updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList) {
         if(userId == null){
             return StatusCode.MISSING_PARAMETERS;
         }
@@ -196,14 +196,6 @@ public class UserServiceImpl implements UserService {
         for (Tag tag : userMapper.listAvoidTagsById(userId)){
             if(!contain(avoidList,tag.getTagId())){
                 if(userMapper.removeAvoidTag(userId,tag.getTagId()) == 0){
-                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
-                }
-            }
-        }
-        //对用户给菜品点过的tag的更改
-        for(Tag tag : allList){
-            if(tag.getTagId() == null || tagMapper.getTagById(tag.getTagId()) == null){
-                if(tagMapper.saveTag(tag) == 0){
                     return StatusCode.FAIL_TO_UPDATE_USER_INFO;
                 }
             }

@@ -52,7 +52,7 @@ public class UserServiceTest {
         preferTags.add(tagMapper.getTagById(8));
         preferTags.add(tagMapper.getTagById(9));
         allList.add(new Tag(10,"很淦"));
-        Integer code = userService.updateInfo(9,preferTags,avoidTags,allList);
+        Integer code = userService.updateInfo(9,preferTags,avoidTags);
         Assertions.assertEquals(StatusCode.SUCCESS,code);
         getInfo();
     }

@@ -47,9 +47,8 @@ public class UserController {
     @PostMapping("/updateInfo")
     public Integer updateInfo(@RequestParam("userId") Integer userId,
                            @RequestParam("preferredList") List<Tag> preferredList,
-                           @RequestParam("avoidList") List<Tag> avoidList,
-                           @RequestParam("allList") List<Tag> allList){
-        return userService.updateInfo(userId, preferredList, avoidList,allList);
+                           @RequestParam("avoidList") List<Tag> avoidList){
+        return userService.updateInfo(userId, preferredList, avoidList);
     }
 
     /**

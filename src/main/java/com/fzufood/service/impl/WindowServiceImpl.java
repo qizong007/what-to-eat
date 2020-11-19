@@ -8,10 +8,7 @@ import com.fzufood.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class WindowServiceImpl implements WindowService {
@@ -26,6 +23,7 @@ public class WindowServiceImpl implements WindowService {
     private DishCommentMapper dishCommentMapper;
     @Autowired
     private DishMapper dishMapper;
+
     /**
      * 首页推荐窗口
      * @author gaoyichao33
@@ -84,9 +82,7 @@ public class WindowServiceImpl implements WindowService {
             jsonObject.setData(new Recommend(newList));
         }
         else if(type==2){
-            Recommend recommend = popular(userId).getData();
-            jsonObject.setCode(StatusCode.SUCCESS);
-            jsonObject.setData(recommend);
+            return popular(userId);
         }
         return jsonObject;
     }
@@ -104,21 +100,30 @@ public class WindowServiceImpl implements WindowService {
             jsonObject.setData(null);
             return jsonObject;
         }
-        List<DishRecommend> dishRecommends = new  ArrayList<>();
+        List<DishRecommend> dishRecommends = new ArrayList<>();
         List<Window> windowList = windowMapper.listWindows();
-        Collections.sort(windowList, new Comparator<Window>()
-        {
-            public int compare(Window window1, Window window2)
-            {
-                double  tagnum1=countTagnumOnWindow(window1.getWindowId());
+        System.out.println("sort start");
+        Collections.sort(windowList, new Comparator<Window>() {
+            public int compare(Window window1, Window window2) {
+                double tagnum1 = countTagNumOnWindow(window1.getWindowId());
                 double i1 = countStarsOnWindow(window1.getWindowId())*0.6+tagnum1*0.4;
-                double  tagnum2=countTagnumOnWindow(window2.getWindowId());
+                System.out.println(i1);
+                double tagnum2 = countTagNumOnWindow(window2.getWindowId());
                 double i2 = countStarsOnWindow(window2.getWindowId())*0.6+tagnum2*0.4;
-                int flag = new Double(i2-i1).intValue();
-                return flag;
+                System.out.println(i2);
+                double diff = i2 - i1;
+                if(diff > 0){
+                    return 1;
+                }else if(diff < 0){
+                    return -1;
+                }else{
+                    return 0;
+                }
             }
         });
+        System.out.println("sort over");
         for(Window window : windowList){
+            System.out.println(window);
             DishRecommend dishRecommend = new DishRecommend();
             dishRecommend.setWindowId(window.getWindowId());
             dishRecommend.setWindowName(window.getWindowName());
@@ -138,21 +143,20 @@ public class WindowServiceImpl implements WindowService {
      * @param windowId
      * @return int
      */
-    private int countTagnumOnWindow(Integer windowId){
+    private int countTagNumOnWindow(Integer windowId){
         List<Dish> dishList = windowMapper.listDishesById(windowId);
-        int num;
         List<Tag> tagLists = new ArrayList<>();
         for(Dish dish : dishList){
             List<Tag> tagList= dishMapper.listTagsById(dish.getDishId());
             tagLists.addAll(tagList);
         }
-        List<Tag> newList = new  ArrayList<>();
+        List<Tag> newList = new ArrayList<>();
         for (Tag cd:tagLists) {
             if(!newList.contains(cd)){
                 newList.add(cd);
             }
         }
-        return  newList.size();
+        return newList.size();
     }
     @Override
     public JsonObject<WindowEntry> info(Integer windowId, Integer userId) {
@@ -236,7 +240,10 @@ public class WindowServiceImpl implements WindowService {
         for(Dish dish : dishList){
             stars += countStarsOnDish(dish.getDishId());
         }
-        return stars/dishList.size();
+        if(dishList.size() == 0)
+            return 0.0;
+        else
+            return stars/dishList.size();
     }
 
     private Double countStarsOnDish(Integer dishId){
@@ -245,7 +252,10 @@ public class WindowServiceImpl implements WindowService {
         for(DishComment dishComment : dishComments){
             stars += dishComment.getStars();
         }
-        return stars/dishComments.size();
+        if(dishComments.size() == 0)
+            return 0.0;
+        else
+            return stars/dishComments.size();
     }
 
     /**

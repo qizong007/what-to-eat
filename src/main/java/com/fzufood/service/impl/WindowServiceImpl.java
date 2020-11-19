@@ -258,7 +258,7 @@ public class WindowServiceImpl implements WindowService {
         List<Window> windowList = userMapper.listMarkWindowsById(userId);
         Window  window = windowMapper.getWindowById(windowId);
         windowList.add(window);
-        user.setMarkWindows(windowList);
+        //user.setMarkWindows(windowList);
         if(windowMapper.updateWindow(window) != 0){
             return StatusCode.SUCCESS;
         }else {

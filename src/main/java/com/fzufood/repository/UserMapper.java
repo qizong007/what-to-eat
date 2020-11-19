@@ -15,41 +15,41 @@ import java.util.List;
 public interface UserMapper {
 
     /**
-     * 查询所有user(userId, openId, phoneNumber, userName, profilePictureURI)
+     * 查询所有user(userId, openId)
      * @return List<User>
      */
     List<User> listUsers();
 
     /**
-     * 根据userId查询对应的user(userId, openId, phoneNumber, userName, profilePictureURI)
+     * 根据userId查询对应的user(userId, openId)
      * @param userId
      * @return User
      */
     User getUserById(Integer userId);
 
     /**
-     * 根据openId查询对应的user(userId, openId, phoneNumber, userName, profilePictureURI)
+     * 根据openId查询对应的user(userId, openId)
      * @param openId
      * @return User
      */
     User getUserByOpenId(String openId);
 
     /**
-     * 插入新的user(userId, openId, phoneNumber, userName, profilePictureURI)
+     * 插入新的user(userId, openId)
      * @param user
      * @return int
      */
     int saveUser(User user);
 
     /**
-     * 根据userId更新user(userId, openId, phoneNumber, userName, profilePictureURI)
+     * 根据userId更新user(userId, openId)
      * @param user
      * @return int
      */
     int updateUser(User user);
 
     /**
-     * 根据userId删除user(userId, openId, phoneNumber, userName, profilePictureURI)
+     * 根据userId删除user(userId, openId)
      * @param userId
      * @return int
      */

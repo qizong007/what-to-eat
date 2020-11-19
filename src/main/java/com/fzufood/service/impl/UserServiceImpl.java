@@ -4,7 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.fzufood.dto.*;
 import com.fzufood.entity.*;
 import com.fzufood.http.HttpRequest;
-import com.fzufood.http.LoginResponse;
+import com.fzufood.http.LoginResponseFail;
+import com.fzufood.http.LoginResponseSuccess;
 import com.fzufood.repository.*;
 import com.fzufood.service.UserService;
 import com.fzufood.util.StatusCode;
@@ -59,34 +60,21 @@ public class UserServiceImpl implements UserService {
         // 拿前端给的code去请求openId
         String str = HttpRequest.sendGet(WeChatAppCode.URL,
                 "appid="+WeChatAppCode.APP_ID
-                        +"&secret=SECRET" +WeChatAppCode.APP_SECRET
+                        +"&secret=" +WeChatAppCode.APP_SECRET
                         +"&js_code="+code
                         +"&grant_type=authorization_code");
-        LoginResponse response = JSON.parseObject(str,LoginResponse.class);
-        // 看看有没有错
-        Integer errCode = response.getErrcode();
-        // code无效
-        if(errCode == StatusCode.INVALID_CODE){
-            System.out.println(response.getErrmsg());
-            jsonObject.setCode(StatusCode.INVALID_CODE);
-            jsonObject.setData(null);
-            return jsonObject;
-        }
-        // 系统繁忙
-        else if(errCode == StatusCode.SYSTEM_BUSY){
-            System.out.println(response.getErrmsg());
-            jsonObject.setCode(StatusCode.SYSTEM_BUSY);
-            jsonObject.setData(null);
-            return jsonObject;
-        }
-        else if(errCode == StatusCode.SUCCESS){
-            String openId = response.getOpenid();
+        Integer errCode = 0;
+        if(str.contains("openid")){
+            LoginResponseSuccess responseSuccess = JSON.parseObject(str,LoginResponseSuccess.class);
+            String openId = responseSuccess.getOpenid();
+            System.out.println(openId);
             User user = userMapper.getUserByOpenId(openId);
             Integer userId;
             if(user == null){
                 // 还未注册
                 user = new User();
                 user.setOpenId(openId);
+                System.out.println(user);
                 userMapper.saveUser(user);
                 userId = userMapper.getUserByOpenId(openId).getUserId();
                 userLogin.setUserId(userId);
@@ -98,13 +86,29 @@ public class UserServiceImpl implements UserService {
                 userLogin.setHasRegistered(true);
             }
             jsonObject.setData(userLogin);
-            jsonObject.setCode(StatusCode.SUCCESS);
+            System.out.println(userLogin);
+            jsonObject.setCode(errCode);
             return jsonObject;
-        }
-        else{
-            jsonObject.setData(null);
-            jsonObject.setCode(StatusCode.UNKNOWN_LOGIN_FAULT);
-            return jsonObject;
+        }else{
+            LoginResponseFail responseFail = JSON.parseObject(str,LoginResponseFail.class);
+            errCode = responseFail.getErrcode();
+            // code无效
+            if(errCode == StatusCode.INVALID_CODE){
+                jsonObject.setCode(errCode);
+                jsonObject.setData(null);
+                return jsonObject;
+            }
+            // 系统繁忙
+            else if(errCode == StatusCode.SYSTEM_BUSY){
+                jsonObject.setCode(errCode);
+                jsonObject.setData(null);
+                return jsonObject;
+            }
+            else{
+                jsonObject.setData(null);
+                jsonObject.setCode(errCode);
+                return jsonObject;
+            }
         }
     }
 

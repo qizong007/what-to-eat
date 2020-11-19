@@ -10,7 +10,6 @@ public class StatusCode {
     public static final Integer FAIL_TO_UPDATE_MARKED_WINDOW = 2003;
     public static final Integer FAIL_TO_SAVE_DISH_STAR = 3001;
     public static final Integer FAIL_TO_SAVE_FEEDBACK = 3002;
-    public static final Integer UNKNOWN_LOGIN_FAULT = 40004;
     public static final Integer INVALID_CODE = 40029;
 
 }

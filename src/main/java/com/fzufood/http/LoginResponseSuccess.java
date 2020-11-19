@@ -12,12 +12,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponse {
+public class LoginResponseSuccess {
 
     private String openid;
     private String session_key;
-    private String unionid;
-    private Integer errcode;
-    private String errmsg;
 
 }

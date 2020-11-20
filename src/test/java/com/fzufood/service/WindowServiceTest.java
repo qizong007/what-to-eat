@@ -22,7 +22,7 @@ public class WindowServiceTest {
     // FIXME: 热门太慢，要20s
     @Test
     void recommend(){
-        JsonObject<Recommend> jsonObject = windowService.recommend(2,1);
+        JsonObject<Recommend> jsonObject = windowService.recommend(1,1);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }

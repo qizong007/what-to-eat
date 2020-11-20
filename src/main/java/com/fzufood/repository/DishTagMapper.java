@@ -26,7 +26,7 @@ public interface DishTagMapper {
      * @param dishId
      * @return List<Tag>
      */
-    List<Tag> listTagIdsByDishId(Integer dishId);
+    List<Integer> listTagIdsByDishId(Integer dishId);
 
     /**
      * 根据dishId,tagId查询该dish某个tag拥有的用户列表

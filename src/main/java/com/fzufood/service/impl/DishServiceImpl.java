@@ -128,11 +128,12 @@ public class DishServiceImpl implements DishService {
         dishInfo.setWindowId(dish.getWindow().getWindowId());
         dishInfo.setWindowName(dish.getWindow().getWindowName());
         dishInfo.setUserStar(dishCommentMapper.getDishCommentByUserIdDishId(userId,dishId).getStars());
-        List<Tag> tags = dishTagMapper.listTagIdsByDishId(dishId);
-        if(tags != null){
+        List<Integer> tagIds = dishTagMapper.listTagIdsByDishId(dishId);
+        if(tagIds != null){
             List<TagInfo> tagInfoList = new ArrayList<>();
             TagInfo tagInfo;
-            for(Tag tag : tags){
+            for(Integer tagId : tagIds){
+                Tag tag = tagMapper.getTagById(tagId);
                 tagInfo = new TagInfo();
                 tagInfo.setTagId(tag.getTagId());
                 tagInfo.setTagName(tag.getContent());

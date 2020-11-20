@@ -39,9 +39,9 @@ public class DishServiceTest {
     // 测试通过
     @Test
     void getDishInfo(){
-//        JsonObject<DishInfo> jsonObject = dishService.getDishInfo(1);
-//        String str = JSON.toJSONString(jsonObject);
-//        System.out.println(str);
+        JsonObject<DishInfo> jsonObject = dishService.getDishInfo(1,10);
+        String str = JSON.toJSONString(jsonObject);
+        System.out.println(str);
     }
 
     // 测试通过

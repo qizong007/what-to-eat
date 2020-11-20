@@ -51,6 +51,4 @@
         delete from window where window_id=#{windowId}
     </delete>
 
-
-
 </mapper>

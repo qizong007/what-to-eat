@@ -69,10 +69,16 @@ public class WindowServiceImpl implements WindowService {
                     Window window = dish.getWindow();
                     dishRecommend.setWindowId(window.getWindowId());
                     dishRecommend.setWindowName(window.getWindowName());
-                    dishRecommend.setPngSrc(window.getProfileURI());
-                    dishRecommend.setDescription(window.getDescription());
+                    if(!window.getProfileURI().equals("")){
+                        dishRecommend.setPngSrc(window.getProfileURI());
+                    }
+                    if(!window.getDescription().equals("")){
+                        dishRecommend.setDescription(window.getDescription());
+                    }
+                    System.out.println(window.getCanteen().getCanteenName());
+                    dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
                     dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
-                    List<Dish> dishList = dishMapper.listDishesByName(window.getWindowName());
+                    List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
                     if(dishList.size()>3){
                         dishRecommend.setDish(dishList.subList(0,3));
                     }else{
@@ -91,7 +97,7 @@ public class WindowServiceImpl implements WindowService {
             recommend.setWindowList(newList);
             jsonObject.setData(recommend);
         }
-        else if(type==2){
+        else if(type==2 || type ==3 ){
             return popular(userId);
         }
         return jsonObject;

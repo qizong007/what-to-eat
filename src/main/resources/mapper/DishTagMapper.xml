@@ -16,7 +16,7 @@
     </select>
 
     <select id="listTagIdsByDishId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        select user_id, dish_id, tag_id
+        select tag_id
         from dish_tag
         where dish_id = #{dishId};
     </select>

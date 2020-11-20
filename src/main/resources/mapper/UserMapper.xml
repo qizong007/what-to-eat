@@ -64,9 +64,9 @@
     <select id="listLikeDishesById" parameterType="java.lang.Integer" resultMap="dishMap">
         select dish.dish_id dish_id, dish_name, price, by_weight, window.window_id window_id,
             window_name, location, profile, description
-        from user_like_dish left join dish on user_like_dish.dish_id = dish.dish_id
+        from dish_comment left join dish on dish_comment.dish_id = dish.dish_id
         left join window on dish.window_id = window.window_id
-        where user_id = #{userId};
+        where user_id = #{userId} and stars = 5;
     </select>
 
     <select id="listMarkWindowsById" parameterType="java.lang.Integer" resultMap="windowMap">
@@ -109,15 +109,15 @@
         delete from user where user_id = #{userId};
     </delete>
 
-    <insert id="saveLikeDish">
-        insert into user_like_dish(user_id, dish_id)
-        values(#{userId}, #{dishId});
-    </insert>
+<!--    <insert id="saveLikeDish">-->
+<!--        insert into user_like_dish(user_id, dish_id)-->
+<!--        values(#{userId}, #{dishId});-->
+<!--    </insert>-->
 
-    <delete id="removeLikeDish">
-        delete from user_like_dish
-        where user_id = #{userId} and dish_id = #{dishId};
-    </delete>
+<!--    <delete id="removeLikeDish">-->
+<!--        delete from user_like_dish-->
+<!--        where user_id = #{userId} and dish_id = #{dishId};-->
+<!--    </delete>-->
 
     <insert id="saveMarkWindow">
         insert into user_mark_window(user_id, window_id)

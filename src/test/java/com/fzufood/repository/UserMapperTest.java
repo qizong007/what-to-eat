@@ -97,15 +97,15 @@ public class UserMapperTest {
         userMapper.removeUser(11);
     }
 
-    @Test
-    void saveLikeDishTest() {
-        userMapper.saveLikeDish(1,99);
-    }
-
-    @Test
-    void removeLikeDishTest() {
-        userMapper.removeLikeDish(1,99);
-    }
+//    @Test
+//    void saveLikeDishTest() {
+//        userMapper.saveLikeDish(1,99);
+//    }
+//
+//    @Test
+//    void removeLikeDishTest() {
+//        userMapper.removeLikeDish(1,99);
+//    }
 
     @Test
     void saveMarkWindowTest() {

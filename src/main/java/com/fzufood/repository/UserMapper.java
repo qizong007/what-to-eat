@@ -62,21 +62,21 @@ public interface UserMapper {
      */
     List<Dish> listLikeDishesById(Integer userId);
 
-    /**
-     * 插入新的likeDish (userId, dishId)
-     * @param userId
-     * @param dishId
-     * @return int
-     */
-    int saveLikeDish(@Param("userId") Integer userId, @Param("dishId") Integer dishId);
-
-    /**
-     * 根据(userId, dishId) 删除likeDish
-     * @param userId
-     * @param dishId
-     * @return int
-     */
-    int removeLikeDish(@Param("userId") Integer userId, @Param("dishId") Integer dishId);
+//    /**
+//     * 插入新的likeDish (userId, dishId)
+//     * @param userId
+//     * @param dishId
+//     * @return int
+//     */
+//    int saveLikeDish(@Param("userId") Integer userId, @Param("dishId") Integer dishId);
+//
+//    /**
+//     * 根据(userId, dishId) 删除likeDish
+//     * @param userId
+//     * @param dishId
+//     * @return int
+//     */
+//    int removeLikeDish(@Param("userId") Integer userId, @Param("dishId") Integer dishId);
 
     /**
      * 根据userId查询该userId收藏的所有(windowId, windowName, locationURI, profileURI, description, canteen)

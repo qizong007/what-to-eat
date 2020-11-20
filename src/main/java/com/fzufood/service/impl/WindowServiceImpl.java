@@ -75,7 +75,6 @@ public class WindowServiceImpl implements WindowService {
                     if(!window.getDescription().equals("")){
                         dishRecommend.setDescription(window.getDescription());
                     }
-                    System.out.println(window.getCanteen().getCanteenName());
                     dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
                     dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
                     List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
@@ -119,7 +118,6 @@ public class WindowServiceImpl implements WindowService {
         }
         List<DishRecommend> dishRecommends = new ArrayList<>();
         List<Window> windowList = windowMapper.listWindows();
-        //System.out.println("sort start");
         Collections.sort(windowList, new Comparator<Window>() {
             double tagnum1;
             double i1;
@@ -153,16 +151,25 @@ public class WindowServiceImpl implements WindowService {
                 }
             }
         });
-        //System.out.println("sort over");
         for(Window window : windowList){
-            System.out.println(window);
             DishRecommend dishRecommend = new DishRecommend();
             dishRecommend.setWindowId(window.getWindowId());
             dishRecommend.setWindowName(window.getWindowName());
-            dishRecommend.setPngSrc(window.getProfileURI());
-            dishRecommend.setDescription(window.getDescription());
+            if(!window.getProfileURI().equals("")){
+                dishRecommend.setPngSrc(window.getProfileURI());
+            }
+            if(!window.getDescription().equals("")){
+                dishRecommend.setDescription(window.getDescription());
+            }
             dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
-            dishRecommend.setDish(window.getDishes());
+            List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
+            dishRecommend.setDish(dishList);
+            dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
+            if(dishList.size()>3){
+                dishRecommend.setDish(dishList.subList(0,3));
+            }else{
+                dishRecommend.setDish(dishList);
+            }
             dishRecommends.add(dishRecommend);
         }
         jsonObject.setCode(StatusCode.SUCCESS);
@@ -230,6 +237,7 @@ public class WindowServiceImpl implements WindowService {
             dishRecommend = new DishRecommend();
             dishRecommend.setWindowId(window.getWindowId());
             dishRecommend.setWindowName(window.getWindowName());
+            dishRecommend.setCanteenName(window.getCanteen().getCanteenName());
             dishRecommend.setPngSrc(window.getProfileURI());
             dishRecommend.setDescription(window.getDescription());
             dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));

@@ -39,7 +39,7 @@ public class DishServiceTest {
     // 测试通过
     @Test
     void getDishInfo(){
-        JsonObject<DishInfo> jsonObject = dishService.getDishInfo(1,10);
+        JsonObject<DishInfo> jsonObject = dishService.getDishInfo(2,10);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }
@@ -47,7 +47,7 @@ public class DishServiceTest {
     // 测试通过
     @Test
     void favorites(){
-        JsonObject<Favorites> jsonObject = dishService.favorites(1);
+        JsonObject<Favorites> jsonObject = dishService.favorites(10);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }

@@ -50,10 +50,8 @@ public class DishServiceImpl implements DishService {
         }
         List<DishTag> userInThisDishTag = dishTagMapper.listDishTagByDishIdAndTagId(dishId,tagId);
         // 某道菜的某个标签多少人点过
-        Integer count = userInThisDishTag.size();
         updateDishTag.setTagName(tagMapper.getTagById(tagId).getContent());
         updateDishTag.setTagId(tagId);
-        updateDishTag.setTagNum(count);
         jsonObject.setCode(StatusCode.SUCCESS);
         if(hasTagged){
             // 用户点过，现在就要取消 -- false
@@ -64,6 +62,7 @@ public class DishServiceImpl implements DishService {
             dishTagMapper.saveDishTag(new DishTag(userId,dishId,tagId));
             updateDishTag.setHasTagged(true);
         }
+        updateDishTag.setTagNum(dishTagMapper.listDishTagByDishIdAndTagId(dishId, tagId).size());
         jsonObject.setData(updateDishTag);
         return jsonObject;
     }
@@ -127,21 +126,28 @@ public class DishServiceImpl implements DishService {
         dishInfo.setStarNum(countStarsNumOnDish(dishId));
         dishInfo.setWindowId(dish.getWindow().getWindowId());
         dishInfo.setWindowName(dish.getWindow().getWindowName());
-        dishInfo.setUserStar(dishCommentMapper.getDishCommentByUserIdDishId(userId,dishId).getStars());
+        DishComment dishComment = dishCommentMapper.getDishCommentByUserIdDishId(userId,dishId);
+        if(dishComment != null){
+            dishInfo.setUserStar(dishComment.getStars());
+        }
         List<Integer> tagIds = dishTagMapper.listTagIdsByDishId(dishId);
+        boolean[] hasAdded = new boolean[1000];
         if(tagIds != null){
             List<TagInfo> tagInfoList = new ArrayList<>();
             TagInfo tagInfo;
             for(Integer tagId : tagIds){
                 Tag tag = tagMapper.getTagById(tagId);
-                tagInfo = new TagInfo();
-                tagInfo.setTagId(tag.getTagId());
-                tagInfo.setTagName(tag.getContent());
-                tagInfo.setTagNum(dishTagMapper.listDishTagByDishIdAndTagId(dishId, userId).size());
-                if(dishTagMapper.getDishTagById(userId,dishId,tag.getTagId()) != null){
-                    tagInfo.setHasTagged(true);
+                if(!hasAdded[tagId]){
+                    hasAdded[tagId] = true;
+                    tagInfo = new TagInfo();
+                    tagInfo.setTagId(tag.getTagId());
+                    tagInfo.setTagName(tag.getContent());
+                    tagInfo.setTagNum(dishTagMapper.listDishTagByDishIdAndTagId(dishId, tagId).size());
+                    if(dishTagMapper.getDishTagById(userId,dishId,tag.getTagId()) != null){
+                        tagInfo.setHasTagged(true);
+                    }
+                    tagInfoList.add(tagInfo);
                 }
-                tagInfoList.add(tagInfo);
             }
             dishInfo.setTagList(tagInfoList);
         }

@@ -33,9 +33,10 @@ public class WindowServiceImpl implements WindowService {
     @Override
     public JsonObject<Recommend> recommend(Integer type, Integer userId) {
         JsonObject<Recommend> jsonObject = new JsonObject<>();
+        Recommend recommend = new Recommend();
         if(userId == null){
             jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setData(null);
+            jsonObject.setData(recommend);
             return jsonObject;
         }
         List<DishRecommend> dishRecommends = new ArrayList<>();
@@ -67,19 +68,20 @@ public class WindowServiceImpl implements WindowService {
                     dishRecommend.setWindowName(window.getWindowName());
                     dishRecommend.setPngSrc(window.getProfileURI());
                     dishRecommend.setDescription(window.getDescription());
-                    dishRecommend.setStar(countStarsOnWindow(window.getWindowId()));
+                    dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
                     dishRecommend.setDish(window.getDishes());
                     dishRecommends.add(dishRecommend);
                 }
             }
-            List<DishRecommend> newList = new  ArrayList<>();
+            List<DishRecommend> newList = new ArrayList<>();
             for (DishRecommend cd:dishRecommends) {
                 if(!newList.contains(cd)){
                     newList.add(cd);
                 }
             }
             jsonObject.setCode(StatusCode.SUCCESS);
-            jsonObject.setData(new Recommend(newList));
+            recommend.setWindowList(newList);
+            jsonObject.setData(recommend);
         }
         else if(type==2){
             return popular(userId);
@@ -95,9 +97,10 @@ public class WindowServiceImpl implements WindowService {
      */
     public JsonObject<Recommend> popular(Integer userId){
         JsonObject<Recommend> jsonObject = new JsonObject<>();
+        Recommend recommend = new Recommend();
         if(userId == null){
             jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setData(null);
+            jsonObject.setData(recommend);
             return jsonObject;
         }
         List<DishRecommend> dishRecommends = new ArrayList<>();
@@ -111,14 +114,14 @@ public class WindowServiceImpl implements WindowService {
             double diff;
             Double avgStarsByWindowId;
             public int compare(Window window1, Window window2) {
-                tagnum1 = countTagNumOnWindow(window1.getWindowId());
+                tagnum1 = dishTagMapper.countTagNumByWindowId(window1.getWindowId());
                 avgStarsByWindowId = dishCommentMapper.getAvgStarsByWindowId(window1.getWindowId());
                 if(avgStarsByWindowId != null){
                     i1 = avgStarsByWindowId*0.6+tagnum1*0.4;
                 }else{
                     i1 = 0.0;
                 }
-                tagnum2 = countTagNumOnWindow(window2.getWindowId());
+                tagnum2 = dishTagMapper.countTagNumByWindowId(window2.getWindowId());
                 avgStarsByWindowId = dishCommentMapper.getAvgStarsByWindowId(window2.getWindowId());
                 if(avgStarsByWindowId != null){
                     i2 = avgStarsByWindowId*0.6+tagnum1*0.4;
@@ -126,7 +129,6 @@ public class WindowServiceImpl implements WindowService {
                     i2 = 0.0;
                 }
                 diff = i2 - i1;
-                System.out.println(diff);
                 if(diff > 0){
                     return 1;
                 }else if(diff < 0){
@@ -144,44 +146,25 @@ public class WindowServiceImpl implements WindowService {
             dishRecommend.setWindowName(window.getWindowName());
             dishRecommend.setPngSrc(window.getProfileURI());
             dishRecommend.setDescription(window.getDescription());
-            dishRecommend.setStar(countStarsOnWindow(window.getWindowId()));
+            dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
             dishRecommend.setDish(window.getDishes());
             dishRecommends.add(dishRecommend);
         }
         jsonObject.setCode(StatusCode.SUCCESS);
-        jsonObject.setData(new Recommend(dishRecommends));
+        recommend.setWindowList(dishRecommends);
+        jsonObject.setData(recommend);
         return jsonObject;
     }
-    /**
-     * 根据windowId得出窗口tag数量
-     * @author gaoyichao33
-     * @param windowId
-     * @return int
-     */
-    private int countTagNumOnWindow(Integer windowId){
-        List<Dish> dishList = windowMapper.listDishesById(windowId);
-        List<Tag> tagLists = new ArrayList<>();
-        for(Dish dish : dishList){
-            List<Tag> tagList= dishMapper.listTagsById(dish.getDishId());
-            tagLists.addAll(tagList);
-        }
-        List<Tag> newList = new ArrayList<>();
-        for (Tag cd:tagLists) {
-            if(!newList.contains(cd)){
-                newList.add(cd);
-            }
-        }
-        return newList.size();
-    }
+
     @Override
     public JsonObject<WindowEntry> info(Integer windowId, Integer userId) {
         JsonObject<WindowEntry> jsonObject = new JsonObject<>();
+        WindowEntry windowEntry = new WindowEntry();
         if(userId == null){
             jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setData(null);
+            jsonObject.setData(windowEntry);
             return jsonObject;
         }
-        WindowEntry windowEntry = new WindowEntry();
         List<Dish> dishList =  windowMapper.listDishesById(windowId);
         List<Tag> tagList = new ArrayList<>();
         windowEntry.setWindowId(windowMapper.getWindowById(windowId).getWindowId());
@@ -190,7 +173,7 @@ public class WindowServiceImpl implements WindowService {
         windowEntry.setDescription(windowMapper.getWindowById(windowId).getDescription());
         windowEntry.setMapSrc(windowMapper.getWindowById(windowId).getLocationURI());
         windowEntry.setCanteenName(windowMapper.getWindowById(windowId).getCanteen().getCanteenName());
-        windowEntry.setStar(countStarsOnWindow(windowId));
+        windowEntry.setStar((double) dishTagMapper.countTagNumByWindowId(windowId));
         for (Dish dish : dishList){
             List<Tag> tags = dishMapper.listTagsById(dish.getDishId());
             for(Tag tag : tags){
@@ -199,7 +182,7 @@ public class WindowServiceImpl implements WindowService {
                 }
             }
             dish.setTags(tags);
-            dish.setStar(countStarsOnDish(dish.getDishId()));
+            dish.setStar(dishCommentMapper.getAvgStarsByDishId(dish.getDishId()));
         }
         windowEntry.setTags(tagList);
         List<Window> windowList = userMapper.listMarkWindowsById(userId);
@@ -208,7 +191,6 @@ public class WindowServiceImpl implements WindowService {
         jsonObject.setCode(StatusCode.SUCCESS);
         jsonObject.setData(windowEntry);
         return jsonObject;
-
     }
 
     /**
@@ -220,9 +202,10 @@ public class WindowServiceImpl implements WindowService {
     @Override
     public JsonObject<Recommend> getMarkedWindow(Integer userId) {
         JsonObject<Recommend> jsonObject = new JsonObject<>();
+        Recommend recommend = new Recommend();
         if(userId == null){
             jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setData(null);
+            jsonObject.setData(recommend);
             return jsonObject;
         }
         List<Window> windowList = userMapper.listMarkWindowsById(userId);
@@ -234,43 +217,14 @@ public class WindowServiceImpl implements WindowService {
             dishRecommend.setWindowName(window.getWindowName());
             dishRecommend.setPngSrc(window.getProfileURI());
             dishRecommend.setDescription(window.getDescription());
-            dishRecommend.setStar(countStarsOnWindow(window.getWindowId()));
+            dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
             dishRecommend.setDish(windowMapper.listDishesById(window.getWindowId()));
             dishRecommends.add(dishRecommend);
         }
         jsonObject.setCode(StatusCode.SUCCESS);
-        jsonObject.setData(new Recommend(dishRecommends));
+        recommend.setWindowList(dishRecommends);
+        jsonObject.setData(recommend);
         return jsonObject;
-    }
-
-    /**
-     * 根据windowId，查出该窗口星级
-     * @author gaoyichao33
-     * @param windowId
-     * @return Double
-     */
-    private Double countStarsOnWindow(Integer windowId){
-        List<Dish> dishList = windowMapper.listDishesById(windowId);
-        Double stars = 0.0;
-        for(Dish dish : dishList){
-            stars += countStarsOnDish(dish.getDishId());
-        }
-        if(dishList.size() == 0)
-            return 0.0;
-        else
-            return stars/dishList.size();
-    }
-
-    private Double countStarsOnDish(Integer dishId){
-        List<DishComment> dishComments = dishCommentMapper.listDishCommentsByDishId(dishId);
-        Double stars = 0.0;
-        for(DishComment dishComment : dishComments){
-            stars += dishComment.getStars();
-        }
-        if(dishComments.size() == 0)
-            return 0.0;
-        else
-            return stars/dishComments.size();
     }
 
     /**
@@ -290,16 +244,13 @@ public class WindowServiceImpl implements WindowService {
                 break;
             }
         }
-        if(flag==1)
-        {
+        if(flag==1){
             userMapper.saveMarkWindow(userId,windowId);
         }
-
         if(windowMapper.updateWindow(windowMapper.getWindowById(windowId)) != 0){
             return StatusCode.SUCCESS;
         }else {
             return StatusCode.FAIL_TO_UPDATE_MARKED_WINDOW;
+        }
     }
-
-}
 }

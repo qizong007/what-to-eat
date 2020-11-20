@@ -37,7 +37,7 @@ public class UserServiceTest {
     // 测试通过
     @Test
     void getInfo(){
-        JsonObject<UserInfo> jsonObject = userService.getInfo(9);
+        JsonObject<UserInfo> jsonObject = userService.getInfo(null);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }

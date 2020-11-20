@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateDishTag{
 
-    private String tagName;
-    private Integer tagId;
-    private Integer tagNum;
-    private Boolean hasTagged;
+    private String tagName = "";
+    private Integer tagId = 0;
+    private Integer tagNum = 0;
+    private Boolean hasTagged = false;
 
 }

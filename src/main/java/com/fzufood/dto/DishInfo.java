@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,13 +14,13 @@ import java.util.List;
 @AllArgsConstructor
 public class DishInfo{
 
-    private String dishName;
-    private BigDecimal price;
-    private Double userStar;
-    private Double star;
-    private Integer[] starNum;
-    private String windowName;
-    private Integer windowId;
-    private List<Tag> tagList;
+    private String dishName = "";
+    private BigDecimal price = new BigDecimal(0);
+    private Double userStar = 0.0;
+    private Double star = 0.0;
+    private Integer[] starNum = new Integer[5];
+    private String windowName = "";
+    private Integer windowId = 0;
+    private List<Tag> tagList = new ArrayList<>();
 
 }

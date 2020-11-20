@@ -47,13 +47,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public JsonObject<UserLogin> login(String code) {
         JsonObject<UserLogin> jsonObject = new JsonObject<>();
+        UserLogin userLogin = new UserLogin();
         // 缺少参数
         if(code == null){
             jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setData(null);
+            jsonObject.setData(userLogin);
             return jsonObject;
         }
-        UserLogin userLogin = new UserLogin();
         // 拿前端给的code去请求openId
         String str = HttpRequest.sendGet(WeChatAppCode.URL,
                 "appid="+WeChatAppCode.APP_ID
@@ -92,17 +92,17 @@ public class UserServiceImpl implements UserService {
             // code无效
             if(errCode == StatusCode.INVALID_CODE){
                 jsonObject.setCode(errCode);
-                jsonObject.setData(null);
+                jsonObject.setData(new UserLogin());
                 return jsonObject;
             }
             // 系统繁忙
             else if(errCode == StatusCode.SYSTEM_BUSY){
                 jsonObject.setCode(errCode);
-                jsonObject.setData(null);
+                jsonObject.setData(userLogin);
                 return jsonObject;
             }
             else{
-                jsonObject.setData(null);
+                jsonObject.setData(userLogin);
                 jsonObject.setCode(errCode);
                 return jsonObject;
             }
@@ -120,16 +120,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public JsonObject<UserInfo> getInfo(Integer userId) {
         JsonObject<UserInfo> jsonObject = new JsonObject<>();
+        UserInfo userInfo = new UserInfo();
         // 缺少参数
         if(userId == null){
             jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setData(null);
+            jsonObject.setData(userInfo);
             return jsonObject;
         }
-        UserInfo userInfo = new UserInfo();
-        userInfo.setPreferredList(userMapper.listPreferTagsById(userId));
-        userInfo.setAvoidList(userMapper.listAvoidTagsById(userId));
-        userInfo.setAllList(tagMapper.listTags());
+        List<Tag> preferredList = userMapper.listPreferTagsById(userId);
+        List<Tag> avoidList = userMapper.listAvoidTagsById(userId);
+        List<Tag> allList = tagMapper.listTags();
+        if(preferredList != null){
+            userInfo.setPreferredList(preferredList);
+        }
+        if(avoidList != null){
+            userInfo.setAvoidList(avoidList);
+        }
+        if(allList != null){
+            userInfo.setAllList(allList);
+        }
         jsonObject.setCode(StatusCode.SUCCESS);
         jsonObject.setData(userInfo);
         return jsonObject;
@@ -152,8 +161,6 @@ public class UserServiceImpl implements UserService {
      * @author invainX
      * @date 15:50 2020/11/15
      */
-
-    //FIXME
     @Override
     public Integer updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList) {
         if(userId == null){
@@ -211,7 +218,6 @@ public class UserServiceImpl implements UserService {
      * @return JsonObject<List<DishRecommend>>
      * @author invainX
      */
-
     //TODO:search自定义搜索待实现
     @Override
     public JsonObject<Search> search(String searchName, List<Tag> tagList, Integer canteenId) {

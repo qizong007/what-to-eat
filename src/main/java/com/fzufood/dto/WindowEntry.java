@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,14 +18,14 @@ import java.util.List;
 @AllArgsConstructor
 public class WindowEntry{
 
-    private Integer windowId;
-    private String windowName;
-    private String pngSrc;
-    private String description;
-    private String mapSrc;
-    private String canteenName;
-    private Double star;
-    private List<Tag> tags;
-    private Boolean isMarked;
-    private List<Dish> dishes;
+    private Integer windowId = 0;
+    private String windowName = "";
+    private String pngSrc = "";
+    private String description = "";
+    private String mapSrc = "";
+    private String canteenName = "";
+    private Double star = 0.0;
+    private List<Tag> tags = new ArrayList<>();
+    private Boolean isMarked = false;
+    private List<Dish> dishes = new ArrayList<>();
 }

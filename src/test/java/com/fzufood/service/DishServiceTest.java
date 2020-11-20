@@ -23,7 +23,7 @@ public class DishServiceTest {
     // 测试通过
     @Test
     void updateDishTag(){
-        JsonObject<UpdateDishTag> jsonObject = dishService.updateDishTag(1,1,3);
+        JsonObject<UpdateDishTag> jsonObject = dishService.updateDishTag(1,1,null);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }

@@ -35,13 +35,12 @@ public class DishServiceImpl implements DishService {
     @Override
     public JsonObject<UpdateDishTag> updateDishTag(Integer userId, Integer dishId, Integer tagId) {
         JsonObject<UpdateDishTag> jsonObject = new JsonObject<>();
+        UpdateDishTag updateDishTag = new UpdateDishTag();
         if(userId == null || dishId == null || tagId == null){
             jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setData(null);
+            jsonObject.setData(updateDishTag);
             return jsonObject;
         }
-        UpdateDishTag updateDishTag = new UpdateDishTag();
-        List<Integer> tagIdList = dishTagMapper.listTagIdsByDishId(dishId);
         DishTag dishTag = null;
         boolean hasTagged = false;
         dishTag = dishTagMapper.getDishTagById(userId, dishId, tagId);
@@ -114,20 +113,23 @@ public class DishServiceImpl implements DishService {
     @Override
     public JsonObject<DishInfo> getDishInfo(Integer dishId) {
         JsonObject<DishInfo> jsonObject = new JsonObject<>();
+        DishInfo dishInfo = new DishInfo();
         if(dishId == null){
             jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setData(null);
+            jsonObject.setData(dishInfo);
             return jsonObject;
         }
-        DishInfo dishInfo = new DishInfo();
         Dish dish = dishMapper.getDishById(dishId);
         dishInfo.setDishName(dish.getDishName());
         dishInfo.setPrice(dish.getPrice());
-        dishInfo.setStar(countStarsOnDish(dishId));
+        dishInfo.setStar(dishCommentMapper.getAvgStarsByDishId(dishId));
         dishInfo.setStarNum(countStarsNumOnDish(dishId));
         dishInfo.setWindowId(dish.getWindow().getWindowId());
         dishInfo.setWindowName(dish.getWindow().getWindowName());
-        dishInfo.setTagList(dish.getTags());
+        List<Tag> tags = dish.getTags();
+        if(tags != null){
+            dishInfo.setTagList(tags);
+        }
         jsonObject.setData(dishInfo);
         jsonObject.setCode(StatusCode.SUCCESS);
         return jsonObject;
@@ -142,9 +144,10 @@ public class DishServiceImpl implements DishService {
     @Override
     public JsonObject<Favorites> favorites(Integer userId) {
         JsonObject<Favorites> jsonObject = new JsonObject<>();
+        Favorites favorites = new Favorites();
         if(userId == null){
             jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setData(null);
+            jsonObject.setData(favorites);
             return jsonObject;
         }
         List<Dish> dishList = userMapper.listLikeDishesById(userId);
@@ -154,27 +157,13 @@ public class DishServiceImpl implements DishService {
             dishEntry.setDishId(dish.getDishId());
             dishEntry.setDishName(dish.getDishName());
             dishEntry.setPrice(dish.getPrice());
-            dishEntry.setStar(countStarsOnDish(dish.getDishId()));
+            dishEntry.setStar(dishCommentMapper.getAvgStarsByDishId(dish.getDishId()));
             dishEntries.add(dishEntry);
         }
         jsonObject.setCode(StatusCode.SUCCESS);
-        jsonObject.setData(new Favorites(dishEntries));
+        favorites.setDishList(dishEntries);
+        jsonObject.setData(favorites);
         return jsonObject;
-    }
-
-    /**
-     * 根据dishId，查出该道菜品星级
-     * @author qizong007
-     * @param dishId
-     * @return Double
-     */
-    private Double countStarsOnDish(Integer dishId){
-        List<DishComment> dishComments = dishCommentMapper.listDishCommentsByDishId(dishId);
-        Double stars = 0.0;
-        for(DishComment dishComment : dishComments){
-            stars += dishComment.getStars();
-        }
-        return stars/dishComments.size();
     }
 
     /**

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -12,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class UserInfo{
 
-    private List<Tag> preferredList;
-    private List<Tag> avoidList;
-    private List<Tag> allList;
+    private List<Tag> preferredList = new ArrayList<>();
+    private List<Tag> avoidList = new ArrayList<>();
+    private List<Tag> allList = new ArrayList<>();
 
 }

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
 /**
  * @Author qizong007
  * @create 2020/11/18 17:23
@@ -19,7 +18,7 @@ public class WindowServiceTest {
     @Autowired
     private WindowService windowService;
 
-    // FIXME
+    // FIXME: 热门太慢，要20s
     @Test
     void recommend(){
         JsonObject<Recommend> jsonObject = windowService.recommend(2,1);

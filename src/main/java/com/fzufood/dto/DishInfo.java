@@ -21,6 +21,6 @@ public class DishInfo{
     private Integer[] starNum = new Integer[5];
     private String windowName = "";
     private Integer windowId = -1;
-    private List<Tag> tagList = new ArrayList<>();
+    private List<TagInfo> tagList = new ArrayList<>();
 
 }

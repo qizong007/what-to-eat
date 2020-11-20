@@ -54,16 +54,18 @@ public class WindowServiceImpl implements WindowService {
                     for (Tag avoid : avoidList) {
                         List<Tag> tagList = dishMapper.listTagsById(dishTag.getDishId());
                         for (Tag tag : tagList) {
-                            if (tag.getTagId() == avoid.getTagId()) {
+                            if (tag.getTagId().equals(avoid.getTagId())) {
                                 flag = 1;
                                 break;
                             }
                         }
-                        if (flag == 1)
+                        if (flag == 1){
                             break;
+                        }
                     }
-                    if (flag == 1)
+                    if (flag == 1){
                         continue;
+                    }
                     Window window = dish.getWindow();
                     dishRecommend.setWindowId(window.getWindowId());
                     dishRecommend.setWindowName(window.getWindowName());
@@ -71,8 +73,8 @@ public class WindowServiceImpl implements WindowService {
                     dishRecommend.setDescription(window.getDescription());
                     dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
                     List<Dish> dishList = dishMapper.listDishesByName(window.getWindowName());
-                    if(dishList.size()>2){
-                        dishRecommend.setDish(dishList.subList(0,2));
+                    if(dishList.size()>3){
+                        dishRecommend.setDish(dishList.subList(0,3));
                     }else{
                         dishRecommend.setDish(dishList);
                     }
@@ -119,6 +121,7 @@ public class WindowServiceImpl implements WindowService {
             double i2;
             double diff;
             Double avgStarsByWindowId;
+            @Override
             public int compare(Window window1, Window window2) {
                 tagnum1 = dishTagMapper.countTagNumByWindowId(window1.getWindowId());
                 avgStarsByWindowId = dishCommentMapper.getAvgStarsByWindowId(window1.getWindowId());
@@ -225,8 +228,8 @@ public class WindowServiceImpl implements WindowService {
             dishRecommend.setDescription(window.getDescription());
             dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
             List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
-            if(dishList.size() > 2){
-                dishRecommend.setDish(dishList.subList(0,2));
+            if(dishList.size() > 3){
+                dishRecommend.setDish(dishList.subList(0,3));
             }else{
                 dishRecommend.setDish(dishList);
             }

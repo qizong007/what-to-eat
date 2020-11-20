@@ -130,7 +130,19 @@ public class DishServiceImpl implements DishService {
         dishInfo.setUserStar(dishCommentMapper.getDishCommentByUserIdDishId(userId,dishId).getStars());
         List<Tag> tags = dishTagMapper.listTagIdsByDishId(dishId);
         if(tags != null){
-            dishInfo.setTagList(tags);
+            List<TagInfo> tagInfoList = new ArrayList<>();
+            TagInfo tagInfo;
+            for(Tag tag : tags){
+                tagInfo = new TagInfo();
+                tagInfo.setTagId(tag.getTagId());
+                tagInfo.setTagName(tag.getContent());
+                tagInfo.setTagNum(dishTagMapper.listDishTagByDishIdAndTagId(dishId, userId).size());
+                if(dishTagMapper.getDishTagById(userId,dishId,tag.getTagId()) != null){
+                    tagInfo.setHasTagged(true);
+                }
+                tagInfoList.add(tagInfo);
+            }
+            dishInfo.setTagList(tagInfoList);
         }
         jsonObject.setData(dishInfo);
         jsonObject.setCode(StatusCode.SUCCESS);

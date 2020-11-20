@@ -58,6 +58,13 @@ public interface DishTagMapper {
     List<DishTag> listDishTagsByUserId(Integer userId);
 
     /**
+     * 根据windowId查询该window拥有的标签数量
+     * @param windowId
+     * @return
+     */
+    Integer countTagNumByWindowId(Integer windowId);
+
+    /**
      * 插入新的dishTag(userId, dishId, tagId)
      * @param dishTag
      * @return int

@@ -56,6 +56,11 @@ public class DishTagMapperTest {
     }
 
     @Test
+    void countTagNumByWindowIdTest() {
+        System.out.println(dishTagMapper.countTagNumByWindowId(1));
+    }
+
+    @Test
     void saveDishTagTest() {
         DishTag dishTag = new DishTag();
         for(int i = 0; i < 4; i++) {

@@ -45,6 +45,12 @@
         where user_id = #{userId};
     </select>
 
+    <select id="countTagNumByWindowId" resultType="java.lang.Integer">
+        select count(distinct tag_id)
+        from dish_tag, dish
+        where dish_tag.dish_id = dish.dish_id and window_id = #{windowId}
+    </select>
+
     <insert id="saveDishTag" parameterType="com.fzufood.entity.DishTag">
         insert into dish_tag(user_id, dish_id, tag_id)
         values (#{userId}, #{dishId}, #{tagId});

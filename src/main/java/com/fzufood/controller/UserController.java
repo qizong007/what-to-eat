@@ -3,6 +3,8 @@ package com.fzufood.controller;
 import com.fzufood.dto.*;
 import com.fzufood.entity.Tag;
 import com.fzufood.http.FeedbackResponse;
+import com.fzufood.http.Code;
+import com.fzufood.http.LoginResponse;
 import com.fzufood.http.UpdateInfoResponse;
 import com.fzufood.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -20,12 +22,12 @@ public class UserController {
 
     /**
      * 用户登录接口
-     * @param code 	要拿着这个东西去查真正的openId,返回我们自己的userid
+     * @param code 要拿着这个东西去查真正的openId,返回我们自己的userid
      * @return JsonObject<UserLogin>
      */
     @ApiOperation("用户登录接口")
     @PostMapping("/login")
-    public JsonObject<UserLogin> login(@RequestBody String code){
+    public JsonObject<UserLogin> login(@RequestBody LoginResponse code){
         return userService.login(code);
     }
 
@@ -47,7 +49,7 @@ public class UserController {
      */
     @ApiOperation("获取用户信息接口")
     @PostMapping("/updateInfo")
-    public Integer updateInfo(@RequestBody UpdateInfoResponse response){
+    public Code updateInfo(@RequestBody UpdateInfoResponse response){
         return userService.updateInfo(response.getUserId(),response.getPreferredList(),response.getAvoidList() );
     }
 
@@ -73,7 +75,7 @@ public class UserController {
      */
     @ApiOperation("用户反馈接口")
     @PostMapping("/feedback")
-    public Integer feedback(@RequestBody FeedbackResponse response){
+    public Code feedback(@RequestBody FeedbackResponse response){
         return userService.feedback(response.getUserId(),response.getContent());
     }
 

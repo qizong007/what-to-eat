@@ -1,6 +1,7 @@
 package com.fzufood.repository;
 
 import com.fzufood.entity.DishTag;
+import com.fzufood.entity.Tag;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -23,9 +24,9 @@ public interface DishTagMapper {
     /**
      * 根据dishId查询该dish拥有的所有tagId
      * @param dishId
-     * @return List<Integer>
+     * @return List<Tag>
      */
-    List<Integer> listTagIdsByDishId(Integer dishId);
+    List<Tag> listTagIdsByDishId(Integer dishId);
 
     /**
      * 根据dishId,tagId查询该dish某个tag拥有的用户列表

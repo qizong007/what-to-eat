@@ -13,15 +13,15 @@ import lombok.NoArgsConstructor;
 public class DishComment {
 
     @ApiModelProperty("菜品评价ID")
-    private Integer commentId;
+    private Integer commentId = -1;
 
     @ApiModelProperty("评价星级")
-    private Double stars;
+    private Double stars = 0.0;
 
     @ApiModelProperty("用户ID")
-    private Integer userId;
+    private Integer userId = -1;
 
     @ApiModelProperty("菜品ID")
-    private Integer dishId;
+    private Integer dishId = -1;
 
 }

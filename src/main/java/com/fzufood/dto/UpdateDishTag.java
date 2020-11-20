@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class UpdateDishTag{
 
     private String tagName = "";
-    private Integer tagId = 0;
+    private Integer tagId = -1;
     private Integer tagNum = 0;
     private Boolean hasTagged = false;
 

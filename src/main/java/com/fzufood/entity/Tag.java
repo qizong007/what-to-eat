@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 public class Tag {
 
     @ApiModelProperty("标签ID")
-    private Integer tagId;
+    private Integer tagId = -1;
 
     @ApiModelProperty("标签内容")
     @JSONField(name = "tagName")
     @JsonProperty("tagName")
-    private String content;
+    private String content = "";
 }

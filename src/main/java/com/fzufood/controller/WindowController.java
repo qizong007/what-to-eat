@@ -3,6 +3,7 @@ package com.fzufood.controller;
 import com.fzufood.dto.JsonObject;
 import com.fzufood.dto.Recommend;
 import com.fzufood.dto.WindowEntry;
+import com.fzufood.http.Code;
 import com.fzufood.http.UpdateMarkedWindowResponse;
 import com.fzufood.service.WindowService;
 import io.swagger.annotations.ApiOperation;
@@ -60,7 +61,7 @@ public class WindowController {
      */
     @ApiOperation("更新收藏窗口接口")
     @PostMapping("/updateMarkedWindow")
-    public Integer updateMarkedWindow(@RequestBody UpdateMarkedWindowResponse response) {
+    public Code updateMarkedWindow(@RequestBody UpdateMarkedWindowResponse response) {
         return windowService.updateMarkedWindow(response.getUserId(), response.getWindowId());
     }
 }

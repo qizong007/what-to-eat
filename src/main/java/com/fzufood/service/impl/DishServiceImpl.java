@@ -2,6 +2,7 @@ package com.fzufood.service.impl;
 
 import com.fzufood.dto.*;
 import com.fzufood.entity.*;
+import com.fzufood.http.Code;
 import com.fzufood.repository.*;
 import com.fzufood.service.DishService;
 import com.fzufood.util.StatusCode;
@@ -75,9 +76,9 @@ public class DishServiceImpl implements DishService {
      * @return Code
      **/
     @Override
-    public Integer updateDishStar(Integer userId, Integer dishId, Double star) {
+    public Code updateDishStar(Integer userId, Integer dishId, Double star) {
         if(userId == null || dishId == null || star == null){
-            return StatusCode.MISSING_PARAMETERS;
+            return new Code(StatusCode.MISSING_PARAMETERS);
         }
         DishComment dishComment = dishCommentMapper.getDishCommentByUserIdDishId(userId, dishId);
         if(dishComment == null){
@@ -88,18 +89,18 @@ public class DishServiceImpl implements DishService {
             dishComment.setUserId(userId);
             // 返回值为受影响的行数
             if(dishCommentMapper.saveDishComment(dishComment) != 0){
-                return StatusCode.SUCCESS;
+                return new Code(StatusCode.SUCCESS);
             }else{
-                return StatusCode.FAIL_TO_SAVE_DISH_STAR;
+                return new Code(StatusCode.FAIL_TO_SAVE_DISH_STAR);
             }
         }else{
             // 有就是更改update
             dishComment.setStars(star);
             // 为0即更新失败
             if(dishCommentMapper.updateDishComment(dishComment) != 0){
-                return StatusCode.SUCCESS;
+                return new Code(StatusCode.SUCCESS);
             }else{
-                return StatusCode.FAIL_TO_UPDATE_DISH_STAR;
+                return new Code(StatusCode.FAIL_TO_UPDATE_DISH_STAR);
             }
         }
     }
@@ -111,7 +112,7 @@ public class DishServiceImpl implements DishService {
      * @return JsonObject<DishInfo>
      */
     @Override
-    public JsonObject<DishInfo> getDishInfo(Integer dishId) {
+    public JsonObject<DishInfo> getDishInfo(Integer dishId,Integer userId) {
         JsonObject<DishInfo> jsonObject = new JsonObject<>();
         DishInfo dishInfo = new DishInfo();
         if(dishId == null){
@@ -126,7 +127,8 @@ public class DishServiceImpl implements DishService {
         dishInfo.setStarNum(countStarsNumOnDish(dishId));
         dishInfo.setWindowId(dish.getWindow().getWindowId());
         dishInfo.setWindowName(dish.getWindow().getWindowName());
-        List<Tag> tags = dish.getTags();
+        dishInfo.setUserStar(dishCommentMapper.getDishCommentByUserIdDishId(userId,dishId).getStars());
+        List<Tag> tags = dishTagMapper.listTagIdsByDishId(dishId);
         if(tags != null){
             dishInfo.setTagList(tags);
         }

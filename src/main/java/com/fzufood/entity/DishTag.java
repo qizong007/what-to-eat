@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 public class DishTag {
 
     @ApiModelProperty("用户ID")
-    private Integer userId;
+    private Integer userId = -1;
 
     @ApiModelProperty("菜品ID")
-    private Integer dishId;
+    private Integer dishId = -1;
 
     @ApiModelProperty("标签ID")
-    private Integer tagId;
+    private Integer tagId = -1;
 }

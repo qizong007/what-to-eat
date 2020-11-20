@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,7 +15,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Search {
-
-    private List<DishRecommend> searchList;
-
+    private List<DishRecommend> searchList = new ArrayList<>();
 }

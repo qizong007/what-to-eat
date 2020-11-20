@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserLogin{
 
-    private Integer userId = 0;
+    private Integer userId = -1;
     private Boolean hasRegistered = false;
 
 }

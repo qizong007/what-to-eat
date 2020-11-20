@@ -2,6 +2,7 @@ package com.fzufood.service.impl;
 
 import com.fzufood.dto.*;
 import com.fzufood.entity.*;
+import com.fzufood.http.Code;
 import com.fzufood.repository.*;
 import com.fzufood.service.WindowService;
 import com.fzufood.util.StatusCode;
@@ -69,7 +70,12 @@ public class WindowServiceImpl implements WindowService {
                     dishRecommend.setPngSrc(window.getProfileURI());
                     dishRecommend.setDescription(window.getDescription());
                     dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
-                    dishRecommend.setDish(window.getDishes());
+                    List<Dish> dishList = dishMapper.listDishesByName(window.getWindowName());
+                    if(dishList.size()>2){
+                        dishRecommend.setDish(dishList.subList(0,2));
+                    }else{
+                        dishRecommend.setDish(dishList);
+                    }
                     dishRecommends.add(dishRecommend);
                 }
             }
@@ -105,7 +111,7 @@ public class WindowServiceImpl implements WindowService {
         }
         List<DishRecommend> dishRecommends = new ArrayList<>();
         List<Window> windowList = windowMapper.listWindows();
-        System.out.println("sort start");
+        //System.out.println("sort start");
         Collections.sort(windowList, new Comparator<Window>() {
             double tagnum1;
             double i1;
@@ -138,7 +144,7 @@ public class WindowServiceImpl implements WindowService {
                 }
             }
         });
-        System.out.println("sort over");
+        //System.out.println("sort over");
         for(Window window : windowList){
             System.out.println(window);
             DishRecommend dishRecommend = new DishRecommend();
@@ -186,7 +192,7 @@ public class WindowServiceImpl implements WindowService {
         }
         windowEntry.setTags(tagList);
         List<Window> windowList = userMapper.listMarkWindowsById(userId);
-        windowEntry.setIsMarked(windowList.contains(windowId));
+        windowEntry.setIsMarked(windowList.contains(windowMapper.getWindowById(windowId)));
         windowEntry.setDishes(dishList);
         jsonObject.setCode(StatusCode.SUCCESS);
         jsonObject.setData(windowEntry);
@@ -218,7 +224,12 @@ public class WindowServiceImpl implements WindowService {
             dishRecommend.setPngSrc(window.getProfileURI());
             dishRecommend.setDescription(window.getDescription());
             dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
-            dishRecommend.setDish(windowMapper.listDishesById(window.getWindowId()));
+            List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
+            if(dishList.size() > 2){
+                dishRecommend.setDish(dishList.subList(0,2));
+            }else{
+                dishRecommend.setDish(dishList);
+            }
             dishRecommends.add(dishRecommend);
         }
         jsonObject.setCode(StatusCode.SUCCESS);
@@ -234,7 +245,7 @@ public class WindowServiceImpl implements WindowService {
      * @return Integer
      */
     @Override
-    public Integer updateMarkedWindow(Integer userId, Integer windowId)  {
+    public Code updateMarkedWindow(Integer userId, Integer windowId)  {
         List<Window> windowList = userMapper.listMarkWindowsById(userId);
         int flag=1;
         for(Window window : windowList){
@@ -248,9 +259,9 @@ public class WindowServiceImpl implements WindowService {
             userMapper.saveMarkWindow(userId,windowId);
         }
         if(windowMapper.updateWindow(windowMapper.getWindowById(windowId)) != 0){
-            return StatusCode.SUCCESS;
+            return new Code(StatusCode.SUCCESS);
         }else {
-            return StatusCode.FAIL_TO_UPDATE_MARKED_WINDOW;
+            return new Code(StatusCode.FAIL_TO_UPDATE_MARKED_WINDOW);
         }
     }
 }

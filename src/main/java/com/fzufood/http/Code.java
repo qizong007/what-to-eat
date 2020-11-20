@@ -1,4 +1,4 @@
-package com.fzufood.dto;
+package com.fzufood.http;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,12 +6,11 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author qizong007
- * @create 2020/11/17 21:10
+ * @create 2020/11/20 16:56
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class JsonObject<T> {
+public class Code {
     private Integer code;
-    private T data;
 }

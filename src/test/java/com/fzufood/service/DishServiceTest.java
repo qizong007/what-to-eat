@@ -2,6 +2,7 @@ package com.fzufood.service;
 
 import com.alibaba.fastjson.JSON;
 import com.fzufood.dto.*;
+import com.fzufood.http.Code;
 import com.fzufood.util.StatusCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,16 +32,16 @@ public class DishServiceTest {
     // 测试通过
     @Test
     void updateDishStar(){
-        Integer code = dishService.updateDishStar(1,1,3.0);
+        Code code = dishService.updateDishStar(1,1,3.0);
         Assertions.assertEquals(StatusCode.SUCCESS,code);
     }
 
     // 测试通过
     @Test
     void getDishInfo(){
-        JsonObject<DishInfo> jsonObject = dishService.getDishInfo(1);
-        String str = JSON.toJSONString(jsonObject);
-        System.out.println(str);
+//        JsonObject<DishInfo> jsonObject = dishService.getDishInfo(1);
+//        String str = JSON.toJSONString(jsonObject);
+//        System.out.println(str);
     }
 
     // 测试通过

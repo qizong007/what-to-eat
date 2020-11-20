@@ -33,10 +33,10 @@ public class DishTagMapperTest {
 
     @Test
     void listTagIdsByDishIdTest() {
-        List<Integer> tagIds = dishTagMapper.listTagIdsByDishId(1);
-        for(Integer tagId: tagIds) {
-            System.out.println(tagId);
-        }
+//        List<Integer> tagIds = dishTagMapper.listTagIdsByDishId(1);
+//        for(Integer tagId: tagIds) {
+//            System.out.println(tagId);
+//        }
     }
 
     @Test

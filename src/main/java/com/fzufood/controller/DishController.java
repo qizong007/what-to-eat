@@ -1,6 +1,7 @@
 package com.fzufood.controller;
 
 import com.fzufood.dto.*;
+import com.fzufood.http.Code;
 import com.fzufood.http.UpdateDishStarResponse;
 import com.fzufood.http.UpdateDishTagResponse;
 import com.fzufood.service.DishService;
@@ -23,7 +24,6 @@ public class DishController {
     @ApiOperation("更新菜品标签接口")
     @PostMapping("/updateDishTag")
     public JsonObject<UpdateDishTag> updateDishTag(@RequestBody UpdateDishTagResponse response){
-
         return dishService.updateDishTag(response.getUserId(),response.getDishId(),response.getTagId());
     }
 
@@ -34,7 +34,7 @@ public class DishController {
      */
     @ApiOperation("更新菜品评分接口")
     @PostMapping("/updateDishStar")
-    public Integer updateDishStar(@RequestBody UpdateDishStarResponse response){
+    public Code updateDishStar(@RequestBody UpdateDishStarResponse response){
         return dishService.updateDishStar(response.getUserId(),response.getDishId(),response.getStar());
     }
 
@@ -45,8 +45,8 @@ public class DishController {
      */
     @ApiOperation("获取菜品信息接口")
     @GetMapping("/getDishInfo")
-    public JsonObject<DishInfo> getDishInfo(Integer dishId){
-        return dishService.getDishInfo(dishId);
+    public JsonObject<DishInfo> getDishInfo(Integer dishId,Integer userId){
+        return dishService.getDishInfo(dishId,userId);
     }
 
     /**

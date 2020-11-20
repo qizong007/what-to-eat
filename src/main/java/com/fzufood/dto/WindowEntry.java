@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class WindowEntry{
 
-    private Integer windowId = 0;
+    private Integer windowId = -1;
     private String windowName = "";
     private String pngSrc = "";
     private String description = "";

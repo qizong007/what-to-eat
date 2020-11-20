@@ -3,9 +3,7 @@ package com.fzufood.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.fzufood.dto.*;
 import com.fzufood.entity.*;
-import com.fzufood.http.HttpRequest;
-import com.fzufood.http.LoginResponseFail;
-import com.fzufood.http.LoginResponseSuccess;
+import com.fzufood.http.*;
 import com.fzufood.repository.*;
 import com.fzufood.service.UserService;
 import com.fzufood.util.StatusCode;
@@ -45,7 +43,7 @@ public class UserServiceImpl implements UserService {
      * @return JsonObject<UserLogin>
      **/
     @Override
-    public JsonObject<UserLogin> login(String code) {
+    public JsonObject<UserLogin> login(LoginResponse code) {
         JsonObject<UserLogin> jsonObject = new JsonObject<>();
         UserLogin userLogin = new UserLogin();
         // 缺少参数
@@ -58,7 +56,7 @@ public class UserServiceImpl implements UserService {
         String str = HttpRequest.sendGet(WeChatAppCode.URL,
                 "appid="+WeChatAppCode.APP_ID
                         +"&secret=" +WeChatAppCode.APP_SECRET
-                        +"&js_code="+code
+                        +"&js_code="+code.getCode()
                         +"&grant_type=authorization_code");
         Integer errCode = 0;
         if(str.contains("openid")){
@@ -71,7 +69,6 @@ public class UserServiceImpl implements UserService {
                 // 还未注册
                 user = new User();
                 user.setOpenId(openId);
-                System.out.println(user);
                 userMapper.saveUser(user);
                 userId = userMapper.getUserByOpenId(openId).getUserId();
                 userLogin.setUserId(userId);
@@ -83,7 +80,7 @@ public class UserServiceImpl implements UserService {
                 userLogin.setHasRegistered(true);
             }
             jsonObject.setData(userLogin);
-            System.out.println(userLogin);
+            System.out.println("openId为"+openId+"的用户已登录");
             jsonObject.setCode(errCode);
             return jsonObject;
         }else{
@@ -162,28 +159,28 @@ public class UserServiceImpl implements UserService {
      * @date 15:50 2020/11/15
      */
     @Override
-    public Integer updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList) {
+    public Code updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList) {
         if(userId == null){
-            return StatusCode.MISSING_PARAMETERS;
+            return new Code(StatusCode.MISSING_PARAMETERS);
         }
         //对喜好tag的更改
         for(Tag tag : preferredList){
             // 没有就先加tag
             if(tag.getTagId() == null || tagMapper.getTagById(tag.getTagId()) == null){
                 if(tagMapper.saveTag(tag) == 0){
-                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                    return new Code(StatusCode.FAIL_TO_UPDATE_USER_INFO);
                 }
             }
             if (!contain(userMapper.listPreferTagsById(userId),tag.getTagId())){
                 if(userMapper.savePreferTag(userId,tag.getTagId()) == 0){
-                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                    return new Code(StatusCode.FAIL_TO_UPDATE_USER_INFO);
                 }
             }
         }
         for (Tag tag : userMapper.listPreferTagsById(userId)){
             if(!contain(preferredList,tag.getTagId())){
                 if(userMapper.removePreferTag(userId,tag.getTagId()) == 0){
-                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                    return new Code(StatusCode.FAIL_TO_UPDATE_USER_INFO);
                 }
             }
         }
@@ -191,23 +188,23 @@ public class UserServiceImpl implements UserService {
         for(Tag tag : avoidList){
             if(tag.getTagId() == null || tagMapper.getTagById(tag.getTagId()) == null){
                 if(tagMapper.saveTag(tag) == 0){
-                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                    return new Code(StatusCode.FAIL_TO_UPDATE_USER_INFO);
                 }
             }
             if (!contain(userMapper.listAvoidTagsById(userId),tag.getTagId())){
                 if(userMapper.saveAvoidTag(userId,tag.getTagId()) == 0){
-                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                    return new Code(StatusCode.FAIL_TO_UPDATE_USER_INFO);
                 }
             }
         }
         for (Tag tag : userMapper.listAvoidTagsById(userId)){
             if(!contain(avoidList,tag.getTagId())){
                 if(userMapper.removeAvoidTag(userId,tag.getTagId()) == 0){
-                    return StatusCode.FAIL_TO_UPDATE_USER_INFO;
+                    return new Code(StatusCode.FAIL_TO_UPDATE_USER_INFO);
                 }
             }
         }
-        return StatusCode.SUCCESS;
+        return new Code(StatusCode.SUCCESS);
     }
 
     /**
@@ -499,18 +496,18 @@ public class UserServiceImpl implements UserService {
      * @date 14:09 2020/11/15
      **/
     @Override
-    public Integer feedback(Integer userId, String content) {
+    public Code feedback(Integer userId, String content) {
         if(userId == null || content == null){
-            return StatusCode.MISSING_PARAMETERS;
+            return new Code(StatusCode.MISSING_PARAMETERS);
         }
         Feedback feedback = new Feedback();
         feedback.setContent(content);
         feedback.setSubmitTime(new Timestamp(new Date().getTime()));
         feedback.setUser(userMapper.getUserById(userId));
         if (feedbackMapper.saveFeedback(feedback) != 0) {
-            return StatusCode.SUCCESS;
+            return new Code(StatusCode.SUCCESS);
         } else {
-            return StatusCode.FAIL_TO_SAVE_FEEDBACK;
+            return new Code(StatusCode.FAIL_TO_SAVE_FEEDBACK);
         }
     }
 

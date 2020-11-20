@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,12 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 public class DishRecommend{
 
-    private Integer windowId;
-    private String windowName;
-    private String pngSrc;
-    private String description;
-    private String canteenName;
-    private Double star;
-    private List<Dish> dish;
+    private Integer windowId = -1;
+    private String windowName = "";
+    private String pngSrc = "";
+    private String description = "暂无介绍";
+    private String canteenName = "";
+    private Double star = 0.0;
+    private List<Dish> dish = new ArrayList<>();
 
 }

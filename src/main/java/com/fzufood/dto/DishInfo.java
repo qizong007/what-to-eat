@@ -20,7 +20,7 @@ public class DishInfo{
     private Double star = 0.0;
     private Integer[] starNum = new Integer[5];
     private String windowName = "";
-    private Integer windowId = 0;
+    private Integer windowId = -1;
     private List<Tag> tagList = new ArrayList<>();
 
 }

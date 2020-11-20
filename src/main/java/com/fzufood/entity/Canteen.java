@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,12 +16,12 @@ import java.util.List;
 public class Canteen {
 
     @ApiModelProperty("食堂ID")
-    private Integer canteenId;
+    private Integer canteenId = -1;
 
     @ApiModelProperty("食堂名字")
-    private String canteenName;
+    private String canteenName = "";
 
     @ApiModelProperty("食堂窗口")
-    private List<Window> windows;
+    private List<Window> windows = new ArrayList<>();
 
 }

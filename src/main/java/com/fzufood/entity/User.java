@@ -15,9 +15,9 @@ import java.util.List;
 public class User {
 
     @ApiModelProperty("用户ID")
-    private Integer userId;
+    private Integer userId = -1;
 
     @ApiModelProperty("用户openID")
-    private String openId;
+    private String openId = "";
 
 }

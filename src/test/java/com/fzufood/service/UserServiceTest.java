@@ -3,6 +3,8 @@ package com.fzufood.service;
 import com.alibaba.fastjson.JSON;
 import com.fzufood.dto.*;
 import com.fzufood.entity.Tag;
+import com.fzufood.http.Code;
+import com.fzufood.http.LoginResponse;
 import com.fzufood.repository.TagMapper;
 import com.fzufood.util.StatusCode;
 import org.junit.jupiter.api.Assertions;
@@ -29,7 +31,7 @@ public class UserServiceTest {
     @Test
     void login(){
         String s = "063FrE0w3tvBkV2dWF1w39VYG04FrE0b";
-        JsonObject<UserLogin> jsonObject = userService.login(s);
+        JsonObject<UserLogin> jsonObject = userService.login(new LoginResponse(s));
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }
@@ -52,8 +54,8 @@ public class UserServiceTest {
         preferTags.add(tagMapper.getTagById(8));
         preferTags.add(tagMapper.getTagById(9));
         allList.add(new Tag(10,"很淦"));
-        Integer code = userService.updateInfo(9,preferTags,avoidTags);
-        Assertions.assertEquals(StatusCode.SUCCESS,code);
+        Code code = userService.updateInfo(9,preferTags,avoidTags);
+        Assertions.assertEquals(StatusCode.SUCCESS,code.getCode());
         getInfo();
     }
 
@@ -71,8 +73,8 @@ public class UserServiceTest {
     // 测试通过
     @Test
     void feedback(){
-        Integer code = userService.feedback(1,"这小程序不得行啊~");
-        Assertions.assertEquals(StatusCode.SUCCESS,code);
+        Code code = userService.feedback(1,"这小程序不得行啊~");
+        Assertions.assertEquals(StatusCode.SUCCESS,code.getCode());
     }
 
 }

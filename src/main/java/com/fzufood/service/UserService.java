@@ -2,13 +2,15 @@ package com.fzufood.service;
 
 import com.fzufood.dto.*;
 import com.fzufood.entity.Tag;
+import com.fzufood.http.Code;
+import com.fzufood.http.LoginResponse;
 
 import java.util.List;
 
 public interface UserService {
-    JsonObject<UserLogin> login(String code);
+    JsonObject<UserLogin> login(LoginResponse code);
     JsonObject<UserInfo> getInfo(Integer userId);
-    Integer updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList);
+    Code updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList);
     JsonObject<Search> search(String searchName, List<Tag> tagList, Integer canteenId);
-    Integer feedback(Integer userId, String content);
+    Code feedback(Integer userId, String content);
 }

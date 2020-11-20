@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class DishEntry{
 
-    private Integer dishId;
-    private String dishName;
-    private BigDecimal price;
-    private Double star;
+    private Integer dishId = -1;
+    private String dishName = "";
+    private BigDecimal price = new BigDecimal(0);
+    private Double star = 0.0;
 
 }

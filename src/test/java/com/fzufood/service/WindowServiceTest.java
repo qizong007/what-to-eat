@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.fzufood.dto.JsonObject;
 import com.fzufood.dto.Recommend;
 import com.fzufood.dto.WindowEntry;
+import com.fzufood.http.Code;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,7 +46,7 @@ public class WindowServiceTest {
     // 测试通过
     @Test
     void updateMarkedWindow(){
-        Integer code = windowService.updateMarkedWindow(1,1);
+        Code code = windowService.updateMarkedWindow(1,1);
         System.out.println(code);
         JsonObject<Recommend> jsonObject = windowService.getMarkedWindow(1);
         String str = JSON.toJSONString(jsonObject);

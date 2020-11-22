@@ -122,7 +122,9 @@ public class DishServiceImpl implements DishService {
         Dish dish = dishMapper.getDishById(dishId);
         dishInfo.setDishName(dish.getDishName());
         dishInfo.setPrice(dish.getPrice());
-        dishInfo.setStar(dishCommentMapper.getAvgStarsByDishId(dishId));
+        if(dishCommentMapper.getAvgStarsByDishId(dishId) != null){
+            dishInfo.setStar(dishCommentMapper.getAvgStarsByDishId(dishId));
+        }
         dishInfo.setStarNum(countStarsNumOnDish(dishId));
         dishInfo.setWindowId(dish.getWindow().getWindowId());
         dishInfo.setWindowName(dish.getWindow().getWindowName());

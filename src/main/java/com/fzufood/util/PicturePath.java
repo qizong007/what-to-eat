@@ -5,6 +5,5 @@ package com.fzufood.util;
  * @create 2020/11/20 21:31
  */
 public class PicturePath {
-
-    public static final String DEFAULT = "https://gitee.com/wang_shuai_zhen/what-to-eat-pic/raw/master/default/default.png";
+    public static final String DEFAULT = "http://123.56.51.120/static/pics/default.png";
 }

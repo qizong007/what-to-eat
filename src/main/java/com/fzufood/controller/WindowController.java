@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
+
 @RestController
 @RequestMapping("/window")
 public class WindowController {
@@ -26,7 +28,7 @@ public class WindowController {
     @ApiOperation("首页窗口推荐接口")
     @GetMapping("/recommend")
     public JsonObject<Recommend> recommend(@RequestParam("type")Integer type,
-                                           @RequestParam("userId")Integer userId){
+                                           @RequestParam("userId")Integer userId) throws FileNotFoundException {
        return windowService.recommend(type, userId);
     }
 
@@ -39,7 +41,7 @@ public class WindowController {
     @ApiOperation("窗口列表接口")
     @GetMapping("/info")
     public JsonObject<WindowEntry> info(@RequestParam("windowId")Integer windowId,
-                            @RequestParam("userId")Integer userId) {
+                            @RequestParam("userId")Integer userId) throws FileNotFoundException {
         return windowService.info(windowId, userId);
     }
 
@@ -50,7 +52,7 @@ public class WindowController {
      */
     @ApiOperation("获取收藏窗口接口")
     @GetMapping("/getMarkedWindow")
-    public JsonObject<Recommend> getMarkedWindow(@RequestParam("userId")Integer userId) {
+    public JsonObject<Recommend> getMarkedWindow(@RequestParam("userId")Integer userId) throws FileNotFoundException {
         return windowService.getMarkedWindow(userId);
     }
 

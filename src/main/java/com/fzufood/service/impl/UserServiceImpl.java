@@ -6,11 +6,14 @@ import com.fzufood.entity.*;
 import com.fzufood.http.*;
 import com.fzufood.repository.*;
 import com.fzufood.service.UserService;
+import com.fzufood.service.WindowService;
+import com.fzufood.util.PicturePath;
 import com.fzufood.util.StatusCode;
 import com.fzufood.util.WeChatAppCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -34,6 +37,8 @@ public class UserServiceImpl implements UserService {
     private DishCommentMapper dishCommentMapper;
     @Autowired
     private TagMapper tagMapper;
+    @Autowired
+    private WindowService windowService;
 
     /**
      * 用户登录
@@ -217,30 +222,19 @@ public class UserServiceImpl implements UserService {
      */
     //TODO:search自定义搜索待实现
     @Override
-    public JsonObject<Search> search(String searchName, List<Tag> tagList, Integer canteenId) {
-
-        for (Tag tag : tagList) {
-            if (tagMapper.getTagById(tag.getTagId()) == null) {
-                tagMapper.saveTag(tag);
-            }
-        }
-
+    public JsonObject<Search> search(String searchName, List<Tag> tagList, Integer canteenId) throws FileNotFoundException {
         JsonObject<Search> jsonObject = new JsonObject<>();
-
         List<DishRecommend> dishRecommendList = new ArrayList<>();
-
         List<Window> windowList = windowMapper.listWindows();
-
         for(int i = 0; i < 10; i++ ){
             Window window = windowList.get(i);
             DishRecommend dishRecommend = new DishRecommend();
             dishRecommend.setWindowId(window.getWindowId());
             dishRecommend.setWindowName(window.getWindowName());
-            dishRecommend.setPngSrc(window.getProfileURI());
-            dishRecommend.setDescription(window.getDescription());
+            dishRecommend.setPngSrc(windowService.getWindowPngSrc(window.getWindowId()));
             dishRecommend.setCanteenName(window.getCanteen().getCanteenName());
-            dishRecommend.setStar(countStarsOnWindow(window.getWindowId()));
-            dishRecommend.setDish(window.getDishes());
+            dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+            dishRecommend.setDish(windowMapper.listDishesById(window.getWindowId()).subList(0,3));
             dishRecommendList.add(dishRecommend);
         }
 //        Tag baseTag = tagList.get(0);
@@ -526,21 +520,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private Double countStarsOnWindow(Integer windowId){
-        List<Dish> dishList = windowMapper.listDishesById(windowId);
-        Double stars = 0.0;
-        for(Dish dish : dishList){
-            stars += countStarsOnDish(dish.getDishId());
-        }
-        return stars/dishList.size();
-    }
-
-    private Double countStarsOnDish(Integer dishId){
-        List<DishComment> dishComments = dishCommentMapper.listDishCommentsByDishId(dishId);
-        Double stars = 0.0;
-        for(DishComment dishComment : dishComments){
-            stars += dishComment.getStars();
-        }
-        return stars/dishComments.size();
-    }
 }

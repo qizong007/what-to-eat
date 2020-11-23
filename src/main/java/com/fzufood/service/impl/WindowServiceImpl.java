@@ -5,10 +5,14 @@ import com.fzufood.entity.*;
 import com.fzufood.http.Code;
 import com.fzufood.repository.*;
 import com.fzufood.service.WindowService;
+import com.fzufood.util.PicturePath;
 import com.fzufood.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 @Service
@@ -32,7 +36,7 @@ public class WindowServiceImpl implements WindowService {
      * @return JsonObject<List<DishRecommend>>
      */
     @Override
-    public JsonObject<Recommend> recommend(Integer type, Integer userId) {
+    public JsonObject<Recommend> recommend(Integer type, Integer userId) throws FileNotFoundException {
         JsonObject<Recommend> jsonObject = new JsonObject<>();
         Recommend recommend = new Recommend();
         if(userId == null){
@@ -69,9 +73,7 @@ public class WindowServiceImpl implements WindowService {
                     Window window = dish.getWindow();
                     dishRecommend.setWindowId(window.getWindowId());
                     dishRecommend.setWindowName(window.getWindowName());
-                    if(!window.getProfileURI().equals("")){
-                        dishRecommend.setPngSrc(window.getProfileURI());
-                    }
+                    dishRecommend.setPngSrc(getWindowPngSrc(window.getWindowId()));
                     if(!window.getDescription().equals("")){
                         dishRecommend.setDescription(window.getDescription());
                     }
@@ -108,7 +110,7 @@ public class WindowServiceImpl implements WindowService {
      * @param userId
      * @return JsonObject<List<DishRecommend>>
      */
-    public JsonObject<Recommend> popular(Integer userId){
+    public JsonObject<Recommend> popular(Integer userId) throws FileNotFoundException {
         JsonObject<Recommend> jsonObject = new JsonObject<>();
         Recommend recommend = new Recommend();
         if(userId == null){
@@ -155,9 +157,7 @@ public class WindowServiceImpl implements WindowService {
             DishRecommend dishRecommend = new DishRecommend();
             dishRecommend.setWindowId(window.getWindowId());
             dishRecommend.setWindowName(window.getWindowName());
-            if(!window.getProfileURI().equals("")){
-                dishRecommend.setPngSrc(window.getProfileURI());
-            }
+            dishRecommend.setPngSrc(getWindowPngSrc(window.getWindowId()));
             if(!window.getDescription().equals("")){
                 dishRecommend.setDescription(window.getDescription());
             }
@@ -173,13 +173,13 @@ public class WindowServiceImpl implements WindowService {
             dishRecommends.add(dishRecommend);
         }
         jsonObject.setCode(StatusCode.SUCCESS);
-        recommend.setWindowList(dishRecommends);
+        recommend.setWindowList(dishRecommends.subList(0,15));
         jsonObject.setData(recommend);
         return jsonObject;
     }
 
     @Override
-    public JsonObject<WindowEntry> info(Integer windowId, Integer userId) {
+    public JsonObject<WindowEntry> info(Integer windowId, Integer userId) throws FileNotFoundException {
         JsonObject<WindowEntry> jsonObject = new JsonObject<>();
         WindowEntry windowEntry = new WindowEntry();
         if(userId == null){
@@ -191,9 +191,9 @@ public class WindowServiceImpl implements WindowService {
         List<Tag> tagList = new ArrayList<>();
         windowEntry.setWindowId(windowMapper.getWindowById(windowId).getWindowId());
         windowEntry.setWindowName(windowMapper.getWindowById(windowId).getWindowName());
-        windowEntry.setPngSrc(windowMapper.getWindowById(windowId).getProfileURI());
+        windowEntry.setPngSrc(getWindowPngSrc(windowId));
         windowEntry.setDescription(windowMapper.getWindowById(windowId).getDescription());
-        windowEntry.setMapSrc(windowMapper.getWindowById(windowId).getLocationURI());
+        windowEntry.setMapSrc(PicturePath.DEFAULT);
         windowEntry.setCanteenName(windowMapper.getWindowById(windowId).getCanteen().getCanteenName());
         windowEntry.setStar((double) dishTagMapper.countTagNumByWindowId(windowId));
         for (Dish dish : dishList){
@@ -222,7 +222,7 @@ public class WindowServiceImpl implements WindowService {
      * @return JsonObject<List<DishRecommend>>
      */
     @Override
-    public JsonObject<Recommend> getMarkedWindow(Integer userId) {
+    public JsonObject<Recommend> getMarkedWindow(Integer userId) throws FileNotFoundException {
         JsonObject<Recommend> jsonObject = new JsonObject<>();
         Recommend recommend = new Recommend();
         if(userId == null){
@@ -238,7 +238,7 @@ public class WindowServiceImpl implements WindowService {
             dishRecommend.setWindowId(window.getWindowId());
             dishRecommend.setWindowName(window.getWindowName());
             dishRecommend.setCanteenName(window.getCanteen().getCanteenName());
-            dishRecommend.setPngSrc(window.getProfileURI());
+            dishRecommend.setPngSrc(getWindowPngSrc(window.getWindowId()));
             dishRecommend.setDescription(window.getDescription());
             dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
             List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
@@ -280,5 +280,36 @@ public class WindowServiceImpl implements WindowService {
         }else {
             return new Code(StatusCode.FAIL_TO_UPDATE_MARKED_WINDOW);
         }
+    }
+
+    /**
+     * 获取窗口图片路径
+     * @author qizong007
+     * @date 21:31 2020/11/23
+     * @param windowId
+     * @return String
+     **/
+    public String getWindowPngSrc(Integer windowId) throws FileNotFoundException {
+        Window window = windowMapper.getWindowById(windowId);
+        String windowName = window.getWindowName();
+        Integer canteenId = window.getCanteen().getCanteenId();
+        //File dec = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX+"static/pics/"+canteenId+"/");
+        //File dec = new File("~/pics/"+canteenId+"/");
+        //File dec = new File(ResourceUtils.getURL("classpath:").getPath()+"static/pics/"+canteenId+"/");
+        //File[] pics = dec.listFiles();
+        //for(File f : pics){
+            //String fileName = f.getName();
+            //if(windowName.equals(fileName.substring(0,fileName.length()-4))){
+                //return PicturePath.SUFFIX+canteenId+"/"+fileName;
+
+            //}
+        //}
+        //return PicturePath.DEFAULT;
+        if(canteenId == 2 || canteenId == 8){
+            return PicturePath.SUFFIX+canteenId+"/"+windowName+".JPG";
+        }else{
+            return PicturePath.SUFFIX+canteenId+"/"+windowName+".jpg";
+        }
+
     }
 }

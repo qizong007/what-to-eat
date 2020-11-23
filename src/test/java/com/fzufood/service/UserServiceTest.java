@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,11 +62,11 @@ public class UserServiceTest {
 
     // FIXME
     @Test
-    void search(){
+    void search() throws FileNotFoundException {
         List<Tag> tagList = new ArrayList<>();
         tagList.add(tagMapper.getTagById(1));
         tagList.add(tagMapper.getTagById(2));
-        JsonObject<Search> jsonObject = userService.search(null,tagList,null);
+        JsonObject<Search> jsonObject = userService.search("饭",null,null);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }

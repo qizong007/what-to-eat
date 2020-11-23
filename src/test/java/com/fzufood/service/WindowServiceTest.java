@@ -5,9 +5,12 @@ import com.fzufood.dto.JsonObject;
 import com.fzufood.dto.Recommend;
 import com.fzufood.dto.WindowEntry;
 import com.fzufood.http.Code;
+import com.fzufood.service.impl.WindowServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.io.FileNotFoundException;
 
 /**
  * @Author qizong007
@@ -21,7 +24,7 @@ public class WindowServiceTest {
 
     // FIXME: 热门太慢，要20s
     @Test
-    void recommend(){
+    void recommend() throws FileNotFoundException {
         JsonObject<Recommend> jsonObject = windowService.recommend(1,1);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
@@ -29,7 +32,7 @@ public class WindowServiceTest {
 
     // 测试通过
     @Test
-    void info(){
+    void info() throws FileNotFoundException {
         JsonObject<WindowEntry> jsonObject = windowService.info(1,1);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
@@ -37,7 +40,7 @@ public class WindowServiceTest {
 
     // 测试通过
     @Test
-    void getMarkedWindow(){
+    void getMarkedWindow() throws FileNotFoundException {
         JsonObject<Recommend> jsonObject = windowService.getMarkedWindow(1);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
@@ -45,7 +48,7 @@ public class WindowServiceTest {
 
     // 测试通过
     @Test
-    void updateMarkedWindow(){
+    void updateMarkedWindow() throws FileNotFoundException {
         Code code = windowService.updateMarkedWindow(1,1);
         System.out.println(code);
         JsonObject<Recommend> jsonObject = windowService.getMarkedWindow(1);
@@ -58,4 +61,8 @@ public class WindowServiceTest {
         System.out.println(str);
     }
 
+    @Test
+    void pics() throws FileNotFoundException {
+        windowService.getWindowPngSrc(3);
+    }
 }

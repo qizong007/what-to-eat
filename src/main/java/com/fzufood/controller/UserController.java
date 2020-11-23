@@ -2,15 +2,13 @@ package com.fzufood.controller;
 
 import com.fzufood.dto.*;
 import com.fzufood.entity.Tag;
-import com.fzufood.http.FeedbackResponse;
-import com.fzufood.http.Code;
-import com.fzufood.http.LoginResponse;
-import com.fzufood.http.UpdateInfoResponse;
+import com.fzufood.http.*;
 import com.fzufood.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 @RestController
@@ -53,19 +51,17 @@ public class UserController {
         return userService.updateInfo(response.getUserId(),response.getPreferredList(),response.getAvoidList() );
     }
 
-    /**
-     * 用户搜索接口
-     * @param searchName
-     * @param tagList
-     * @param canteenId
-     * @return JsonObject<List<DishRecommend>>
-     */
+//    /**
+//     * 用户搜索接口
+//     * @param searchName
+//     * @param tagList
+//     * @param canteenId
+//     * @return JsonObject<List<DishRecommend>>
+//     */
     @ApiOperation("用户搜索接口")
     @GetMapping("/search")
-    public JsonObject<Search> search(@RequestParam("searchName")String searchName,
-                                      @RequestParam("tagList")List<Tag> tagList,
-                                      @RequestParam("canteenId")Integer canteenId){
-        return userService.search(searchName, tagList, canteenId);
+    public JsonObject<Search> search() throws FileNotFoundException {
+        return userService.search(null,null,null);
     }
 
     /**

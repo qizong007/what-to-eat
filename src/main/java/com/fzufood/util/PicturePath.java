@@ -6,4 +6,5 @@ package com.fzufood.util;
  */
 public class PicturePath {
     public static final String DEFAULT = "http://123.56.51.120/static/pics/default.png";
+    public static final String SUFFIX = "http://123.56.51.120/static/pics/";
 }

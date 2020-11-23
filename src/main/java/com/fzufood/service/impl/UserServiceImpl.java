@@ -224,262 +224,277 @@ public class UserServiceImpl implements UserService {
                 tagMapper.saveTag(tag);
             }
         }
+
         JsonObject<Search> jsonObject = new JsonObject<>();
 
-
         List<DishRecommend> dishRecommendList = new ArrayList<>();
-        Tag baseTag = tagList.get(0);
-        List<DishTag> baseDishTags = dishTagMapper.listDishTagsByTagId(baseTag.getTagId());
 
+        List<Window> windowList = windowMapper.listWindows();
 
-        if (searchName == null) {
-            if (canteenId == null) {
-                if(tagList.size() == 0){
-                    //TODO:null null null返回最热门的五个
-
-                }
-                else if (tagList.size() == 1) {
-                    for (DishTag dishTag : baseDishTags) {
-                        DishRecommend dishRecommend = new DishRecommend();
-                        Dish dish = dishMapper.getDishById(dishTag.getDishId());
-                        dishRecommend.setWindowId(dish.getWindow().getWindowId());
-                        dishRecommend.setWindowName(dish.getWindow().getWindowName());
-                        dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
-                        dishRecommend.setDescription(dish.getWindow().getDescription());
-                        dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                        //星级计算
-                        dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
-                        //获取窗口的dishes
-                        dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
-                        dishRecommendList.add(dishRecommend);
-                    }
-
-                } else {
-                    for (Tag tag : tagList) {
-                        if (tag == baseTag) continue;
-                        List<DishTag> dishTags = dishTagMapper.listDishTagsByTagId(tag.getTagId());
-                        for (DishTag dishTag : baseDishTags) {
-                            if (!dishTags.contains(dishTag)) {
-                                baseDishTags.remove(dishTag);
-                            }
-                        }
-                    }
-                    for (DishTag dishTag : baseDishTags) {
-                        DishRecommend dishRecommend = new DishRecommend();
-                        Dish dish = dishMapper.getDishById(dishTag.getDishId());
-                        dishRecommend.setWindowId(dish.getWindow().getWindowId());
-                        dishRecommend.setWindowName(dish.getWindow().getWindowName());
-                        dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
-                        dishRecommend.setDescription(dish.getWindow().getDescription());
-                        dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                        //星级计算
-                        dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
-                        //获取窗口的dishes
-                        dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
-                        dishRecommendList.add(dishRecommend);
-                    }
-                }
-            } else {
-                List<Window> windows = canteenMapper.listWindowsById(canteenId);
-                if (tagList.size() == 0){
-                    for(Window window : windows){
-                        DishRecommend dishRecommend = new DishRecommend();
-                        dishRecommend.setWindowId(window.getWindowId());
-                        dishRecommend.setWindowName(window.getWindowName());
-                        dishRecommend.setPngSrc(window.getProfileURI());
-                        dishRecommend.setDescription(window.getDescription());
-                        dishRecommend.setCanteenName(window.getCanteen().getCanteenName());
-                        //窗口星级计算
-                        dishRecommend.setStar(countStarsOnWindow(window.getWindowId()));
-                        //获取窗口的dishes
-                        dishRecommend.setDish(window.getDishes());
-                        dishRecommendList.add(dishRecommend);
-                    }
-                }
-                else if (tagList.size() == 1) {
-                    for (DishTag dishTag : baseDishTags) {
-                        DishRecommend dishRecommend = new DishRecommend();
-                        Dish dish = dishMapper.getDishById(dishTag.getDishId());
-                        if (windows.contains(dish.getWindow().getWindowId())) {
-                            dishRecommend.setWindowId(dish.getWindow().getWindowId());
-                            dishRecommend.setWindowName(dish.getWindow().getWindowName());
-                            dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
-                            dishRecommend.setDescription(dish.getWindow().getDescription());
-                            dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                            //星级计算
-                            dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
-                            //获取窗口的dishes
-                            dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
-                            dishRecommendList.add(dishRecommend);
-                        }
-                    }
-
-                } else {
-                    for (Tag tag : tagList) {
-                        if (tag == baseTag) continue;
-                        List<DishTag> dishTags = dishTagMapper.listDishTagsByTagId(tag.getTagId());
-                        for (DishTag dishTag : baseDishTags) {
-                            if (!dishTags.contains(dishTag)) {
-                                baseDishTags.remove(dishTag);
-                            }
-                        }
-                    }
-                    for (DishTag dishTag : baseDishTags) {
-                        DishRecommend dishRecommend = new DishRecommend();
-                        Dish dish = dishMapper.getDishById(dishTag.getDishId());
-                        if (windows.contains(dish.getWindow().getWindowId())) {
-                            dishRecommend.setWindowId(dish.getWindow().getWindowId());
-                            dishRecommend.setWindowName(dish.getWindow().getWindowName());
-                            dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
-                            dishRecommend.setDescription(dish.getWindow().getDescription());
-                            dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                            //星级计算
-                            dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
-                            //获取窗口的dishes
-                            dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
-                            dishRecommendList.add(dishRecommend);
-                        }
-                    }
-
-
-                }
-            }
-
+        for(int i = 0; i < 10; i++ ){
+            Window window = windowList.get(i);
+            DishRecommend dishRecommend = new DishRecommend();
+            dishRecommend.setWindowId(window.getWindowId());
+            dishRecommend.setWindowName(window.getWindowName());
+            dishRecommend.setPngSrc(window.getProfileURI());
+            dishRecommend.setDescription(window.getDescription());
+            dishRecommend.setCanteenName(window.getCanteen().getCanteenName());
+            dishRecommend.setStar(countStarsOnWindow(window.getWindowId()));
+            dishRecommend.setDish(window.getDishes());
+            dishRecommendList.add(dishRecommend);
         }
-        else {
-            List<Dish> dishList = dishMapper.listDishesByName(searchName);
-            if (canteenId == null) {
-                if (tagList.size() == 0) {
-                    for (Dish dish : dishList) {
-                        DishRecommend dishRecommend = new DishRecommend();
-                        dishRecommend.setWindowId(dish.getWindow().getWindowId());
-                        dishRecommend.setWindowName(dish.getWindow().getWindowName());
-                        dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
-                        dishRecommend.setDescription(dish.getWindow().getDescription());
-                        dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                        //星级计算
-                        dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
-                        //获取窗口的dishes
-                        dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
-                        dishRecommendList.add(dishRecommend);
-                    }
-                }
-                else if (tagList.size() == 1) {
+//        Tag baseTag = tagList.get(0);
+//        List<DishTag> baseDishTags = dishTagMapper.listDishTagsByTagId(baseTag.getTagId());
 
-                    for (Dish dish : dishList) {
-                        for (DishTag dishTag : baseDishTags) {
-                            if (dish.getDishId() == dishTag.getDishId()) {
-                                DishRecommend dishRecommend = new DishRecommend();
-                                dishRecommend.setWindowId(dish.getWindow().getWindowId());
-                                dishRecommend.setWindowName(dish.getWindow().getWindowName());
-                                dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
-                                dishRecommend.setDescription(dish.getWindow().getDescription());
-                                dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                                //星级计算
-                                dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
-                                //获取窗口的dishes
-                                dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
-                                dishRecommendList.add(dishRecommend);
-                            }
-                            continue;
-                        }
-                    }
-                }else
-                {
-                    for (Tag tag : tagList) {
-                        if (tag == baseTag) continue;
-                        List<DishTag> dishTags = dishTagMapper.listDishTagsByTagId(tag.getTagId());
-                        for (DishTag dishTag : baseDishTags) {
-                            if (!dishTags.contains(dishTag)) {
-                                baseDishTags.remove(dishTag);
-                            }
-                        }
-                    }
-                    for (Dish dish : dishList) {
-                        for (DishTag dishTag : baseDishTags) {
-                            if (dish.getDishId() == dishTag.getDishId()) {
-                                DishRecommend dishRecommend = new DishRecommend();
-                                dishRecommend.setWindowId(dish.getWindow().getWindowId());
-                                dishRecommend.setWindowName(dish.getWindow().getWindowName());
-                                dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
-                                dishRecommend.setDescription(dish.getWindow().getDescription());
-                                dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                                //星级计算
-                                dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
-                                //获取窗口的dishes
-                                dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
-                                dishRecommendList.add(dishRecommend);
-                            }
-                            continue;
-                        }
-                    }
-                }
-            } else {
-                if ((tagList.size() == 0)) {
-                    for (Dish dish : dishList) {
-                        if (dish.getWindow().getCanteen().getCanteenId() == canteenId) {
-                            DishRecommend dishRecommend = new DishRecommend();
-                            dishRecommend.setWindowId(dish.getWindow().getWindowId());
-                            dishRecommend.setWindowName(dish.getWindow().getWindowName());
-                            dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
-                            dishRecommend.setDescription(dish.getWindow().getDescription());
-                            dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                            //星级计算
-                            dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
-                            //获取窗口的dishes
-                            dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
-                            dishRecommendList.add(dishRecommend);
-                        }
-                    }
-                } else if(tagList.size() == 1) {
-                    for (Dish dish : dishList) {
-                        for (DishTag dishTag : baseDishTags) {
-                            if (dish.getDishId() == dishTag.getDishId() && dish.getWindow().getCanteen().getCanteenId() == canteenId) {
-                                DishRecommend dishRecommend = new DishRecommend();
-                                dishRecommend.setWindowId(dish.getWindow().getWindowId());
-                                dishRecommend.setWindowName(dish.getWindow().getWindowName());
-                                dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
-                                dishRecommend.setDescription(dish.getWindow().getDescription());
-                                dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                                //星级计算
-                                dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
-                                //获取窗口的dishes
-                                dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
-                                dishRecommendList.add(dishRecommend);
-                            }
-                        }
-                    }
-                }else{
-                    for (Tag tag : tagList) {
-                        if (tag == baseTag) continue;
-                        List<DishTag> dishTags = dishTagMapper.listDishTagsByTagId(tag.getTagId());
-                        for (DishTag dishTag : baseDishTags) {
-                            if (!dishTags.contains(dishTag)) {
-                                baseDishTags.remove(dishTag);
-                            }
-                        }
-                    }
 
-                    for (Dish dish : dishList) {
-                        for (DishTag dishTag : baseDishTags) {
-                            if (dish.getDishId() == dishTag.getDishId() && dish.getWindow().getCanteen().getCanteenId() == canteenId) {
-                                DishRecommend dishRecommend = new DishRecommend();
-                                dishRecommend.setWindowId(dish.getWindow().getWindowId());
-                                dishRecommend.setWindowName(dish.getWindow().getWindowName());
-                                dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
-                                dishRecommend.setDescription(dish.getWindow().getDescription());
-                                dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
-                                //星级计算
-                                dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
-                                //获取窗口的dishes
-                                dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
-                                dishRecommendList.add(dishRecommend);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+//        if (searchName == null) {
+//            if (canteenId == null) {
+//                if(tagList.size() == 0){
+//                    //TODO:null null null返回最热门的五个
+//
+//                }
+//                else if (tagList.size() == 1) {
+//                    for (DishTag dishTag : baseDishTags) {
+//                        DishRecommend dishRecommend = new DishRecommend();
+//                        Dish dish = dishMapper.getDishById(dishTag.getDishId());
+//                        dishRecommend.setWindowId(dish.getWindow().getWindowId());
+//                        dishRecommend.setWindowName(dish.getWindow().getWindowName());
+//                        dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
+//                        dishRecommend.setDescription(dish.getWindow().getDescription());
+//                        dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
+//                        //星级计算
+//                        dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
+//                        //获取窗口的dishes
+//                        dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
+//                        dishRecommendList.add(dishRecommend);
+//                    }
+//
+//                } else {
+//                    for (Tag tag : tagList) {
+//                        if (tag == baseTag) continue;
+//                        List<DishTag> dishTags = dishTagMapper.listDishTagsByTagId(tag.getTagId());
+//                        for (DishTag dishTag : baseDishTags) {
+//                            if (!dishTags.contains(dishTag)) {
+//                                baseDishTags.remove(dishTag);
+//                            }
+//                        }
+//                    }
+//                    for (DishTag dishTag : baseDishTags) {
+//                        DishRecommend dishRecommend = new DishRecommend();
+//                        Dish dish = dishMapper.getDishById(dishTag.getDishId());
+//                        dishRecommend.setWindowId(dish.getWindow().getWindowId());
+//                        dishRecommend.setWindowName(dish.getWindow().getWindowName());
+//                        dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
+//                        dishRecommend.setDescription(dish.getWindow().getDescription());
+//                        dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
+//                        //星级计算
+//                        dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
+//                        //获取窗口的dishes
+//                        dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
+//                        dishRecommendList.add(dishRecommend);
+//                    }
+//                }
+//            } else {
+//                List<Window> windows = canteenMapper.listWindowsById(canteenId);
+//                if (tagList.size() == 0){
+//                    for(Window window : windows){
+//                        DishRecommend dishRecommend = new DishRecommend();
+//                        dishRecommend.setWindowId(window.getWindowId());
+//                        dishRecommend.setWindowName(window.getWindowName());
+//                        dishRecommend.setPngSrc(window.getProfileURI());
+//                        dishRecommend.setDescription(window.getDescription());
+//                        dishRecommend.setCanteenName(window.getCanteen().getCanteenName());
+//                        //窗口星级计算
+//                        dishRecommend.setStar(countStarsOnWindow(window.getWindowId()));
+//                        //获取窗口的dishes
+//                        dishRecommend.setDish(window.getDishes());
+//                        dishRecommendList.add(dishRecommend);
+//                    }
+//                }
+//                else if (tagList.size() == 1) {
+//                    for (DishTag dishTag : baseDishTags) {
+//                        DishRecommend dishRecommend = new DishRecommend();
+//                        Dish dish = dishMapper.getDishById(dishTag.getDishId());
+//                        if (windows.contains(dish.getWindow().getWindowId())) {
+//                            dishRecommend.setWindowId(dish.getWindow().getWindowId());
+//                            dishRecommend.setWindowName(dish.getWindow().getWindowName());
+//                            dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
+//                            dishRecommend.setDescription(dish.getWindow().getDescription());
+//                            dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
+//                            //星级计算
+//                            dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
+//                            //获取窗口的dishes
+//                            dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
+//                            dishRecommendList.add(dishRecommend);
+//                        }
+//                    }
+//
+//                } else {
+//                    for (Tag tag : tagList) {
+//                        if (tag == baseTag) continue;
+//                        List<DishTag> dishTags = dishTagMapper.listDishTagsByTagId(tag.getTagId());
+//                        for (DishTag dishTag : baseDishTags) {
+//                            if (!dishTags.contains(dishTag)) {
+//                                baseDishTags.remove(dishTag);
+//                            }
+//                        }
+//                    }
+//                    for (DishTag dishTag : baseDishTags) {
+//                        DishRecommend dishRecommend = new DishRecommend();
+//                        Dish dish = dishMapper.getDishById(dishTag.getDishId());
+//                        if (windows.contains(dish.getWindow().getWindowId())) {
+//                            dishRecommend.setWindowId(dish.getWindow().getWindowId());
+//                            dishRecommend.setWindowName(dish.getWindow().getWindowName());
+//                            dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
+//                            dishRecommend.setDescription(dish.getWindow().getDescription());
+//                            dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
+//                            //星级计算
+//                            dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
+//                            //获取窗口的dishes
+//                            dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
+//                            dishRecommendList.add(dishRecommend);
+//                        }
+//                    }
+//
+//
+//                }
+//            }
+//
+//        }
+//        else {
+//            List<Dish> dishList = dishMapper.listDishesByName(searchName);
+//            if (canteenId == null) {
+//                if (tagList.size() == 0) {
+//                    for (Dish dish : dishList) {
+//                        DishRecommend dishRecommend = new DishRecommend();
+//                        dishRecommend.setWindowId(dish.getWindow().getWindowId());
+//                        dishRecommend.setWindowName(dish.getWindow().getWindowName());
+//                        dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
+//                        dishRecommend.setDescription(dish.getWindow().getDescription());
+//                        dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
+//                        //星级计算
+//                        dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
+//                        //获取窗口的dishes
+//                        dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
+//                        dishRecommendList.add(dishRecommend);
+//                    }
+//                }
+//                else if (tagList.size() == 1) {
+//
+//                    for (Dish dish : dishList) {
+//                        for (DishTag dishTag : baseDishTags) {
+//                            if (dish.getDishId() == dishTag.getDishId()) {
+//                                DishRecommend dishRecommend = new DishRecommend();
+//                                dishRecommend.setWindowId(dish.getWindow().getWindowId());
+//                                dishRecommend.setWindowName(dish.getWindow().getWindowName());
+//                                dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
+//                                dishRecommend.setDescription(dish.getWindow().getDescription());
+//                                dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
+//                                //星级计算
+//                                dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
+//                                //获取窗口的dishes
+//                                dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
+//                                dishRecommendList.add(dishRecommend);
+//                            }
+//                            continue;
+//                        }
+//                    }
+//                }else
+//                {
+//                    for (Tag tag : tagList) {
+//                        if (tag == baseTag) continue;
+//                        List<DishTag> dishTags = dishTagMapper.listDishTagsByTagId(tag.getTagId());
+//                        for (DishTag dishTag : baseDishTags) {
+//                            if (!dishTags.contains(dishTag)) {
+//                                baseDishTags.remove(dishTag);
+//                            }
+//                        }
+//                    }
+//                    for (Dish dish : dishList) {
+//                        for (DishTag dishTag : baseDishTags) {
+//                            if (dish.getDishId() == dishTag.getDishId()) {
+//                                DishRecommend dishRecommend = new DishRecommend();
+//                                dishRecommend.setWindowId(dish.getWindow().getWindowId());
+//                                dishRecommend.setWindowName(dish.getWindow().getWindowName());
+//                                dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
+//                                dishRecommend.setDescription(dish.getWindow().getDescription());
+//                                dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
+//                                //星级计算
+//                                dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
+//                                //获取窗口的dishes
+//                                dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
+//                                dishRecommendList.add(dishRecommend);
+//                            }
+//                            continue;
+//                        }
+//                    }
+//                }
+//            } else {
+//                if ((tagList.size() == 0)) {
+//                    for (Dish dish : dishList) {
+//                        if (dish.getWindow().getCanteen().getCanteenId() == canteenId) {
+//                            DishRecommend dishRecommend = new DishRecommend();
+//                            dishRecommend.setWindowId(dish.getWindow().getWindowId());
+//                            dishRecommend.setWindowName(dish.getWindow().getWindowName());
+//                            dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
+//                            dishRecommend.setDescription(dish.getWindow().getDescription());
+//                            dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
+//                            //星级计算
+//                            dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
+//                            //获取窗口的dishes
+//                            dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
+//                            dishRecommendList.add(dishRecommend);
+//                        }
+//                    }
+//                } else if(tagList.size() == 1) {
+//                    for (Dish dish : dishList) {
+//                        for (DishTag dishTag : baseDishTags) {
+//                            if (dish.getDishId() == dishTag.getDishId() && dish.getWindow().getCanteen().getCanteenId() == canteenId) {
+//                                DishRecommend dishRecommend = new DishRecommend();
+//                                dishRecommend.setWindowId(dish.getWindow().getWindowId());
+//                                dishRecommend.setWindowName(dish.getWindow().getWindowName());
+//                                dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
+//                                dishRecommend.setDescription(dish.getWindow().getDescription());
+//                                dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
+//                                //星级计算
+//                                dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
+//                                //获取窗口的dishes
+//                                dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
+//                                dishRecommendList.add(dishRecommend);
+//                            }
+//                        }
+//                    }
+//                }else{
+//                    for (Tag tag : tagList) {
+//                        if (tag == baseTag) continue;
+//                        List<DishTag> dishTags = dishTagMapper.listDishTagsByTagId(tag.getTagId());
+//                        for (DishTag dishTag : baseDishTags) {
+//                            if (!dishTags.contains(dishTag)) {
+//                                baseDishTags.remove(dishTag);
+//                            }
+//                        }
+//                    }
+//
+//                    for (Dish dish : dishList) {
+//                        for (DishTag dishTag : baseDishTags) {
+//                            if (dish.getDishId() == dishTag.getDishId() && dish.getWindow().getCanteen().getCanteenId() == canteenId) {
+//                                DishRecommend dishRecommend = new DishRecommend();
+//                                dishRecommend.setWindowId(dish.getWindow().getWindowId());
+//                                dishRecommend.setWindowName(dish.getWindow().getWindowName());
+//                                dishRecommend.setPngSrc(dish.getWindow().getProfileURI());
+//                                dishRecommend.setDescription(dish.getWindow().getDescription());
+//                                dishRecommend.setCanteenName(dish.getWindow().getCanteen().getCanteenName());
+//                                //星级计算
+//                                dishRecommend.setStar(countStarsOnWindow(dish.getWindow().getWindowId()));
+//                                //获取窗口的dishes
+//                                dishRecommend.setDish(windowMapper.listDishesById(dish.getWindow().getWindowId()));
+//                                dishRecommendList.add(dishRecommend);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         jsonObject.setData(new Search(dishRecommendList));
         jsonObject.setCode(StatusCode.SUCCESS);

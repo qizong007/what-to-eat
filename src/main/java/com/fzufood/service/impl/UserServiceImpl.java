@@ -233,7 +233,9 @@ public class UserServiceImpl implements UserService {
             dishRecommend.setWindowName(window.getWindowName());
             dishRecommend.setPngSrc(windowService.getWindowPngSrc(window.getWindowId()));
             dishRecommend.setCanteenName(window.getCanteen().getCanteenName());
-            dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+            if(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()) != null){
+                dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+            }
             dishRecommend.setDish(windowMapper.listDishesById(window.getWindowId()).subList(0,3));
             dishRecommendList.add(dishRecommend);
         }

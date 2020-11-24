@@ -192,7 +192,9 @@ public class WindowServiceImpl implements WindowService {
         windowEntry.setWindowId(windowMapper.getWindowById(windowId).getWindowId());
         windowEntry.setWindowName(windowMapper.getWindowById(windowId).getWindowName());
         windowEntry.setPngSrc(getWindowPngSrc(windowId));
-        windowEntry.setDescription(windowMapper.getWindowById(windowId).getDescription());
+        if(windowMapper.getWindowById(windowId).getDescription() != null){
+            windowEntry.setDescription(windowMapper.getWindowById(windowId).getDescription());
+        }
         windowEntry.setMapSrc(PicturePath.DEFAULT);
         windowEntry.setCanteenName(windowMapper.getWindowById(windowId).getCanteen().getCanteenName());
         windowEntry.setStar((double) dishTagMapper.countTagNumByWindowId(windowId));

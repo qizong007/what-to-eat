@@ -11,21 +11,16 @@
         <association property="user" column="user_id" javaType="com.fzufood.entity.User">
             <id property="userId" column="user_id"/>
             <result property="openId" column="open_id"/>
-            <result property="phoneNumber" column="phone_number"/>
-            <result property="userName" column="user_name"/>
-            <result property="profilePictureURI" column="profile_picture"/>
         </association>
     </resultMap>
 
     <select id="listFeedback" resultMap="feedbackMap">
-        select feedback_id, submit_time, content, user.user_id user_id,
-            open_id, phone_number, user_name, profile_picture
+        select feedback_id, submit_time, content, user.user_id user_id,open_id
         from feedback left join user on feedback.user_id = user.user_id;
     </select>
 
     <select id="getFeedbackById" parameterType="java.lang.Integer" resultMap="feedbackMap">
-        select feedback_id, submit_time, content, user.user_id user_id,
-            open_id, phone_number, user_name, profile_picture
+        select feedback_id, submit_time, content, user.user_id user_id,open_id
         from feedback left join user on feedback.user_id = user.user_id
         where feedback_id = #{feedbackId};
     </select>

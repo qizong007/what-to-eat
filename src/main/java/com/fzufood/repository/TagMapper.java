@@ -27,6 +27,13 @@ public interface TagMapper {
     Tag getTagById(Integer tagId);
 
     /**
+     * 根据content查询对应tag(tagId, content)
+     * @param content
+     * @return Tag
+     */
+    Tag getTagByContent(String content);
+
+    /**
      * 插入新的tag(tagId, content)
      * @param tag
      * @return int

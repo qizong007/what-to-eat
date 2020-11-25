@@ -308,9 +308,9 @@ public class WindowServiceImpl implements WindowService {
         //}
         //return PicturePath.DEFAULT;
         if(canteenId == 2 || canteenId == 8){
-            return PicturePath.SUFFIX+canteenId+"/"+windowName+".JPG";
+            return PicturePath.PREFIX+canteenId+"/"+windowName+".JPG";
         }else{
-            return PicturePath.SUFFIX+canteenId+"/"+windowName+".jpg";
+            return PicturePath.PREFIX+canteenId+"/"+windowName+".jpg";
         }
 
     }

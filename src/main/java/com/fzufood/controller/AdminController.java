@@ -1,6 +1,8 @@
 package com.fzufood.controller;
 
 import com.fzufood.entity.Admin;
+import com.fzufood.entity.DishTag;
+import com.fzufood.entity.Tag;
 import com.fzufood.entity.Window;
 import com.fzufood.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,8 @@ public class AdminController {
     private TagMapper tagMapper;
     @Autowired
     private FeedbackMapper feedbackMapper;
-
+    @Autowired
+    private DishTagMapper dishTagMapper;
 
     @RequestMapping("/test")
     public String test(Model model){
@@ -114,6 +117,20 @@ public class AdminController {
         return "tag";
     }
 
+    @PostMapping("/addTag")
+    public String addTag(Tag tag,Model model){
+        tag.setTagId(null);
+        tagMapper.saveTag(tag);
+        model.addAttribute("tags",tagMapper.listTags());
+        return "tag";
+    }
+
+    @GetMapping("/addTag")
+    public String addTag(Model model){
+        model.addAttribute("tag",new Tag());
+        return "addTag";
+    }
+
     @GetMapping("/deleteTag")
     public String deleteTag(Model model, Integer tagId){
         tagMapper.removeTagById(tagId);
@@ -139,5 +156,35 @@ public class AdminController {
         model.addAttribute("window",windowMapper.getWindowById(windowId));
         model.addAttribute("dishes",windowMapper.listDishesById(windowId));
         return "dish";
+    }
+
+    @GetMapping("/dishTag")
+    public String dishTag(Model model,Integer dishId){
+        model.addAttribute("dish",dishMapper.getDishById(dishId));
+        model.addAttribute("tags",dishMapper.listTagsById(dishId));
+        return "dishTag";
+    }
+
+    @PostMapping("/addDishTag")
+    public String addDishTag(Tag tag,Model model,HttpServletRequest request){
+        Integer dishId = (Integer)request.getSession().getAttribute("dishId");
+        Tag desTag = tagMapper.getTagByContent(tag.getContent());
+        if(desTag == null){
+            tag.setTagId(null);
+            tagMapper.saveTag(tag);
+            desTag = tagMapper.getTagByContent(tag.getContent());
+        }
+        dishTagMapper.saveDishTag(new DishTag(1,dishId,desTag.getTagId()));
+        model.addAttribute("dish",dishMapper.getDishById(dishId));
+        model.addAttribute("tags",dishMapper.listTagsById(dishId));
+        return "dishTag";
+    }
+
+    @GetMapping("/addDishTag")
+    public String addDishTag(Model model,Integer dishId,HttpServletRequest request){
+        model.addAttribute("tag",new Tag());
+        model.addAttribute("dish",dishMapper.getDishById(dishId));
+        request.getSession().setAttribute("dishId",dishId);
+        return "addDishTag";
     }
 }

@@ -5,26 +5,24 @@
 <script src="/static/js/bootstrap/3.3.6/bootstrap.min.js"></script>
 <head>
     <meta charset="UTF-8">
-    <title th:text="标签列表"></title>
+    <title th:text="|${dish.getDishName()}的标签列表|"></title>
 </head>
 <body>
-<h2 class="text-center" th:text="标签表"></h2>
+<h2 class="text-center" th:text="|${dish.getDishName()}的标签|"></h2>
 <table class="table table-striped table-bordered table-hover table-condensed">
     <thead>
         <th style="text-align: center">标签ID</th>
-        <th style="text-align: center">内容</th>
-        <th style="text-align: center">删除</th>
+        <th style="text-align: center">标签内容</th>
     </thead>
     <tbody style="text-align: center">
         <tr th:each="tag:${tags}">
             <td th:text="${tag.getTagId()}"></td>
             <td th:text="${tag.getContent()}"></td>
-            <td><a th:href="@{/admin/deleteTag(tagId=${tag.getTagId()})}" class="btn btn-primary">删</a></td>
         </tr>
     </tbody>
 </table>
 <div class="modal-body" style="text-align: center">
-    <a href="/admin/addTag" class="btn btn-info">添加标签</a>
+    <a th:href="@{/admin/addDishTag(dishId=${dish.getDishId()})}" class="btn btn-info">添加标签</a>
 </div>
 </body>
 </html>

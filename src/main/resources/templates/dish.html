@@ -14,12 +14,14 @@
         <th style="text-align: center">菜品ID</th>
         <th style="text-align: center">菜品名</th>
         <th style="text-align: center">价格</th>
+        <th style="text-align: center">查看标签</th>
     </thead>
     <tbody style="text-align: center">
         <tr th:each="dish:${dishes}">
             <td th:text="${dish.getDishId()}"></td>
             <td th:text="${dish.getDishName()}"></td>
             <td th:text="${dish.getPrice()}"></td>
+            <td><a th:href="@{/admin/dishTag(dishId=${dish.getDishId()})}" class="btn btn-primary">标签</a></td>
         </tr>
     </tbody>
 </table>

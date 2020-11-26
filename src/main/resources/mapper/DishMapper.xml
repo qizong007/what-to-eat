@@ -16,7 +16,17 @@
             <result property="description" column="description"/>
         </association>
     </resultMap>
-
+    <resultMap id="windowMap" type="com.fzufood.entity.Window">
+        <id property="windowId" column="window_id"/>
+        <result property="windowName" column="window_name"/>
+        <result property="locationURI" column="location"/>
+        <result property="profileURI" column="profile"/>
+        <result property="description" column="description"/>
+        <association property="canteen" column="canteen_id" javaType="com.fzufood.entity.Canteen">
+            <id property="canteenId" column="canteen_id" ></id>
+            <result property="canteenName" column="canteen_name" ></result>
+        </association>
+    </resultMap>
     <resultMap id="TagMap" type="com.fzufood.entity.Tag">
         <id property="tagId" column="tag_id" ></id>
         <result property="content" column="content" ></result>
@@ -56,6 +66,13 @@
 
     <select id="listTagsById" parameterType="java.lang.Integer" resultMap="TagMap">
         select tag_id,content from tag where tag_id in (select tag_id from dish_tag where dish_id = #{dishId})
+    </select>
+    <select id="listWindowsByDishName" parameterType="java.lang.String" resultMap="windowMap">
+        select window.window_id,window_name, location, profile,
+            description,canteen.canteen_id canteen_id, canteen_name
+            from dish  join window on window.window_id = dish.window_id
+        left join canteen on window.canteen_id = canteen.canteen_id
+        where dish_name like "%"#{dishName}"%";
     </select>
 
     <update id="updateDish" parameterType="com.fzufood.entity.Dish">

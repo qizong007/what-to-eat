@@ -20,6 +20,9 @@ public class DishMapperTest {
     @Autowired
     private DishMapper dishMapper;
 
+    @Autowired
+    private WindowMapper windowMapper;
+
     @Test
     void contextLoads() throws SQLException {
         System.out.println(dataSource.getClass());
@@ -53,7 +56,13 @@ public class DishMapperTest {
             System.out.println(dish);
         }
     }
-
+    @Test
+    void listWindowsByNameTest() {
+        List<Window> windows = dishMapper.listWindowsByDishName("薯");
+        for(Window window: windows) {
+            System.out.println(window);
+        }
+    }
     @Test
     void addDish() {
         Window window =new Window();

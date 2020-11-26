@@ -15,6 +15,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CrowdedResponse {
-    private Integer code = -1;
     private List<Crowded> canteenList = new ArrayList<>();
 }

@@ -2,6 +2,7 @@ package com.fzufood.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.fzufood.dto.CrowdedRequest;
+import com.fzufood.dto.JsonObject;
 import com.fzufood.entity.Canteen;
 import com.fzufood.http.Crowded;
 import com.fzufood.http.CrowdedResponse;
@@ -33,16 +34,18 @@ public class CanteenServiceImpl implements CanteenService {
      * @return
      **/
     @Override
-    public CrowdedResponse crowded() {
+    public JsonObject<CrowdedResponse> crowded() {
+        JsonObject<CrowdedResponse> jsonObject = new JsonObject<>();
         CrowdedResponse crowdedResponse = new CrowdedResponse();
         String crowdedStr = HttpRequest.sendGet(RequestPath.CROWDED,null);
         List<CrowdedRequest> crowdedRequestList = JSON.parseArray(crowdedStr,CrowdedRequest.class);
         if(crowdedRequestList == null){
-            crowdedResponse.setCode(-1);
+            jsonObject.setCode(-1);
             crowdedResponse.setCanteenList(new ArrayList<>());
+            jsonObject.setData(crowdedResponse);
         }
         List<Crowded> canteenList = new ArrayList<>();
-        crowdedResponse.setCode(0);
+        jsonObject.setCode(0);
         for(CrowdedRequest request : crowdedRequestList){
             Crowded crowded = new Crowded();
             crowded.setFullNum(request.getFullNum());
@@ -61,7 +64,8 @@ public class CanteenServiceImpl implements CanteenService {
         crowded.setCanteenName("教职工食堂");
         canteenList.add(crowded);
         crowdedResponse.setCanteenList(canteenList);
-        return crowdedResponse;
+        jsonObject.setData(crowdedResponse);
+        return jsonObject;
     }
 
     private Canteen getCanteenByRoomName(String room){

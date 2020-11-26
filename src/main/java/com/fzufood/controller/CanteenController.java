@@ -1,5 +1,6 @@
 package com.fzufood.controller;
 
+import com.fzufood.dto.JsonObject;
 import com.fzufood.http.CrowdedResponse;
 import com.fzufood.service.CanteenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class CanteenController {
     private CanteenService canteenService;
 
     @RequestMapping("/crowded")
-    public CrowdedResponse crowded(){
+    public JsonObject<CrowdedResponse> crowded(){
         return canteenService.crowded();
     }
 }

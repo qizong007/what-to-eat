@@ -2,6 +2,7 @@ package com.fzufood.repository;
 
 import com.fzufood.entity.Dish;
 import com.fzufood.entity.Tag;
+import com.fzufood.entity.Window;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +27,13 @@ public interface DishMapper {
      * @return List<Dish>
      */
     List<Dish> listDishesByName(String dishName);
+
+    /**
+     * 根据dishName模糊查询出窗口
+     * @param dishName
+     * @return List<Window>
+     */
+    List<Window> listWindowsByDishName(String dishName);
 
     /**
      * 根据dishId查询对应的dish(dishId, dishName, price, byWeight, window)

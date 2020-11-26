@@ -222,23 +222,83 @@ public class UserServiceImpl implements UserService {
      */
     //TODO:search自定义搜索待实现
     @Override
-    public JsonObject<Search> search(String searchName, List<Tag> tagList, Integer canteenId) throws FileNotFoundException {
+    public JsonObject<Search> search(String searchName, List<Integer> tagList, Integer canteenId) throws FileNotFoundException {
         JsonObject<Search> jsonObject = new JsonObject<>();
         List<DishRecommend> dishRecommendList = new ArrayList<>();
-        List<Window> windowList = windowMapper.listWindows();
-        for(int i = 0; i < 10; i++ ){
-            Window window = windowList.get(i);
-            DishRecommend dishRecommend = new DishRecommend();
-            dishRecommend.setWindowId(window.getWindowId());
-            dishRecommend.setWindowName(window.getWindowName());
-            dishRecommend.setPngSrc(windowService.getWindowPngSrc(window.getWindowId()));
-            dishRecommend.setCanteenName(window.getCanteen().getCanteenName());
-            if(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()) != null){
-                dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+        if(searchName == null || searchName == ""){
+            if(canteenId == 0 || canteenId == null){
+                List<Canteen> canteenList = canteenMapper.listCanteens();
+                for(Canteen canteen : canteenList){
+                    List<Window> windowList = canteenMapper.listWindowsById(canteen.getCanteenId());
+                    for(Window window : windowList){
+                        DishRecommend dishRecommend = new DishRecommend();
+                        dishRecommend.setWindowId(window.getWindowId());
+                        dishRecommend.setWindowName(window.getWindowName());
+                        dishRecommend.setPngSrc(windowService.getWindowPngSrc(window.getWindowId()));
+                        dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
+                        if(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()) != null){
+                            dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+                        }
+                        List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
+                        if(dishList.size()>3){
+                            dishRecommend.setDish(dishList.subList(0,3));
+                        }else{
+                            dishRecommend.setDish(dishList);
+                        }
+                        dishRecommendList.add(dishRecommend);
+                    }
+                }
+            }else{
+                List<Window> windowList = canteenMapper.listWindowsById(canteenId);
+                for(Window window : windowList){
+                    DishRecommend dishRecommend = new DishRecommend();
+                    dishRecommend.setWindowId(window.getWindowId());
+                    dishRecommend.setWindowName(window.getWindowName());
+                    dishRecommend.setPngSrc(windowService.getWindowPngSrc(window.getWindowId()));
+                    dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
+                    if(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()) != null){
+                        dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+                    }
+                    List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
+                    if(dishList.size()>3){
+                        dishRecommend.setDish(dishList.subList(0,3));
+                    }else{
+                        dishRecommend.setDish(dishList);
+                    }
+                    dishRecommendList.add(dishRecommend);
+                }
             }
-            dishRecommend.setDish(windowMapper.listDishesById(window.getWindowId()).subList(0,3));
-            dishRecommendList.add(dishRecommend);
+        }else{
+            List<Window> windowList = dishMapper.listWindowsByDishName(searchName);
+            DishRecommend dishRecommend;
+            for(Window window : windowList){
+                dishRecommend = new DishRecommend();
+                dishRecommend.setWindowId(window.getWindowId());
+                dishRecommend.setWindowName(window.getWindowName());
+                dishRecommend.setPngSrc(windowService.getWindowPngSrc(window.getWindowId()));
+                dishRecommend.setCanteenName(window.getCanteen().getCanteenName());
+                if(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()) != null){
+                    dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+                }
+                List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
+                if(dishList.size()>3){
+                    dishRecommend.setDish(dishList.subList(0,3));
+                }else{
+                    dishRecommend.setDish(dishList);
+                }
+                dishRecommendList.add(dishRecommend);
+            }
+            if(canteenId != null && canteenId > 0){
+                List<DishRecommend> newDishRecommends = new ArrayList<>();
+                for(DishRecommend dishRecommend1 : dishRecommendList){
+                    if(windowMapper.getWindowById(dishRecommend1.getWindowId()).getCanteen().getCanteenId() == canteenId){
+                        newDishRecommends.add(dishRecommend1);
+                    }
+                }
+                dishRecommendList = newDishRecommends;
+            }
         }
+
 //        Tag baseTag = tagList.get(0);
 //        List<DishTag> baseDishTags = dishTagMapper.listDishTagsByTagId(baseTag.getTagId());
 
@@ -491,7 +551,6 @@ public class UserServiceImpl implements UserService {
 //                }
 //            }
 //        }
-
         jsonObject.setData(new Search(dishRecommendList));
         jsonObject.setCode(StatusCode.SUCCESS);
         return jsonObject;

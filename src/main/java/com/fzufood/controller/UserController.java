@@ -59,9 +59,9 @@ public class UserController {
 //     * @return JsonObject<List<DishRecommend>>
 //     */
     @ApiOperation("用户搜索接口")
-    @GetMapping("/search")
-    public JsonObject<Search> search() throws FileNotFoundException {
-        return userService.search(null,null,null);
+    @PostMapping("/search")
+    public JsonObject<Search> search(@RequestBody SearchRequest request) throws FileNotFoundException {
+        return userService.search(request.getSearchName(),request.getTagList(),request.getCanteenId());
     }
 
     /**

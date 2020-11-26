@@ -28,6 +28,8 @@ public class WindowServiceImpl implements WindowService {
     private DishCommentMapper dishCommentMapper;
     @Autowired
     private DishMapper dishMapper;
+    @Autowired
+    private CanteenMapper canteenMapper;
 
     /**
      * 首页推荐窗口
@@ -78,7 +80,8 @@ public class WindowServiceImpl implements WindowService {
                         dishRecommend.setDescription(window.getDescription());
                     }
                     dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
-                    dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
+                    //dishRecommend.setStar(countCanteenStar(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenId()));
+                    dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
                     List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
                     if(dishList.size()>3){
                         dishRecommend.setDish(dishList.subList(0,3));
@@ -161,7 +164,8 @@ public class WindowServiceImpl implements WindowService {
             if(!window.getDescription().equals("")){
                 dishRecommend.setDescription(window.getDescription());
             }
-            dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
+            //dishRecommend.setStar(countCanteenStar(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenId()));
+            dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
             List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
             dishRecommend.setDish(dishList);
             dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
@@ -312,6 +316,21 @@ public class WindowServiceImpl implements WindowService {
         }else{
             return PicturePath.PREFIX+canteenId+"/"+windowName+".jpg";
         }
-
     }
+
+//    /**
+//     * 计算食堂星级
+//     * @author qizong007
+//     * @date 21:47 2020/11/26
+//     * @param
+//     * @return
+//     **/
+//    private Double countCanteenStar(Integer canteenId){
+//        List<Window> windowList = canteenMapper.listWindowsById(canteenId);
+//        double star = 0;
+//        for(Window window : windowList){
+//            star += dishCommentMapper.getAvgStarsByWindowId(window.getWindowId());
+//        }
+//        return star/windowList.size();
+//    }
 }

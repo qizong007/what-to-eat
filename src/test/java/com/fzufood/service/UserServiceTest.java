@@ -63,10 +63,7 @@ public class UserServiceTest {
     // FIXME
     @Test
     void search() throws FileNotFoundException {
-        List<Tag> tagList = new ArrayList<>();
-        tagList.add(tagMapper.getTagById(1));
-        tagList.add(tagMapper.getTagById(2));
-        JsonObject<Search> jsonObject = userService.search("饭",null,null);
+        JsonObject<Search> jsonObject = userService.search(null,null,3);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }

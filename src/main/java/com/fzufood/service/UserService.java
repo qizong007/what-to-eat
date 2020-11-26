@@ -12,6 +12,6 @@ public interface UserService {
     JsonObject<UserLogin> login(LoginResponse code);
     JsonObject<UserInfo> getInfo(Integer userId);
     Code updateInfo(Integer userId, List<Tag> preferredList, List<Tag> avoidList);
-    JsonObject<Search> search(String searchName, List<Tag> tagList, Integer canteenId) throws FileNotFoundException;
+    JsonObject<Search> search(String searchName, List<Integer> tagList, Integer canteenId) throws FileNotFoundException;
     Code feedback(Integer userId, String content);
 }

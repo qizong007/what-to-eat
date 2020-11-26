@@ -1,9 +1,6 @@
 package com.fzufood.controller;
 
-import com.fzufood.entity.Admin;
-import com.fzufood.entity.DishTag;
-import com.fzufood.entity.Tag;
-import com.fzufood.entity.Window;
+import com.fzufood.entity.*;
 import com.fzufood.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -103,6 +100,25 @@ public class AdminController {
         return "window";
     }
 
+    @PostMapping("/addWindow")
+    public String addWindow(Window window,Model model,HttpServletRequest request){
+        Integer canteenId = (Integer) request.getSession().getAttribute("canteenId");
+        window.setCanteen(canteenMapper.getCanteenById(canteenId));
+        window.setWindowId(null);
+        windowMapper.saveWindow(window);
+        model.addAttribute("canteen",canteenMapper.getCanteenById(canteenId));
+        model.addAttribute("windows",canteenMapper.listWindowsById(canteenId));
+        return "window";
+    }
+
+    @GetMapping("/addWindow")
+    public String addWindow(Model model,Integer canteenId,HttpServletRequest request){
+        model.addAttribute("window",new Window());
+        model.addAttribute("canteen",canteenMapper.getCanteenById(canteenId));
+        request.getSession().setAttribute("canteenId",canteenId);
+        return "addWindow";
+    }
+
     @GetMapping("/deleteWindow")
     public String deleteWindow(Model model, Integer canteenId,Integer windowId){
         windowMapper.removeWindowById(windowId);
@@ -144,15 +160,37 @@ public class AdminController {
         return "feedback";
     }
 
-    @GetMapping("/deleteFeedback")
-    public String deleteFeedback(Model model, Integer feedbackId){
-        feedbackMapper.removeFeedbackById(feedbackId);
-        model.addAttribute("feedbackList",feedbackMapper.listFeedback());
-        return "feedback";
-    }
-
     @GetMapping("/dish")
     public String dish(Model model, Integer windowId){
+        model.addAttribute("window",windowMapper.getWindowById(windowId));
+        model.addAttribute("dishes",windowMapper.listDishesById(windowId));
+        return "dish";
+    }
+
+    @PostMapping("/addDish")
+    public String addDish(Dish dish,Model model,HttpServletRequest request){
+        Integer windowId = (Integer) request.getSession().getAttribute("windowId");
+        dish.setWindow(windowMapper.getWindowById(windowId));
+        dish.setDishId(null);
+        dishMapper.saveDish(dish);
+        model.addAttribute("window",windowMapper.getWindowById(windowId));
+        model.addAttribute("dishes",windowMapper.listDishesById(windowId));
+        return "dish";
+    }
+
+    @GetMapping("/addDish")
+    public String addDish(Model model,Integer windowId,HttpServletRequest request){
+        model.addAttribute("dish",new Dish());
+        model.addAttribute("window",canteenMapper.getCanteenById(windowId));
+        request.getSession().setAttribute("windowId",windowId);
+        return "addDish";
+    }
+
+    @GetMapping("/deleteDish")
+    public String deleteDish(Model model, Integer dishId){
+        Dish dish = dishMapper.getDishById(dishId);
+        dishMapper.removeDishById(dishId);
+        Integer windowId = dish.getWindow().getWindowId();
         model.addAttribute("window",windowMapper.getWindowById(windowId));
         model.addAttribute("dishes",windowMapper.listDishesById(windowId));
         return "dish";

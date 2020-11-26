@@ -14,6 +14,7 @@
         <th style="text-align: center">菜品ID</th>
         <th style="text-align: center">菜品名</th>
         <th style="text-align: center">价格</th>
+        <th style="text-align: center">删除</th>
         <th style="text-align: center">查看标签</th>
     </thead>
     <tbody style="text-align: center">
@@ -21,9 +22,13 @@
             <td th:text="${dish.getDishId()}"></td>
             <td th:text="${dish.getDishName()}"></td>
             <td th:text="${dish.getPrice()}"></td>
+            <td><a th:href="@{/admin/deleteDish(dishId=${dish.getDishId()})}" class="btn btn-primary">删</a></td>
             <td><a th:href="@{/admin/dishTag(dishId=${dish.getDishId()})}" class="btn btn-primary">标签</a></td>
         </tr>
     </tbody>
 </table>
+<div class="modal-body" style="text-align: center">
+    <a th:href="@{/admin/addDish(windowId=${window.getWindowId()})}" class="btn btn-info">添加菜品</a>
+</div>
 </body>
 </html>

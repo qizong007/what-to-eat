@@ -9,9 +9,7 @@ import com.fzufood.util.PicturePath;
 import com.fzufood.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
@@ -28,8 +26,6 @@ public class WindowServiceImpl implements WindowService {
     private DishCommentMapper dishCommentMapper;
     @Autowired
     private DishMapper dishMapper;
-    @Autowired
-    private CanteenMapper canteenMapper;
 
     /**
      * 首页推荐窗口
@@ -81,7 +77,9 @@ public class WindowServiceImpl implements WindowService {
                     }
                     dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
                     //dishRecommend.setStar(countCanteenStar(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenId()));
-                    dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+                    if(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()) != null){
+                        dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+                    }
                     List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
                     if(dishList.size()>3){
                         dishRecommend.setDish(dishList.subList(0,3));
@@ -98,7 +96,11 @@ public class WindowServiceImpl implements WindowService {
                 }
             }
             jsonObject.setCode(StatusCode.SUCCESS);
-            recommend.setWindowList(newList);
+            if(newList.size() > 50){
+                recommend.setWindowList(newList.subList(0,50));
+            }else{
+                recommend.setWindowList(newList);
+            }
             jsonObject.setData(recommend);
         }
         else if(type==2 || type ==3 ){
@@ -165,7 +167,9 @@ public class WindowServiceImpl implements WindowService {
                 dishRecommend.setDescription(window.getDescription());
             }
             //dishRecommend.setStar(countCanteenStar(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenId()));
-            dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+            if(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()) != null){
+                dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+            }
             List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
             dishRecommend.setDish(dishList);
             dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
@@ -177,7 +181,11 @@ public class WindowServiceImpl implements WindowService {
             dishRecommends.add(dishRecommend);
         }
         jsonObject.setCode(StatusCode.SUCCESS);
-        recommend.setWindowList(dishRecommends.subList(0,15));
+        if(dishRecommends.size() > 50){
+            recommend.setWindowList(dishRecommends.subList(0,50));
+        }else{
+            recommend.setWindowList(dishRecommends);
+        }
         jsonObject.setData(recommend);
         return jsonObject;
     }
@@ -199,9 +207,11 @@ public class WindowServiceImpl implements WindowService {
         if(windowMapper.getWindowById(windowId).getDescription() != null){
             windowEntry.setDescription(windowMapper.getWindowById(windowId).getDescription());
         }
-        windowEntry.setMapSrc(PicturePath.DEFAULT);
+        windowEntry.setMapSrc(getWindowMapSrc(windowId));
         windowEntry.setCanteenName(windowMapper.getWindowById(windowId).getCanteen().getCanteenName());
-        windowEntry.setStar((double) dishTagMapper.countTagNumByWindowId(windowId));
+        if(dishCommentMapper.getAvgStarsByWindowId(windowId) != null){
+            windowEntry.setStar(dishCommentMapper.getAvgStarsByWindowId(windowId));
+        }
         for (Dish dish : dishList){
             List<Tag> tags = dishMapper.listTagsById(dish.getDishId());
             for(Tag tag : tags){
@@ -210,7 +220,9 @@ public class WindowServiceImpl implements WindowService {
                 }
             }
             dish.setTags(tags);
-            dish.setStar(dishCommentMapper.getAvgStarsByDishId(dish.getDishId()));
+            if(dishCommentMapper.getAvgStarsByDishId(dish.getDishId()) != null){
+                dish.setStar(dishCommentMapper.getAvgStarsByDishId(dish.getDishId()));
+            }
         }
         windowEntry.setTags(tagList);
         List<Window> windowList = userMapper.listMarkWindowsById(userId);
@@ -246,7 +258,9 @@ public class WindowServiceImpl implements WindowService {
             dishRecommend.setCanteenName(window.getCanteen().getCanteenName());
             dishRecommend.setPngSrc(getWindowPngSrc(window.getWindowId()));
             dishRecommend.setDescription(window.getDescription());
-            dishRecommend.setStar((double) dishTagMapper.countTagNumByWindowId(window.getWindowId()));
+            if(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()) != null){
+                dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+            }
             List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
             if(dishList.size() > 3){
                 dishRecommend.setDish(dishList.subList(0,3));
@@ -299,23 +313,25 @@ public class WindowServiceImpl implements WindowService {
         Window window = windowMapper.getWindowById(windowId);
         String windowName = window.getWindowName();
         Integer canteenId = window.getCanteen().getCanteenId();
-        //File dec = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX+"static/pics/"+canteenId+"/");
-        //File dec = new File("~/pics/"+canteenId+"/");
-        //File dec = new File(ResourceUtils.getURL("classpath:").getPath()+"static/pics/"+canteenId+"/");
-        //File[] pics = dec.listFiles();
-        //for(File f : pics){
-            //String fileName = f.getName();
-            //if(windowName.equals(fileName.substring(0,fileName.length()-4))){
-                //return PicturePath.SUFFIX+canteenId+"/"+fileName;
-
-            //}
-        //}
-        //return PicturePath.DEFAULT;
         if(canteenId == 2 || canteenId == 8){
             return PicturePath.PREFIX+canteenId+"/"+windowName+".JPG";
         }else{
             return PicturePath.PREFIX+canteenId+"/"+windowName+".jpg";
         }
+    }
+
+    /**
+     * 获取窗口地图
+     * @author qizong007
+     * @date 14:31 2020/11/27
+     * @param windowId
+     * @return String
+     **/
+    public String getWindowMapSrc(Integer windowId) throws FileNotFoundException {
+        Window window = windowMapper.getWindowById(windowId);
+        String windowName = window.getWindowName();
+        Integer canteenId = window.getCanteen().getCanteenId();
+        return PicturePath.PREFIX+"map/"+canteenId+"/"+windowName+".png";
     }
 
 //    /**

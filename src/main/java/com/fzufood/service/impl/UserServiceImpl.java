@@ -213,6 +213,30 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 配置dish推荐
+     * @author qizong007
+     * @date 13:42 2020/11/27
+     * @param
+     * @return
+     **/
+    private void setDishRecommend(List<DishRecommend> dishRecommendList, DishRecommend dishRecommend,Window window) throws FileNotFoundException {
+        dishRecommend.setWindowId(window.getWindowId());
+        dishRecommend.setWindowName(window.getWindowName());
+        dishRecommend.setPngSrc(windowService.getWindowPngSrc(window.getWindowId()));
+        dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
+        if(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()) != null){
+            dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
+        }
+        List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
+        if(dishList.size()>3){
+            dishRecommend.setDish(dishList.subList(0,3));
+        }else{
+            dishRecommend.setDish(dishList);
+        }
+        dishRecommendList.add(dishRecommend);
+    }
+
+    /**
      * 用户搜索
      * @param searchName
      * @param tagList
@@ -226,46 +250,20 @@ public class UserServiceImpl implements UserService {
         JsonObject<Search> jsonObject = new JsonObject<>();
         List<DishRecommend> dishRecommendList = new ArrayList<>();
         if(searchName == null || searchName == ""){
-            if(canteenId == 0 || canteenId == null){
+            if(canteenId == null || canteenId == 0){
                 List<Canteen> canteenList = canteenMapper.listCanteens();
                 for(Canteen canteen : canteenList){
                     List<Window> windowList = canteenMapper.listWindowsById(canteen.getCanteenId());
                     for(Window window : windowList){
                         DishRecommend dishRecommend = new DishRecommend();
-                        dishRecommend.setWindowId(window.getWindowId());
-                        dishRecommend.setWindowName(window.getWindowName());
-                        dishRecommend.setPngSrc(windowService.getWindowPngSrc(window.getWindowId()));
-                        dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
-                        if(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()) != null){
-                            dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
-                        }
-                        List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
-                        if(dishList.size()>3){
-                            dishRecommend.setDish(dishList.subList(0,3));
-                        }else{
-                            dishRecommend.setDish(dishList);
-                        }
-                        dishRecommendList.add(dishRecommend);
+                        setDishRecommend(dishRecommendList,dishRecommend,window);
                     }
                 }
             }else{
                 List<Window> windowList = canteenMapper.listWindowsById(canteenId);
                 for(Window window : windowList){
                     DishRecommend dishRecommend = new DishRecommend();
-                    dishRecommend.setWindowId(window.getWindowId());
-                    dishRecommend.setWindowName(window.getWindowName());
-                    dishRecommend.setPngSrc(windowService.getWindowPngSrc(window.getWindowId()));
-                    dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
-                    if(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()) != null){
-                        dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
-                    }
-                    List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
-                    if(dishList.size()>3){
-                        dishRecommend.setDish(dishList.subList(0,3));
-                    }else{
-                        dishRecommend.setDish(dishList);
-                    }
-                    dishRecommendList.add(dishRecommend);
+                    setDishRecommend(dishRecommendList,dishRecommend,window);
                 }
             }
         }else{
@@ -551,6 +549,26 @@ public class UserServiceImpl implements UserService {
 //                }
 //            }
 //        }
+        if(tagList != null && tagList.size() != 0){
+            Map<Integer,Tag> tagMap = new HashMap<>();
+            for(Integer tagId : tagList){
+                tagMap.put(tagId,tagMapper.getTagById(tagId));
+            }
+            List<DishRecommend> newDishRecommendList = new ArrayList<>();
+            for(DishRecommend dishRecommend : dishRecommendList){
+                List<Dish> dishList = dishRecommend.getDish();
+                label:for(Dish dish : dishList){
+                    List<Integer> tagIds = dishTagMapper.listTagIdsByDishId(dish.getDishId());
+                    for(Integer tagId : tagIds){
+                        if(tagMap.get(tagId) != null){
+                            newDishRecommendList.add(dishRecommend);
+                            break label;
+                        }
+                    }
+                }
+            }
+            dishRecommendList = newDishRecommendList;
+        }
         jsonObject.setData(new Search(dishRecommendList));
         jsonObject.setCode(StatusCode.SUCCESS);
         return jsonObject;

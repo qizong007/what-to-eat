@@ -140,8 +140,10 @@ public class AdminController {
 
     @PostMapping("/addTag")
     public String addTag(Tag tag,Model model){
-        tag.setTagId(null);
-        tagMapper.saveTag(tag);
+        if(tagMapper.getTagByContent(tag.getContent()) == null){
+            tag.setTagId(null);
+            tagMapper.saveTag(tag);
+        }
         model.addAttribute("tags",tagMapper.listTags());
         return "tag";
     }

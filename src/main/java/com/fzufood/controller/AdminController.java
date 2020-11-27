@@ -74,6 +74,11 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/tables")
+    public String success(Model model){
+        return "tables";
+    }
+
     @GetMapping("/canteen")
     public String canteen(Model model){
         model.addAttribute("canteens",canteenMapper.listCanteens());

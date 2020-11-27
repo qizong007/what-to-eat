@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<script src="/static/js/jquery/2.0.0/jquery.min.js"></script>
+<link href="/static/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+<script src="/static/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>管理员首页</title>
+</head>
+<body>
+<div class="modal-dialog" style="margin-top: 10%;">
+    <div class="modal-content">
+        <div class="modal-header" style="text-align: center">
+            <h4 th:text="管理员首页" class="modal-title text-center"></h4>
+        </div>
+        <div class="modal-body" style="text-align: center">
+            <a href="/admin/canteen" class="btn btn-info">食堂表</a>
+        </div>
+        <div class="modal-body" style="text-align: center">
+            <a href="/admin/user" class="btn btn-info">用户表</a>
+        </div>
+        <div class="modal-body" style="text-align: center">
+            <a href="/admin/tag" class="btn btn-info">标签表</a>
+        </div>
+        <div class="modal-body" style="text-align: center">
+            <a href="/admin/feedback" class="btn btn-info">用户反馈表</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

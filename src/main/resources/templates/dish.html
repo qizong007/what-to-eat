@@ -29,6 +29,7 @@
 </table>
 <div class="modal-body" style="text-align: center">
     <a th:href="@{/admin/addDish(windowId=${window.getWindowId()})}" class="btn btn-info">添加菜品</a>
+    <a th:href="@{/admin/window(canteenId=${window.getCanteen().getCanteenId()})}" class="btn btn-info">返回窗口</a>
 </div>
 </body>
 </html>

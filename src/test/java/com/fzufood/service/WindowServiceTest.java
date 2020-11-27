@@ -22,10 +22,9 @@ public class WindowServiceTest {
     @Autowired
     private WindowService windowService;
 
-    // FIXME: 热门太慢，要20s
     @Test
     void recommend() throws FileNotFoundException {
-        JsonObject<Recommend> jsonObject = windowService.recommend(1,1);
+        JsonObject<Recommend> jsonObject = windowService.recommend(2,10);
         String str = JSON.toJSONString(jsonObject);
         System.out.println(str);
     }

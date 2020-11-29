@@ -78,7 +78,6 @@ public class WindowServiceImpl implements WindowService {
                         dishRecommend.setDescription(window.getDescription());
                     }
                     dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
-                    //dishRecommend.setStar(countCanteenStar(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenId()));
                     if (dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()) != null) {
                         dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
                     }
@@ -129,10 +128,8 @@ public class WindowServiceImpl implements WindowService {
         List<Window> windowList = windowMapper.listWindows();
         windowList.sort(new Comparator<Window>() {
             Integer tagnum1;
-            //Double i1;
             BigDecimal i1;
             Integer tagnum2;
-            //Double i2;
             BigDecimal i2;
             Double avgStarsByWindowId;
 
@@ -154,7 +151,6 @@ public class WindowServiceImpl implements WindowService {
                 } else {
                     i2 = BigDecimal.ZERO;
                 }
-                //return tagnum2.compareTo(tagnum1);
                 return i2.compareTo(i1);
             }
         });
@@ -331,19 +327,4 @@ public class WindowServiceImpl implements WindowService {
         return PicturePath.PREFIX + "map/" + canteenId + "/" + windowName + ".png";
     }
 
-//    /**
-//     * 计算食堂星级
-//     * @author qizong007
-//     * @date 21:47 2020/11/26
-//     * @param
-//     * @return
-//     **/
-//    private Double countCanteenStar(Integer canteenId){
-//        List<Window> windowList = canteenMapper.listWindowsById(canteenId);
-//        double star = 0;
-//        for(Window window : windowList){
-//            star += dishCommentMapper.getAvgStarsByWindowId(window.getWindowId());
-//        }
-//        return star/windowList.size();
-//    }
 }

@@ -46,9 +46,8 @@ public class DishServiceImpl implements DishService {
         boolean hasTagged = false;
         dishTag = dishTagMapper.getDishTagById(userId, dishId, tagId);
         if(dishTag != null){
-            hasTagged = true;;
+            hasTagged = true;
         }
-        List<DishTag> userInThisDishTag = dishTagMapper.listDishTagByDishIdAndTagId(dishId,tagId);
         // 某道菜的某个标签多少人点过
         updateDishTag.setTagName(tagMapper.getTagById(tagId).getContent());
         updateDishTag.setTagId(tagId);

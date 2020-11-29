@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @Author qizong007
@@ -87,7 +88,9 @@ public class AdminController {
 
     @GetMapping("/user")
     public String user(Model model){
-        model.addAttribute("users",userMapper.listUsers());
+        List<User> userList = userMapper.listUsers();
+        model.addAttribute("users",userList);
+        model.addAttribute("userNum",userList.size());
         return "user";
     }
 
@@ -134,7 +137,9 @@ public class AdminController {
 
     @GetMapping("/tag")
     public String tag(Model model){
-        model.addAttribute("tags",tagMapper.listTags());
+        List<Tag> tagList = tagMapper.listTags();
+        model.addAttribute("tags",tagList);
+        model.addAttribute("tagNum",tagList.size());
         return "tag";
     }
 
@@ -231,5 +236,16 @@ public class AdminController {
         model.addAttribute("dish",dishMapper.getDishById(dishId));
         request.getSession().setAttribute("dishId",dishId);
         return "addDishTag";
+    }
+
+    @GetMapping("/deleteDishTag")
+    public String deleteDishTag(Model model, Integer dishId, Integer tagId){
+        List<DishTag> dishTagList = dishTagMapper.listDishTagByDishIdAndTagId(dishId, tagId);
+        for(DishTag dishTag : dishTagList){
+            dishTagMapper.removeDishTagByDishTag(dishTag);
+        }
+        model.addAttribute("dish",dishMapper.getDishById(dishId));
+        model.addAttribute("tags",dishMapper.listTagsById(dishId));
+        return "dishTag";
     }
 }

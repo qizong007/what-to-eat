@@ -13,14 +13,14 @@
     <thead>
         <th style="text-align: center">窗口ID</th>
         <th style="text-align: center">窗口名</th>
-        <th style="text-align: center">删除</th>
+        <th style="text-align: center">商家倒闭</th>
         <th style="text-align: center">查看菜品</th>
     </thead>
     <tbody style="text-align: center">
         <tr th:each="window:${windows}">
             <td th:text="${window.getWindowId()}"></td>
             <td th:text="${window.getWindowName()}"></td>
-            <td><a th:href="@{/admin/deleteWindow(canteenId=${canteen.getCanteenId()},windowId=${window.getWindowId()})}" class="btn btn-primary">删</a></td>
+            <td><a th:href="@{/admin/deleteWindow(canteenId=${canteen.getCanteenId()},windowId=${window.getWindowId()})}" class="btn btn-primary">倒闭</a></td>
             <td><a th:href="@{/admin/dish(windowId=${window.getWindowId()})}" class="btn btn-primary">查看菜品</a></td>
         </tr>
     </tbody>

@@ -12,7 +12,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <a href="/admin/tables">
-                <span style="font-size:20px" title="返回首页" class="glyphicon glyphicon-home"></span>
+                <span style="font-size:30px" title="返回首页" class="glyphicon glyphicon-home"></span>
             </a>
             <h2 class="modal-title text-center" th:text="|${canteen.getCanteenName()}的窗口|"></h2>
         </div>
@@ -35,14 +35,14 @@
             </table>
         </div>
     </div>
-    <div style="position:fixed;bottom:100px;right:10px">
+    <div style="position:fixed;bottom:200px;right:40px">
         <a th:href="@{/admin/addWindow(canteenId=${canteen.getCanteenId()})}">
-            <span style="font-size:20px" title="添加" class="glyphicon glyphicon-plus"></span>
+            <span style="font-size:40px" title="添加" class="glyphicon glyphicon-plus"></span>
         </a>
     </div>
-    <div style="position:fixed;bottom:60px;right:10px">
+    <div style="position:fixed;bottom:120px;right:40px">
         <a th:href="@{/admin/canteen}">
-            <span style="font-size:20px" title="返回食堂" class="glyphicon glyphicon-circle-arrow-left"></span>
+            <span style="font-size:40px" title="返回食堂" class="glyphicon glyphicon-circle-arrow-left"></span>
         </a>
     </div>
 </div>

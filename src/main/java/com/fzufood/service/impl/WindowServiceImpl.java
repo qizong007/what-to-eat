@@ -277,7 +277,7 @@ public class WindowServiceImpl implements WindowService {
         List<Window> windowList = userMapper.listMarkWindowsById(userId);
         int flag = 1;
         for (Window window : windowList) {
-            if (window.getWindowId() == windowId) {
+            if (window.getWindowId().equals(windowId)) {
                 userMapper.removeMarkWindow(userId, windowId);
                 flag = 0;
                 break;

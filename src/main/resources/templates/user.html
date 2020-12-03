@@ -8,24 +8,39 @@
     <title>用户列表</title>
 </head>
 <body>
-<h2 class="text-center">用户表</h2>
-<h5 class="text-center" th:text="|当前有效用户共计: ${userNum}个|"></h5>
-<table class="table table-striped table-bordered table-hover table-condensed">
-    <thead>
-        <th style="text-align: center">用户ID</th>
-        <th style="text-align: center">用户openID</th>
-        <th style="text-align: center">删除</th>
-    </thead>
-    <tbody style="text-align: center">
-        <tr th:each="user:${users}">
-            <td th:text="${user.getUserId()}"></td>
-            <td th:text="${user.getOpenId()}"></td>
-            <td><a th:href="@{/admin/deleteUser(userId=${user.getUserId()})}" class="btn btn-primary">删</a></td>
-        </tr>
-    </tbody>
-</table>
-<div class="modal-body" style="text-align: center">
-    <a th:href="@{/admin/tables}" class="btn btn-info">返回管理员首页</a>
+<div class="modal-dialog modal-lg" style="margin-top: 5%;">
+    <div class="modal-content">
+        <div class="modal-header" id="header">
+            <h2 class="modal-title text-center">用户表</h2>
+            <h5 class="modal-title text-center" th:text="|当前有效用户共计: ${userNum}个|"></h5>
+        </div>
+        <div class="modal-body">
+            <table class="table table-striped table-bordered table-hover table-condensed">
+                <thead>
+                <th style="text-align: center">用户ID</th>
+                <th style="text-align: center">用户openID</th>
+                <th style="text-align: center">删除</th>
+                </thead>
+                <tbody style="text-align: center">
+                <tr th:each="user:${users}">
+                    <td th:text="${user.getUserId()}"></td>
+                    <td th:text="${user.getOpenId()}"></td>
+                    <td><a th:href="@{/admin/deleteUser(userId=${user.getUserId()})}" class="btn btn-danger">删</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="position:fixed;bottom:60px;right:10px">
+        <a th:href="@{/admin/tables}">
+            <span style="font-size:20px" title="返回首页" class="glyphicon glyphicon-circle-arrow-left"></span>
+        </a>
+    </div>
+    <div style="position:fixed;bottom:20px;right:10px">
+        <a href="#header">
+            <span style="font-size:20px" title="跳到顶部" class="glyphicon glyphicon-upload"></span>
+        </a>
+    </div>
 </div>
 </body>
 </html>

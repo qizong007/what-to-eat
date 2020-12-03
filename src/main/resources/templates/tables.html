@@ -10,22 +10,22 @@
 <body>
 <div class="modal-dialog" style="margin-top: 10%;">
     <div class="modal-content">
-        <div class="modal-header" style="text-align: center">
+        <div class="modal-header" style="text-align: center" data-toggle="tooltip" data-placement="top" title="选择表进入">
             <h4 th:text="管理员首页" class="modal-title text-center"></h4>
         </div>
         <div class="modal-body" style="text-align: center">
-            <a href="/admin/canteen" class="btn btn-info">食堂表</a>
-        </div>
-        <div class="modal-body" style="text-align: center">
-            <a href="/admin/user" class="btn btn-info">用户表</a>
-        </div>
-        <div class="modal-body" style="text-align: center">
-            <a href="/admin/tag" class="btn btn-info">标签表</a>
-        </div>
-        <div class="modal-body" style="text-align: center">
-            <a href="/admin/feedback" class="btn btn-info">用户反馈表</a>
+            <div class="list-group">
+                <a href="/admin/canteen" class="list-group-item list-group-item-info">食堂表</a>
+                <a href="/admin/user" class="list-group-item list-group-item-success">用户表</a>
+                <a href="/admin/tag" class="list-group-item list-group-item-warning">标签表</a>
+                <a href="/admin/feedback" class="list-group-item list-group-item-danger">用户反馈</a>
+            </div>
         </div>
     </div>
 </div>
 </body>
 </html>
+
+<script>
+    $(function () { $("[data-toggle='tooltip']").tooltip(); });
+</script>

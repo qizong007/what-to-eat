@@ -37,6 +37,8 @@ public class AdminController {
     private FeedbackMapper feedbackMapper;
     @Autowired
     private DishTagMapper dishTagMapper;
+    @Autowired
+    private DishCommentMapper dishCommentMapper;
 
     @RequestMapping("/test")
     public String test(Model model){
@@ -105,6 +107,7 @@ public class AdminController {
     public String window(Model model, Integer canteenId){
         model.addAttribute("canteen",canteenMapper.getCanteenById(canteenId));
         model.addAttribute("windows",canteenMapper.listWindowsById(canteenId));
+        model.addAttribute("dishCommentMapper",dishCommentMapper);
         return "window";
     }
 
@@ -116,6 +119,7 @@ public class AdminController {
         windowMapper.saveWindow(window);
         model.addAttribute("canteen",canteenMapper.getCanteenById(canteenId));
         model.addAttribute("windows",canteenMapper.listWindowsById(canteenId));
+        model.addAttribute("dishCommentMapper",dishCommentMapper);
         return "window";
     }
 
@@ -132,6 +136,7 @@ public class AdminController {
         windowMapper.removeWindowById(windowId);
         model.addAttribute("canteen",canteenMapper.getCanteenById(canteenId));
         model.addAttribute("windows",canteenMapper.listWindowsById(canteenId));
+        model.addAttribute("dishCommentMapper",dishCommentMapper);
         return "window";
     }
 
@@ -172,6 +177,13 @@ public class AdminController {
         return "feedback";
     }
 
+    @GetMapping("/deleteFeedback")
+    public String deleteFeedback(Model model, Integer feedbackId){
+        feedbackMapper.removeFeedbackById(feedbackId);
+        model.addAttribute("feedbackList",feedbackMapper.listFeedback());
+        return "feedback";
+    }
+
     @GetMapping("/dish")
     public String dish(Model model, Integer windowId){
         model.addAttribute("window",windowMapper.getWindowById(windowId));
@@ -193,7 +205,7 @@ public class AdminController {
     @GetMapping("/addDish")
     public String addDish(Model model,Integer windowId,HttpServletRequest request){
         model.addAttribute("dish",new Dish());
-        model.addAttribute("window",canteenMapper.getCanteenById(windowId));
+        model.addAttribute("window",windowMapper.getWindowById(windowId));
         request.getSession().setAttribute("windowId",windowId);
         return "addDish";
     }

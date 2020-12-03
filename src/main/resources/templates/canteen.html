@@ -8,23 +8,33 @@
     <title>食堂列表</title>
 </head>
 <body>
-<h2 class="text-center">福大食堂表</h2>
-<table class="table table-striped table-bordered table-hover table-condensed">
-    <thead>
-        <th style="text-align: center">食堂ID</th>
-        <th style="text-align: center">食堂名</th>
-        <th style="text-align: center">食堂窗口</th>
-    </thead>
-    <tbody style="text-align: center">
-        <tr th:each="canteen:${canteens}">
-            <td th:text="${canteen.getCanteenId()}"></td>
-            <td th:text="${canteen.getCanteenName()}"></td>
-            <td><a th:href="@{/admin/window(canteenId=${canteen.getCanteenId()})}" class="btn btn-primary">查看窗口</a></td>
-        </tr>
-    </tbody>
-</table>
-<div class="modal-body" style="text-align: center">
-    <a th:href="@{/admin/tables}" class="btn btn-info">返回管理员首页</a>
+<div class="modal-dialog modal-lg" style="margin-top: 5%;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title text-center">福大食堂表</h2>
+        </div>
+        <div class="modal-body">
+            <table class="table table-striped table-bordered table-hover table-condensed">
+                <thead>
+                <th style="text-align: center">食堂ID</th>
+                <th style="text-align: center">食堂名</th>
+                <th style="text-align: center">食堂窗口</th>
+                </thead>
+                <tbody style="text-align: center">
+                <tr th:each="canteen:${canteens}">
+                    <td th:text="${canteen.getCanteenId()}"></td>
+                    <td th:text="${canteen.getCanteenName()}"></td>
+                    <td><a th:href="@{/admin/window(canteenId=${canteen.getCanteenId()})}" class="btn btn-primary">查看窗口</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="position:fixed;bottom:60px;right:10px">
+        <a th:href="@{/admin/tables}">
+            <span style="font-size:20px" title="返回首页" class="glyphicon glyphicon-circle-arrow-left"></span>
+        </a>
+    </div>
 </div>
 </body>
 </html>

@@ -11,16 +11,20 @@
 <div class="modal-dialog" style="margin-top: 10%;">
     <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title text-center">用户登录</h4>
+            <h3 class="modal-title text-center">管理员登录</h3>
         </div>
         <div class="modal-body">
             <form action="/admin/login" th:action="@{/admin/login}" th:object="${admin}" method="post">
-                <div class="form-group" style="text-align: center">
-                    <span class="glyphicon glyphicon-user text-success"></span>&nbsp;用户名&nbsp;<input type="text" th:field="*{adminName}" cssClass="form-control"/>
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-user text-success" id="user-name-label"></span>
+                    <input type="text" th:field="*{adminName}" class="form-control" placeholder="用户名" aria-describedby="user-name-label">
                 </div>
-                <div class="form-group" style="text-align: center">
-                    <span class="glyphicon glyphicon-eye-close text-success"></span>&nbsp;密码&nbsp;<input type="password" th:field="*{adminPassword}" cssClass="form-control"/>
+                <br>
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-eye-close text-success" id="password-label"></span>
+                    <input type="password" th:field="*{adminPassword}" class="form-control" placeholder="密码" aria-describedby="password-label"/>
                 </div>
+                <br>
                 <div class="form-group" style="text-align: center">
                     <input type="submit" value="登录" class="btn btn-primary"/>
                 </div>

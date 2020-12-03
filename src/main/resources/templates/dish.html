@@ -8,28 +8,50 @@
     <title th:text="|${window.getWindowName()}的菜品列表|"></title>
 </head>
 <body>
-<h2 class="text-center" th:text="|${window.getWindowName()}的菜品|"></h2>
-<table class="table table-striped table-bordered table-hover table-condensed">
-    <thead>
-        <th style="text-align: center">菜品ID</th>
-        <th style="text-align: center">菜品名</th>
-        <th style="text-align: center">价格</th>
-        <th style="text-align: center">菜品下架</th>
-        <th style="text-align: center">查看标签</th>
-    </thead>
-    <tbody style="text-align: center">
-        <tr th:each="dish:${dishes}">
-            <td th:text="${dish.getDishId()}"></td>
-            <td th:text="${dish.getDishName()}"></td>
-            <td th:text="${dish.getPrice()}"></td>
-            <td><a th:href="@{/admin/deleteDish(dishId=${dish.getDishId()})}" class="btn btn-primary">下架</a></td>
-            <td><a th:href="@{/admin/dishTag(dishId=${dish.getDishId()})}" class="btn btn-primary">标签</a></td>
-        </tr>
-    </tbody>
-</table>
-<div class="modal-body" style="text-align: center">
-    <a th:href="@{/admin/addDish(windowId=${window.getWindowId()})}" class="btn btn-info">添加菜品</a>
-    <a th:href="@{/admin/window(canteenId=${window.getCanteen().getCanteenId()})}" class="btn btn-info">返回窗口</a>
+<div class="modal-dialog modal-lg" style="margin-top: 5%;">
+    <div class="modal-content">
+        <div class="modal-header" id="header">
+            <a href="/admin/tables">
+                <span style="font-size:20px" title="返回首页" class="glyphicon glyphicon-home"></span>
+            </a>
+            <h2 class="modal-title text-center" th:text="|${window.getWindowName()}的菜品|"></h2>
+        </div>
+        <div class="modal-body">
+            <table class="table table-striped table-bordered table-hover table-condensed">
+                <thead>
+                <th style="text-align: center">菜品ID</th>
+                <th style="text-align: center">菜品名</th>
+                <th style="text-align: center">价格</th>
+                <th style="text-align: center">菜品下架</th>
+                <th style="text-align: center">查看标签</th>
+                </thead>
+                <tbody style="text-align: center">
+                <tr th:each="dish:${dishes}">
+                    <td th:text="${dish.getDishId()}"></td>
+                    <td th:text="${dish.getDishName()}"></td>
+                    <td th:text="${dish.getPrice()}"></td>
+                    <td><a th:href="@{/admin/deleteDish(dishId=${dish.getDishId()})}" class="btn btn-danger">下架</a></td>
+                    <td><a th:href="@{/admin/dishTag(dishId=${dish.getDishId()})}" class="btn btn-primary">标签</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="position:fixed;bottom:100px;right:10px">
+        <a th:href="@{/admin/addDish(windowId=${window.getWindowId()})}">
+            <span style="font-size:20px" title="添加" class="glyphicon glyphicon-plus"></span>
+        </a>
+    </div>
+    <div style="position:fixed;bottom:60px;right:10px">
+        <a th:href="@{/admin/window(canteenId=${window.getCanteen().getCanteenId()})}">
+            <span style="font-size:20px" title="返回窗口" class="glyphicon glyphicon-circle-arrow-left"></span>
+        </a>
+    </div>
+    <div style="position:fixed;bottom:20px;right:10px">
+        <a href="#header">
+            <span style="font-size:20px" title="跳到顶部" class="glyphicon glyphicon-upload"></span>
+        </a>
+    </div>
 </div>
 </body>
 </html>

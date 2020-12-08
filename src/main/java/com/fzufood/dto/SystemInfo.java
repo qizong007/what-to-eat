@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SystemInfo{
-    private List<Tag> tags;
+    private List<UpdateDishTag> tags;
     private List<Canteen> canteens;
 }

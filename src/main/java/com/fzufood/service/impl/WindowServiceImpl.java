@@ -5,13 +5,13 @@ import com.fzufood.entity.*;
 import com.fzufood.http.Code;
 import com.fzufood.repository.*;
 import com.fzufood.service.WindowService;
+import com.fzufood.service.job.PopularJob;
 import com.fzufood.util.PicturePath;
 import com.fzufood.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
-import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -27,10 +27,11 @@ public class WindowServiceImpl implements WindowService {
     private DishCommentMapper dishCommentMapper;
     @Autowired
     private DishMapper dishMapper;
+    @Autowired
+    private PopularJob popularJob;
 
     /**
      * 首页推荐窗口
-     *
      * @param type,userId
      * @return JsonObject<List < DishRecommend>>
      * @author gaoyichao33
@@ -104,77 +105,20 @@ public class WindowServiceImpl implements WindowService {
             }
             jsonObject.setData(recommend);
         } else if (type == 2 || type == 3) {
-            return popular(userId);
+            return popular();
         }
         return jsonObject;
     }
 
     /**
      * 热门窗口
-     *
-     * @param userId
-     * @return JsonObject<List < DishRecommend>>
+     * @return JsonObject<Recommend>
      * @author gaoyichao33
      */
-    public JsonObject<Recommend> popular(Integer userId) throws FileNotFoundException {
+    public JsonObject<Recommend> popular() {
         JsonObject<Recommend> jsonObject = new JsonObject<>();
-        Recommend recommend = new Recommend();
-        if (userId == null) {
-            jsonObject.setCode(StatusCode.MISSING_PARAMETERS);
-            jsonObject.setData(recommend);
-            return jsonObject;
-        }
-        List<DishRecommend> dishRecommends = new ArrayList<>();
-        List<Window> windowList = windowMapper.listWindows();
-        windowList.sort(new Comparator<Window>() {
-            Integer tagnum1;
-            BigDecimal i1;
-            Integer tagnum2;
-            BigDecimal i2;
-            Double avgStarsByWindowId;
-
-            @Override
-            public int compare(Window window1, Window window2) {
-                Integer window1Id = window1.getWindowId();
-                tagnum1 = dishTagMapper.countTagNumByWindowId(window1Id);
-                avgStarsByWindowId = dishCommentMapper.getAvgStarsByWindowId(window1.getWindowId());
-                if (avgStarsByWindowId != null) {
-                    i1 = new BigDecimal(avgStarsByWindowId * 0.6 + tagnum1 * 0.4);
-                } else {
-                    i1 = BigDecimal.ZERO;
-                }
-                Integer window2Id = window2.getWindowId();
-                tagnum2 = dishTagMapper.countTagNumByWindowId(window2Id);
-                avgStarsByWindowId = dishCommentMapper.getAvgStarsByWindowId(window2.getWindowId());
-                if (avgStarsByWindowId != null) {
-                    i2 = new BigDecimal(avgStarsByWindowId * 0.6 + tagnum2 * 0.4);
-                } else {
-                    i2 = BigDecimal.ZERO;
-                }
-                return i2.compareTo(i1);
-            }
-        });
-        for (Window window : windowList) {
-            DishRecommend dishRecommend = new DishRecommend();
-            dishRecommend.setWindowId(window.getWindowId());
-            dishRecommend.setWindowName(window.getWindowName());
-            dishRecommend.setPngSrc(getWindowPngSrc(window.getWindowId()));
-            if (!window.getDescription().equals("")) {
-                dishRecommend.setDescription(window.getDescription());
-            }
-            dishRecommend.setStar(dishCommentMapper.getAvgStarsByWindowId(window.getWindowId()));
-            List<Dish> dishList = windowMapper.listDishesById(window.getWindowId());
-            dishRecommend.setDish(dishList);
-            dishRecommend.setCanteenName(windowMapper.getWindowById(window.getWindowId()).getCanteen().getCanteenName());
-            if (dishList.size() > 3) {
-                dishRecommend.setDish(dishList.subList(0, 3));
-            } else {
-                dishRecommend.setDish(dishList);
-            }
-            dishRecommends.add(dishRecommend);
-        }
+        Recommend recommend = popularJob.getRecommend();
         jsonObject.setCode(StatusCode.SUCCESS);
-        recommend.setWindowList(dishRecommends.subList(0, 15));
         jsonObject.setData(recommend);
         return jsonObject;
     }
@@ -295,13 +239,12 @@ public class WindowServiceImpl implements WindowService {
 
     /**
      * 获取窗口图片路径
-     *
      * @param windowId
      * @return String
      * @author qizong007
      * @date 21:31 2020/11/23
      **/
-    public String getWindowPngSrc(Integer windowId) throws FileNotFoundException {
+    public String getWindowPngSrc(Integer windowId) {
         Window window = windowMapper.getWindowById(windowId);
         String windowName = window.getWindowName();
         Integer canteenId = window.getCanteen().getCanteenId();
@@ -314,13 +257,12 @@ public class WindowServiceImpl implements WindowService {
 
     /**
      * 获取窗口地图
-     *
      * @param windowId
      * @return String
      * @author qizong007
      * @date 14:31 2020/11/27
      **/
-    public String getWindowMapSrc(Integer windowId) throws FileNotFoundException {
+    public String getWindowMapSrc(Integer windowId){
         Window window = windowMapper.getWindowById(windowId);
         String windowName = window.getWindowName();
         Integer canteenId = window.getCanteen().getCanteenId();

@@ -1,6 +1,5 @@
 package com.fzufood.service.job;
 
-import com.fzufood.WhatToEatApplication;
 import com.fzufood.dto.DishRecommend;
 import com.fzufood.dto.Recommend;
 import com.fzufood.entity.Dish;
@@ -9,18 +8,11 @@ import com.fzufood.repository.DishCommentMapper;
 import com.fzufood.repository.DishTagMapper;
 import com.fzufood.repository.WindowMapper;
 import com.fzufood.util.PicturePath;
-import com.fzufood.util.SpringUtil;
-import com.fzufood.util.StatusCode;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
@@ -33,17 +25,14 @@ import java.util.List;
  * @create 2020/12/8 19:54
  */
 @Component
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
 public class PopularJob implements Job {
 
     @Autowired
-    private WindowMapper windowMapper;// = WhatToEatApplication.applicationContext.getBean(WindowMapper.class);
+    private WindowMapper windowMapper;
     @Autowired
-    private DishTagMapper dishTagMapper;// = WhatToEatApplication.applicationContext.getBean(DishTagMapper.class);
+    private DishTagMapper dishTagMapper;
     @Autowired
-    private DishCommentMapper dishCommentMapper;// = WhatToEatApplication.applicationContext.getBean(DishCommentMapper.class);
+    private DishCommentMapper dishCommentMapper;
 
     public static PopularJob popularJob;
     private Recommend recommend;
@@ -79,7 +68,7 @@ public class PopularJob implements Job {
                 tagnum1 = popularJob.dishTagMapper.countTagNumByWindowId(window1Id);
                 avgStarsByWindowId = popularJob.dishCommentMapper.getAvgStarsByWindowId(window1.getWindowId());
                 if (avgStarsByWindowId != null) {
-                    i1 = new BigDecimal(avgStarsByWindowId * 0.6 + tagnum1 * 0.4);
+                    i1 = new BigDecimal(avgStarsByWindowId * 0.8 + tagnum1 * 0.2);
                 } else {
                     i1 = BigDecimal.ZERO;
                 }
@@ -87,7 +76,7 @@ public class PopularJob implements Job {
                 tagnum2 = popularJob.dishTagMapper.countTagNumByWindowId(window2Id);
                 avgStarsByWindowId = popularJob.dishCommentMapper.getAvgStarsByWindowId(window2.getWindowId());
                 if (avgStarsByWindowId != null) {
-                    i2 = new BigDecimal(avgStarsByWindowId * 0.6 + tagnum2 * 0.4);
+                    i2 = new BigDecimal(avgStarsByWindowId * 0.8 + tagnum2 * 0.2);
                 } else {
                     i2 = BigDecimal.ZERO;
                 }
@@ -113,7 +102,11 @@ public class PopularJob implements Job {
             }
             popularJob.dishRecommends.add(dishRecommend);
         }
-        popularJob.recommend.setWindowList(popularJob.dishRecommends.subList(0, 15));
+        if(popularJob.dishRecommends.size() <= 25){
+            popularJob.recommend.setWindowList(popularJob.dishRecommends);
+        } else {
+            popularJob.recommend.setWindowList(popularJob.dishRecommends.subList(0, 25));
+        }
         System.out.println("热门推荐计算完毕");
     }
 

@@ -37,8 +37,7 @@ public class TagMapperTest {
     @Test
     void addTag() {
         Tag tag = new Tag();
-        tag.setTagId(11);
-        tag.setContent("偏酸");;
+        tag.setContent("味儿大但香");;
         System.out.println(tagMapper.saveTag(tag));
         findTagAll();
     }

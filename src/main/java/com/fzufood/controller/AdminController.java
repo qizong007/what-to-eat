@@ -99,7 +99,9 @@ public class AdminController {
     @GetMapping("/deleteUser")
     public String deleteUser(Model model, Integer userId){
         userMapper.removeUser(userId);
-        model.addAttribute("users",userMapper.listUsers());
+        List<User> userList = userMapper.listUsers();
+        model.addAttribute("users",userList);
+        model.addAttribute("userNum",userList.size());
         return "user";
     }
 
@@ -154,7 +156,9 @@ public class AdminController {
             tag.setTagId(null);
             tagMapper.saveTag(tag);
         }
-        model.addAttribute("tags",tagMapper.listTags());
+        List<Tag> tagList = tagMapper.listTags();
+        model.addAttribute("tags",tagList);
+        model.addAttribute("tagNum",tagList.size());
         return "tag";
     }
 
@@ -167,7 +171,9 @@ public class AdminController {
     @GetMapping("/deleteTag")
     public String deleteTag(Model model, Integer tagId){
         tagMapper.removeTagById(tagId);
-        model.addAttribute("tags",tagMapper.listTags());
+        List<Tag> tagList = tagMapper.listTags();
+        model.addAttribute("tags",tagList);
+        model.addAttribute("tagNum",tagList.size());
         return "tag";
     }
 

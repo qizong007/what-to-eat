@@ -37,7 +37,7 @@ public class WindowServiceImpl implements WindowService {
      * @author gaoyichao33
      */
     @Override
-    public JsonObject<Recommend> recommend(Integer type, Integer userId) throws FileNotFoundException {
+    public JsonObject<Recommend> recommend(Integer type, Integer userId) {
         JsonObject<Recommend> jsonObject = new JsonObject<>();
         Recommend recommend = new Recommend();
         if (userId == null) {
